@@ -28,19 +28,15 @@ from chatterbot.trainers import ListTrainer
 class Game:
 #main game class object, complete with heler functions, help, quit, restart, move etc..
     
-    def __init__(self, title, author, mission, player_characters, destinations, non_player_characters, objects, items, transport, player, commands, player_moves, msg):
+    def __init__(self, title, author, mission, player_characters, destinations, transport, player, commands, msg):
         self.title = title
         self.author = author
         self.mission = mission
         self.player_characters = player_characters
         self.destinations = destinations
-        self.non_player_characters = non_player_characters
-        self.objects = objects
-        self.items = items
         self.player = player
         self.transport = transport
         self.commands = commands
-        self.player_moves = player_moves
         self.msg = msg
 
         #start a new chatbot
@@ -100,22 +96,11 @@ Looks like your super power - {power}
         #if beginning of the game print welcome message
         if not self.player_moves and self.player.destination.order == 1:
             self.showWelcome()
-        
 
-        # players health - start at 5
-        health = self.player.health
-        h = 1
-        health_hearts = ""
-
-        while h <= health:
-            health_hearts += " \u2764 "
-            h += 1
-        
-        #set up players weapon
-        weapon = ""
-        
-        if self.player.collected_weapon:
-            weapon = self.player.weapon
+        if self.player.weapon is None:
+            weapon =  self.player.weapon.name
+        else: 
+            weapon = ""
 
         # print player
         print(stylize("Player : " + self.player.name, colored.fg(84)))
@@ -124,7 +109,7 @@ Looks like your super power - {power}
         # print weapon
         print(stylize("Weapon : " + weapon, colored.fg(84)))
         # print health
-        print(stylize("Health :" + str(health_hearts), colored.fg(15) + colored.bg(1)))
+        print(stylize("Health :" + str(self.player.showHealth()), colored.fg(15) + colored.bg(1)))
 
         #print destination scenario if just arrived
         if not self.player_moves:
@@ -132,11 +117,11 @@ Looks like your super power - {power}
             self.player.destination.scenario is None
         
         # print the quick look script - if there is an item
-        if self.player.health > 0 and self.player.destination.item and not self.msg:
+        if self.player.health > 0 and self.player.destination.items and not self.msg:
             self.msg.append(str('''
 You have a quick look around you and see what appears to be a {item} 
 on the ground in front of you.
-            ''').format(item = self.player.destination.item[0].name))
+            ''').format(item = self.player.destination.items[0].name))
                 
         if self.msg:
             print("{0}".format("="*75))
@@ -221,7 +206,7 @@ on the ground in front of you.
 
                         #create items
                         for itm in destination_list[new_destination]['item']:
-                            it = Item(items[itm]['name'], items[itm]['description'], items[itm]['type'], items[itm]['msg'])
+                            it = Item(items[itm]['name'], items[itm]['description'], items[itm]['msg'])
                             destination_items.append(it)
 
                         self.player.destination = Destination(destination_list[new_destination]['name'], destination_list[new_destination]['order'], destination_list[new_destination]['voyage'], destination_objects, destination_items, destination_list[new_destination]['thing'], destination_list[new_destination]['scenario'], destination_list[new_destination]['colour'])

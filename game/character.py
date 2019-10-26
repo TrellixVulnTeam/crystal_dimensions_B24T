@@ -24,16 +24,26 @@ from chatterbot.trainers import ListTrainer
 
 class PlayerCharacter:
 
-    def __init__(self, name, power, weapon, collected_weapon, strength, health, destination, inventory, transport):
+    def __init__(self, name, power, weapon, strength, health, destination, inventory, transport, moves):
         self.name = name
         self.power = power
         self.weapon = weapon
-        self.collected_weapon = collected_weapon
         self.strength = strength
         self.health = health   
         self.destination = destination
         self.inventory = inventory
         self.transport = transport
+        self.moves = moves
+
+    def showHealth(self):
+        health = self.health
+        h = 1
+        health_hearts = ""
+
+        while h <= health:
+            health_hearts += " \u2764 "
+            h += 1   
+        return health_hearts
         
     def go(self, game, command):
         go_styles = ["jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]

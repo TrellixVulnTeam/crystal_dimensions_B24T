@@ -42,7 +42,7 @@ while True:
             if int(character) in new_game.player_characters:
                                 
                 #add player to game
-                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], new_game.player_characters[int(character)]['weapon'], False, new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['health'], "", inventory, "")
+                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], new_game.player_characters[int(character)]['weapon'], new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['health'], "", inventory, "")
 
                 # starting location
                 for place in destinations:
@@ -58,7 +58,7 @@ while True:
 
                         #create items
                         for itm in destinations[place]['item']:
-                            it = Item(items[itm]['name'], items[itm]['description'], items[itm]['type'], items[itm]['msg'])
+                            it = Item(items[itm]['name'], items[itm]['description'], items[itm]['msg'])
                             destination_items.append(it)
 
                         new_game.player.destination = Destination(destinations[place]['name'], destinations[place]['order'], destinations[place]['voyage'], destination_objects, destination_items, destinations[place]['thing'], destinations[place]['scenario'], destinations[place]['colour'])

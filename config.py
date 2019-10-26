@@ -60,11 +60,8 @@ is parked just out of sight on the mud flats.
 destinations = {
         1: {
         'name': 'Sector 9',
-        'order': 1,
         'voyage': {'north': 3, 'east': 2, 'south': 4, 'west': 5},
-        'object': {},
-        'item': {1},
-        'thing': 0,
+        'crystal': False,
         'scenario': '''You check your handheld navigation system, 
 from here you can fly to the South, where you'll find planet Sapsa 
 and it's not far or fly North to Yanus.
@@ -75,12 +72,8 @@ so desperately need but that you also risk bumping into trouble...''',
     },
         2: {
         'name': 'Taiga planet',
-        'order': 2,
         'voyage': {'north': 3, 'west': 5, 'south': 4},
-        'object': {2},
-        'item': {},
-        'thing': 3,
-        'crystal': 'collapse crystal',
+        'crystal': True,
         'scenario': '''You struggle to find somewhere to land, 
 with great skill you park in the middle of what 
 appears to be the only dry land surrounded by swamp. 
@@ -90,12 +83,8 @@ the new planet you've landed on.''',
     },  
         3: {
         'name': 'Yanus planet',
-        'order': 3,
         'voyage': {'east': 2, 'west': 5, 'south': 4},
-        'object': {3},
-        'item': {6},
-        'thing': 1,
-        'crystal': 'build crystal',
+        'crystal': True,
         'scenario': '''You land with a bump on an empty piece of land - there's a twilight glow
 to the sky and the air is dry. Stepping out of the spaceship, the ground 
 is rocky, almost crunching under foot.''',
@@ -103,12 +92,8 @@ is rocky, almost crunching under foot.''',
     },
         4: {
         'name': 'Sapsa planet',
-        'order': 4,
         'voyage': {'east': 2, 'north': 3, 'west': 5},
-        'object': {4},
-        'item': {7},
-        'thing': 4,
-        'crystal': 'unite crystal',
+        'crystal': True,
         'scenario': '''You pull off a super smooth landing in a clearing and 
 run towards what looks like vegetation - travelling around the solar system 
 has made you hungry.''',
@@ -116,18 +101,81 @@ has made you hungry.''',
     },
         5: { 
         'name': 'Earth',
-        'order': 5,
         'voyage': {'north': 3, 'south': 4},
-        'object': {0, 1},
-        'item': 'shield',
-        'thing': 5,
+        'crystal': False,
         'scenario': '''You've arrived on Earth, memories flood back, the summer breeze, the trees, 
 the ocean but enough of this nostalgia where is the Portal?''',
         'colour': 21
     }
 }
 
-
+#game zones
+destinations = {
+        1: {
+        'name': 'Zone 1',
+        'scenario': '''zone 1 lorem ipsum.'''
+        },
+        2: {
+        'name': 'Zone 2',
+        'scenario': '''zone 2 lorem ipsum.'''
+        },
+        3: {
+        'name': 'Zone 3',
+        'scenario': '''zone 3 lorem ipsum.'''
+        },
+        4: {
+        'name': 'Zone 4',
+        'scenario': '''zone 4 lorem ipsum.'''
+        },
+        5: {
+        'name': 'Zone 5',
+        'scenario': '''zone 5 lorem ipsum.'''
+        },
+        6: {
+        'name': 'Zone 6',
+        'scenario': '''zone 6 lorem ipsum.'''
+        },
+        7: {
+        'name': 'Zone 7',
+        'scenario': '''zone 7 lorem ipsum.'''
+        },
+        8: {
+        'name': 'Zone 8',
+        'scenario': '''zone 8 lorem ipsum.'''
+        },
+        9: {
+        'name': 'Zone 9',
+        'scenario': '''zone 9 lorem ipsum.'''
+        },
+        10: {
+        'name': 'Zone 10',
+        'scenario': '''zone 10 lorem ipsum.'''
+        },
+        11: {
+        'name': 'Zone 11',
+        'scenario': '''zone 11 lorem ipsum.'''
+        },
+        12: {
+        'name': 'Zone 12',
+        'scenario': '''zone 12 lorem ipsum.'''
+        },
+        13: {
+        'name': 'Zone 13',
+        'scenario': '''zone 13 lorem ipsum.'''
+        },
+        14: {
+        'name': 'Zone 14',
+        'scenario': '''zone 14 lorem ipsum.'''
+        },
+        15: {
+        'name': 'Zone 15',
+        'scenario': '''zone 15 lorem ipsum.'''
+        },
+        16: {
+        'name': 'Zone 16',
+        'scenario': '''zone 16 lorem ipsum.'''
+        },
+}
 #player characters
 player_characters = {
     1: {
@@ -164,41 +212,7 @@ non_player_characters = {
 big green slimey hairy lizzard with a long spikey tail. They're really 
 strong and fierce fighters.
         ''',
-        'image': stylize('''
-   .--.( `.___.' ).--.         /_\\
-   `._ `%_&%#%$_ ' _.'        <___>
-      `|(@\\*%%/@)|'            |L|
-       |  |%%#|  |             |=|
-        \\ \\$#%/ /              |=|
-        |\\|%%#|/|              |=|
-        | (.".)%|              |L|  
-    ___.'  `-'  `.___          |L|  
-  .'#*#`-       -'$#*`.       / )|
- /#%^#%*_ *%^%_  #  %$%\\    .J (__)
- #&  . %%%#% ###%*.   *%\\.-'&# (__)
- %*  J %.%#_|_#$.\\J* \\ %'#%*^  (__)
- *#% J %$%%#|#$#$ J\\%   *   .--|(_)
- |%  J\\ `%%#|#%%' / `.   _.'   |L|
- |#$%||` %%%$### '|   `-'      |L|
- (#%%||` #$#$%%% '|            |L|
- |&^ ||  #%#$%#%  |            |L|
- |#$*|| #$%$$#%%$ |\\           |L|
- ||||||  %%(@)$#  |\\\\          |L|
- `|||||  #$$|%#%  | L|         |L|
-      |  #$%|$%%  | ||l        |L|
-      |  ##% $%#  | Y|||       |L|
-      J $$#* *%#% L  Y|||
-      (__ $F J$ __)  Y|||
-      J#%$ | |%%#%L   |E/
-      |$$%#& & %%#|   F/ 
-      J##$ J % %%$F
-       %$# * * %#&
-       %#$ | |%#$%
-       *#$%| | #$*
-      /$#' ) ( `%%\\
-     /#$# /   \\ %$%\\
-    ooooO'     `Ooooo
-        ''', colored.fg(2)),
+        'art': ''' ''',
         'encounter': '''
 A tall shadow moves quickly across the floor and before you know it 
 - you are face to face with a mean looking monster!
@@ -215,7 +229,7 @@ A tall shadow moves quickly across the floor and before you know it
 small and fast with a cunning smile. They carry daggers in each hand. 
 Be careful as these guys are super intelligent.
         ''',
-        'image': '''
+        'art': '''
 
         ''',
         'encounter': '''
@@ -347,15 +361,37 @@ but there is no one around it''',
 
 #items
 items = {
-    1: {
-        "name": "weapon",
-        "description": "Your trusty weapon",
-        "type": "weapon",
+        "weapons": {
+        1: {
+        "name": "Rhino horn daggers",
+        "description": "Nothing is sharper or cuts deaper than fossilized rhino horn.",
+        "damage": 3,
+        "rounds": 18,
+        "msg": {"get": '''You're now armed with your trusty weapon - 
+ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
+Where you're going - you're defintely going to need a weapon!'''},
+        2: {
+        "name": "Two swords and a pistol",
+        "description": '''Ready for close and long range combat. 
+The swords are your favourite but you are happy to finish the job with a pistol if need be...''',
+        "damage": 4,
+        "rounds": 14,
         "msg": {"get": '''You're now armed with your trusty weapon - 
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
 Where you're going - you're defintely going to need a weapon!'''}
     },
-    2: {
+    3: {
+        "name": "Rifle",
+        "description": '''You need to get up out of the way with this weapon,
+its leathal but you need some cover to use it range effectively''',
+        "damage": 5,
+        "rounds": 10,
+        "msg": {"get": '''You're now armed with your trusty weapon - 
+ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
+Where you're going - you're defintely going to need a weapon!'''}
+    }},
+        "crystals": {
+    1: {
         "name": "Collapse Crystal",
         "description": '''A very thin, sheet like crystal with shards of shiny black 
 material running through the middle.''',
@@ -364,7 +400,7 @@ material running through the middle.''',
 another step closer to completing your mission''', "look": '''You spot what looks like a stone but something tells 
 you it is more than that'''}
     },
-    3: {
+    2: {
         "name": "Build Crystal",
         "description": '''A dense perfect square. Purple and very shiny, 
 when you look into this crystal you see your reflection
@@ -374,7 +410,7 @@ but wear your eyes would be, there are black holes.''',
 you're pleased it's safely in your possession''', "look": '''What's that shiny thing relfecting the light a little way off, 
 you can just about see the light bouncing of it is purple - the build crystal is purple...'''}
     },
-    4: {
+    3: {
         "name": "Unite Crystal",
         "description": '''This is the most beautiful thing you have ever seen.
 Radiating warmth and energy, the Unite Crystal has an 
@@ -383,16 +419,18 @@ iridescent glow that lights up it's surroundings.''',
         "msg": {"get": '''Wow you barely manage to take your eyes off the Crsytal as you stow it away safely.
 The rumours were right this is the most powerful crystal and you've got it!!''', "look": '''There's glow coming up from somewhere in the undergrowth.
 It could be some kind of energy source - its worth a closer look.'''}
-    },  
-    5: {
+    }},
+        "keys": {
+    1: {
         "name": "skeleton key",
         "description": '''It's a Large iron key with a Ruby encrusted bit and a 
 ornate looking blade.''',
         "type": "key",
         "msg": {"get": '''You pocket the skeleton key - this will unlock anything''', "look": '''Is that a key you can see, looks like someone has tried to hide it 
 - but failed as there it is bold as brass, right in front of you!'''}
-    },
-    6: {
+    }},
+        "potions": {
+    1: {
         "name": "potion",
         "description": '''A small leather flask with clear liquid inside.
 Smells like vanilla pods.''',
@@ -401,17 +439,25 @@ Smells like vanilla pods.''',
 "drink": '''With a gulp and a slurp you down the potion.
 A few moments later the hallucinations kick in -
 you might need to lie down for while...'''}
-    },
-    7: {
+    }},
+        "food": {
+    1: {
         "name": "cake",
         "description": '''That's one big slice of sticky chocolate cake.''',
         "type": "food",
         "msg": {"get": '''Save this food in case of hunger or the need for a boost!''', "look": '''Your eyes must be decieving you - 
-it looks like cake ****chocolate cake!?!****''', "eat": '''You gobble it down so quickly it's like it has evapourated - and then
+it looks like cake ****chocolate cake!?!****''', "food": '''You gobble it down so quickly it's like it has evapourated - and then
 you start to feel bloated, you really need to fart dude
  or you might explode...'''}
-    }
-}
+    },
+    2: {
+        "name": "water",
+        "description": '''Blue. Cold. Wet. Delicious''',
+        "type": "food",
+        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "food": '''You take a couple fo big gulps,
+it is water and it's as refreshing as you'd hoped it would be...'''}
+    }}
+}}
 
 conversation = [
             "How are you?",
