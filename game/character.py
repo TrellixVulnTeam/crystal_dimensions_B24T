@@ -24,18 +24,22 @@ from chatterbot.trainers import ListTrainer
 
 class PlayerCharacter:
 
-    def __init__(self, name, power, weapon, strength, health, destination, inventory, transport, moves):
+    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, moves=None):
         self.name = name
         self.power = power
         self.weapon = weapon
         self.strength = strength
         self.health = health   
         self.destination = destination
+        self.zone = zone
         self.inventory = inventory
         self.transport = transport
-        self.moves = moves
+        if moves is None:
+            self.moves = []
+        else: 
+            self.moves = moves
 
-    def showHealth(self):
+    def show_health(self):
         health = self.health
         h = 1
         health_hearts = ""
@@ -46,13 +50,19 @@ class PlayerCharacter:
         return health_hearts
         
     def go(self, game, command):
+        go_directions = {"forward": 2, "back": 0, "left": 1, "right": 3}
         go_styles = ["jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
         obj_name = ""
-        for obj in game.player.destination.object:
-            obj_name = obj.name  
-            go_msg = obj.msg['go']
+        
+        obj_name = game.player.zone.objects.name  
+        go_msg = game.player.zone.objects.msg['go']
 
-        if command == obj_name:
+        if command in go_directions:
+            game.msg.append(str("Moving swiftly to the {direction}").format(direction=command))
+            game.player.zone = game.player.destination.zones[go_directions[command]]
+            game.msg.append(game.player.zone.scenario)
+
+        elif command == obj_name:
             go_style = random.choice(go_styles)
             game.msg.append(str("You {go} {object}").format(go = go_style, object = obj_name))
             game.msg.append(go_msg)         
@@ -61,25 +71,30 @@ class PlayerCharacter:
             if game.player.transport == "":
                 game.player.transport = game.transport    
             game.msg.append(game.player.transport.msg['go'])
+
         else:
             game.msg.append(stylize(commands['go']['error'], colored.fg(1)))
 
 
     def look(self, game, command):
-        if command == "closer" and "look" in game.player_moves:
-            game.msg.append("You get closer and see that...")
-            for itm in game.player.destination.item:
-                game.msg.append("the item you could see looks a lot like a " + itm.name)
-                game.msg.append(itm.description)
+        if command == "closer" and "look" in game.player.moves:
+            if game.player.zone.items.collected == False:
+                game.msg.append("You get closer and see that...")
+                game.msg.append("the item you could see looks a lot like a " + game.player.zone.items.name)
+                game.msg.append(game.player.zone.items.description)
+            else:
+                game.msg.append("You look closer but that just does not appear to be anything here to see...")  
         elif command == "around":
-            game.msg.append("You have a good look around...")
-            for obj in game.player.destination.object:
+            if game.player.zone == game.destinations[0].zones[0] and game.player.weapon == "":
+                game.select_weapon()
+            else:
+                game.msg.append("You have a good look around...")
                 tip = ""
-                if len(game.player_moves) < 4:
-                    tip = stylize(" (tip: go " + obj.name + ")", colored.fg(1))
-                game.msg.append(obj.msg['look'] + tip)
-            for itm in game.player.destination.item:
-                game.msg.append(itm.msg['look'])
+            if len(game.player.moves) < 4:
+                tip = stylize(" (tip: go " + game.player.zone.objects.name + ")", colored.fg(1))
+            game.msg.append(game.player.zone.objects.msg['look'] + tip)
+            if game.player.zone.items.collected == False:
+                game.msg.append(game.player.zone.items.msg['look'])
         else:
             game.msg.append(stylize(commands['look']['error'], colored.fg(1)))
     

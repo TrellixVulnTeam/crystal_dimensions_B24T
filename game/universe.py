@@ -16,11 +16,12 @@ from config import commands, destinations
 class Destination:
 #destination class - used in conjunction with Hero to create the players destination
 
-    def __init__(self, name, crystal, voyages, scenario, colour):
+    def __init__(self, name, voyages, scenario, colour, zones):
         self.name = name
         self.voyages = voyages
         self.scenario = scenario
         self.colour = colour
+        self.zones = zones
 
     def title(self):
         print('{0}'.format('-'*65))
@@ -30,19 +31,24 @@ class Destination:
 
     def voyage_list(self, game, task):
         if task == "list":
-            game.msg.append(str("Voyages:"))
+            game.msg.append(str("Suggested destinations:"))
             for direction, value in self.voyages.items():
                 game.msg.append(str(destinations[value]['name']) + str(" ( direction: " + direction + " )"))   
         game.msg.append(stylize(str("Remember you'll need enough fuel to reach your destination!").format(capacity=10), colored.fg(1)))
 
-class Zone(Destination):
+class Zone():
 #create a game zone to find items and fight enemies
-    def __init__(self, name, objects, items, crystal, non_player_characters, scenario):
-        super().__init__(name, scenario)
+    def __init__(self, name, objects, items, crystal, non_player_characters, scenario, weapons=None):
+        self.name = name 
         self.objects = objects 
         self.items = items
+        if weapons is None:
+            self.weapons = []
+        else: 
+            self.weapons = weapons
         self.crystal = crystal
         self.non_player_characters = non_player_characters 
+        self.scenario = scenario
 
 class Transport:
 #create a vehicle to carry the player  + non player characters around the game
@@ -80,10 +86,12 @@ class Object:
 class Item:
 #create items (pick-ups) in the game
 
-    def __init__(self, name, description, msg):
+    def __init__(self, name, description, msg, category, collected):
         self.name = name
         self.description = description
         self.msg = msg
+        self.category = category
+        self.collected = collected
     
     def get(self, game, command):
 
@@ -91,10 +99,9 @@ class Item:
             # display a helpful message
             game.msg.append(str("Yay - you've got the " + self.name))
             game.msg.append(self.msg['get'])
-            game.player.inventory.append(self)    
+            game.player.inventory.append(self)
+            self.collected = True
 
-            # remove item from destination
-            game.player.destination.item.remove(self)        
         else:
             # otherwise, if the item isn't there to get
             # tell them they can't get it
@@ -110,24 +117,24 @@ class Item:
             #show updated list of pack items
             game.player.list_inventory(game, "", "list")
             # restore the item to the current destination as if dropped on the ground
-            game.player.destination.item.append(self)  
+            game.destination.item.append(self)  
 
 class Weapon(Item):
 #create weapons for the player
-    def __init__(self, name, description, msg, damage, rounds):
-        super().__init__(name, description, msg)
-        self.damage = damage
+    def __init__(self, name, description, msg, category, collected, damage, rounds, player):
+        super().__init__(name, description, msg, category, collected)
+        self.damage = damage, collected
         self.rounds = rounds
+        self.player = player
 
     def use(self):
         pass    
-    
+
 class Food(Item):
 #create edible items
-    def __init__(self, name, description, msg, health, category):
-        super().__init__(name, description, msg)
+    def __init__(self, name, description, msg, category, collected, health):
+        super().__init__(name, description, msg, category, collected)
         self.health = health
-        self.category = category
 
     def eat(self, game, command):
 
@@ -153,17 +160,18 @@ class Food(Item):
             game.msg.clear()
             game.msg.append(stylize(commands['food']['error'], colored.fg(1)))  
 
-class Potion(Food):
+class Magic(Item):
 #create magic potion items
-    def __init__(self, name, description, msg, health, category, magic, strength):
-        super().__init__(name, description, msg, health, category)
-        self.magic = magic
+    def __init__(self, name, description, msg, category, collected, spell, health, strength):
+        super().__init__(name, description, msg, category, collected)
+        self.spell = spell
+        self.health = health
         self.strength = strength
 
 class Key(Item):
 #create key items
-    def __init__(self, name, description, msg, object=None):
-        super().__init__(name, description, msg)
+    def __init__(self, name, description, msg, category, collected, object=None):
+        super().__init__(name, description, msg, category, collected)
         if object is None:
             self.object = []
         else: 
@@ -171,8 +179,8 @@ class Key(Item):
         
 class WinningItem(Item):
 #create winning items - these must be collected to win game!
-    def __init__(self, name, description, msg):
-       super().__init__(name, description, msg)
+    def __init__(self, name, description, msg, category, collected):
+       super().__init__(name, description, msg, category, collected)
 
     def place_to_win(self):
         pass

@@ -60,7 +60,7 @@ is parked just out of sight on the mud flats.
 destinations = {
         1: {
         'name': 'Sector 9',
-        'voyage': {'north': 3, 'east': 2, 'south': 4, 'west': 5},
+        'voyages': {'north': 3, 'east': 2, 'south': 4, 'west': 5},
         'crystal': False,
         'scenario': '''You check your handheld navigation system, 
 from here you can fly to the South, where you'll find planet Sapsa 
@@ -72,7 +72,7 @@ so desperately need but that you also risk bumping into trouble...''',
     },
         2: {
         'name': 'Taiga planet',
-        'voyage': {'north': 3, 'west': 5, 'south': 4},
+        'voyages': {'north': 3, 'west': 5, 'south': 4},
         'crystal': True,
         'scenario': '''You struggle to find somewhere to land, 
 with great skill you park in the middle of what 
@@ -83,7 +83,7 @@ the new planet you've landed on.''',
     },  
         3: {
         'name': 'Yanus planet',
-        'voyage': {'east': 2, 'west': 5, 'south': 4},
+        'voyages': {'east': 2, 'west': 5, 'south': 4},
         'crystal': True,
         'scenario': '''You land with a bump on an empty piece of land - there's a twilight glow
 to the sky and the air is dry. Stepping out of the spaceship, the ground 
@@ -92,7 +92,7 @@ is rocky, almost crunching under foot.''',
     },
         4: {
         'name': 'Sapsa planet',
-        'voyage': {'east': 2, 'north': 3, 'west': 5},
+        'voyages': {'east': 2, 'north': 3, 'west': 5},
         'crystal': True,
         'scenario': '''You pull off a super smooth landing in a clearing and 
 run towards what looks like vegetation - travelling around the solar system 
@@ -101,7 +101,7 @@ has made you hungry.''',
     },
         5: { 
         'name': 'Earth',
-        'voyage': {'north': 3, 'south': 4},
+        'voyages': {'north': 3, 'south': 4},
         'crystal': False,
         'scenario': '''You've arrived on Earth, memories flood back, the summer breeze, the trees, 
 the ocean but enough of this nostalgia where is the Portal?''',
@@ -110,7 +110,7 @@ the ocean but enough of this nostalgia where is the Portal?''',
 }
 
 #game zones
-destinations = {
+zones = {
         1: {
         'name': 'Zone 1',
         'scenario': '''zone 1 lorem ipsum.'''
@@ -175,13 +175,28 @@ destinations = {
         'name': 'Zone 16',
         'scenario': '''zone 16 lorem ipsum.'''
         },
+        17: {
+        'name': 'Zone 17',
+        'scenario': '''zone 13 lorem ipsum.'''
+        },
+        18: {
+        'name': 'Zone 18',
+        'scenario': '''zone 14 lorem ipsum.'''
+        },
+        19: {
+        'name': 'Zone 19',
+        'scenario': '''zone 15 lorem ipsum.'''
+        },
+        20: {
+        'name': 'Zone 20',
+        'scenario': '''zone 16 lorem ipsum.'''
+        },
 }
 #player characters
 player_characters = {
     1: {
         'name': 'Rampage', 
         'power': 'Superhuman strength', 
-        'weapon': 'Rhino horn daggers',
         'strength': 7,
         'health': 5
         },
@@ -189,7 +204,6 @@ player_characters = {
     2: {
         'name': 'Springing Tiger', 
         'power': 'Mega jump (30m)', 
-        'weapon': 'Two swords and a pistol',
         'strength': 5,
         'health': 5
         },
@@ -197,7 +211,6 @@ player_characters = {
     3: {
         'name': 'Armoured Soldier', 
         'power': 'Laser eyes', 
-        'weapon': 'Rifle',
         'strength': 6,
         'health': 5
         }
@@ -324,26 +337,24 @@ objects = {
     1: {
         "name": "portal",
         "description": "Large black metal container with no obvious markings",
-        "move": {"go", "enter"},
+        "move": {"enter"},
         "msg": {"go": '''You're now inches away from the portal.''', "look": '''
-You see something you think might be the portal     
-        '''} 
+You see something you think might be the portal'''} 
     },
     2: {
         "name": "box",
         "description": "Large black metal container with no obvious markings",
-        "move": {"go", "open"},
+        "move": {"open"},
         "msg": {"go": '''The box is much bigger than it looked from a distance. 
-It has a door like opening but its firmly shut - locked by the looks of it...''', "look": '''
-A square metal container is lying on the ground up ahead of you
-        ''' 
+It has a door but it's firmly shut - locked by the looks of it...''', "look": '''
+A square metal container is lying on the ground up ahead of you''' 
         }
     },
     3: {
         "name": "treehouse",
         "description": '''High up in the trees there is a platform with a hideawy camouflaged 
 in the branches of the big oak tree''',
-        "move": {"go", "climb"},
+        "move": {"climb"},
         "msg": {"go": '''You're standing below the treehouse - wondering how to get up to it and 
 inside to have a look around - could be hiding something interesting''', "look": '''Up high above you can make out a treetop hideaway'''
         }
@@ -353,7 +364,7 @@ inside to have a look around - could be hiding something interesting''', "look":
         "description": '''It's a long wooden table covered in elaborate carvings. 
 It look like it has been prepared for a feast 
 but there is no one around it''',
-        "move": {"go", "sit"},
+        "move": {"under"},
         "msg": {"go": '''You run up to the table keen to see if there are any signs of life...''', "look": '''There in front of you is a long wooden table'''
        }
     }
@@ -370,6 +381,9 @@ items = {
         "msg": {"get": '''You're now armed with your trusty weapon - 
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
 Where you're going - you're defintely going to need a weapon!'''},
+        "category": "weapon",
+        "player": 1
+        },
         2: {
         "name": "Two swords and a pistol",
         "description": '''Ready for close and long range combat. 
@@ -378,9 +392,11 @@ The swords are your favourite but you are happy to finish the job with a pistol 
         "rounds": 14,
         "msg": {"get": '''You're now armed with your trusty weapon - 
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
-Where you're going - you're defintely going to need a weapon!'''}
-    },
-    3: {
+Where you're going - you're defintely going to need a weapon!'''},
+        "category": "weapon",
+        "player": 2
+        },
+        3: {
         "name": "Rifle",
         "description": '''You need to get up out of the way with this weapon,
 its leathal but you need some cover to use it range effectively''',
@@ -388,48 +404,50 @@ its leathal but you need some cover to use it range effectively''',
         "rounds": 10,
         "msg": {"get": '''You're now armed with your trusty weapon - 
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
-Where you're going - you're defintely going to need a weapon!'''}
-    }},
-        "crystals": {
+Where you're going - you're defintely going to need a weapon!'''},
+        "category": "weapon",
+        "player": 3
+        }},
+        "winning_items": {
     1: {
         "name": "Collapse Crystal",
         "description": '''A very thin, sheet like crystal with shards of shiny black 
 material running through the middle.''',
-        "type": "crystal",
         "msg": {"get": '''Nice work, another precious crystal and 
 another step closer to completing your mission''', "look": '''You spot what looks like a stone but something tells 
-you it is more than that'''}
+you it is more than that'''},
+        "category": "crystal"
     },
     2: {
         "name": "Build Crystal",
         "description": '''A dense perfect square. Purple and very shiny, 
 when you look into this crystal you see your reflection
 but wear your eyes would be, there are black holes.''',
-        "type": "crystal",
         "msg": {"get": '''It's the build crystal, this one creeps you right out but 
 you're pleased it's safely in your possession''', "look": '''What's that shiny thing relfecting the light a little way off, 
-you can just about see the light bouncing of it is purple - the build crystal is purple...'''}
+you can just about see the light bouncing of it is purple - the build crystal is purple...'''},
+        "category": "crystal"
     },
     3: {
         "name": "Unite Crystal",
         "description": '''This is the most beautiful thing you have ever seen.
 Radiating warmth and energy, the Unite Crystal has an 
 iridescent glow that lights up it's surroundings.''',
-        "type": "crystal",
         "msg": {"get": '''Wow you barely manage to take your eyes off the Crsytal as you stow it away safely.
 The rumours were right this is the most powerful crystal and you've got it!!''', "look": '''There's glow coming up from somewhere in the undergrowth.
-It could be some kind of energy source - its worth a closer look.'''}
+It could be some kind of energy source - its worth a closer look.'''},
+        "category": "crystal"
     }},
         "keys": {
     1: {
         "name": "skeleton key",
         "description": '''It's a Large iron key with a Ruby encrusted bit and a 
 ornate looking blade.''',
-        "type": "key",
         "msg": {"get": '''You pocket the skeleton key - this will unlock anything''', "look": '''Is that a key you can see, looks like someone has tried to hide it 
-- but failed as there it is bold as brass, right in front of you!'''}
+- but failed as there it is bold as brass, right in front of you!'''},
+        "category": "key"
     }},
-        "potions": {
+        "magic": {
     1: {
         "name": "potion",
         "description": '''A small leather flask with clear liquid inside.
@@ -438,7 +456,11 @@ Smells like vanilla pods.''',
         "msg": {"get": '''Supplies always come in handy - I wonder if the potion has any kick to it?''', "look": '''There's a bottle - looks too special to be water...''',
 "drink": '''With a gulp and a slurp you down the potion.
 A few moments later the hallucinations kick in -
-you might need to lie down for while...'''}
+you might need to lie down for while...'''},
+        "category": "magic",
+        "spell": "",
+        "health": -1,
+        "strength": 0
     }},
         "food": {
     1: {
@@ -448,16 +470,20 @@ you might need to lie down for while...'''}
         "msg": {"get": '''Save this food in case of hunger or the need for a boost!''', "look": '''Your eyes must be decieving you - 
 it looks like cake ****chocolate cake!?!****''', "food": '''You gobble it down so quickly it's like it has evapourated - and then
 you start to feel bloated, you really need to fart dude
- or you might explode...'''}
+ or you might explode...'''},
+        "category": "food",
+        "health": 0,
     },
     2: {
         "name": "water",
         "description": '''Blue. Cold. Wet. Delicious''',
         "type": "food",
-        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "food": '''You take a couple fo big gulps,
-it is water and it's as refreshing as you'd hoped it would be...'''}
+        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "drink": '''You take a couple fo big gulps,
+it is water and it's as refreshing as you'd hoped it would be...'''},
+        "category": "drink",
+        "health": 0,
     }}
-}}
+}
 
 conversation = [
             "How are you?",

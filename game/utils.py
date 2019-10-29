@@ -28,3 +28,10 @@ def progress_bar():
     time.sleep(0.1)
     sys.stdout.write('\r{:02d}: {}'.format(i, '#' * (i / 2)))
     sys.stdout.flush()
+
+# break a list into chunks of n size:
+def chunks(l, n):
+    # For item i in a range that is a length of l,
+    for i in range(0, len(l), n):
+        # Create an index range for l of n items:
+        yield l[i:i+n]    

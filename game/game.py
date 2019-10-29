@@ -23,8 +23,6 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 # Create a new trainer for the chatbot
 from chatterbot.trainers import ListTrainer
 
-
-
 class Game:
 #main game class object, complete with heler functions, help, quit, restart, move etc..
     
@@ -34,8 +32,9 @@ class Game:
         self.mission = mission
         self.player_characters = player_characters
         self.destinations = destinations
-        self.player = player
         self.transport = transport
+        self.player = player
+        self.msg = msg
         self.commands = commands
         self.msg = msg
 
@@ -67,7 +66,7 @@ class Game:
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
-    def showIntro(self):
+    def show_intro(self):
         clear()
         # ascii banner
         ascii_banner = pyfiglet.figlet_format(self.title)
@@ -80,24 +79,24 @@ class Game:
         time.sleep(1)
         print(self.mission) 
 
-    def showWelcome(self):
+    def show_welcome(self):
         self.msg.append(str('''
 Hey there {name} there's no time to waste...    
 Looks like your super power - {power} 
 - will be key to saving humanity.    
 {intro}''').format(name = self.player.name, power = self.player.power, intro = intro))
        
-    def showStatus(self):
+    def show_status(self):
         clear()
         # print the player's current status
         ascii_banner = pyfiglet.figlet_format(self.player.destination.name)
         print(stylize(ascii_banner, colored.fg(self.player.destination.colour)))
 
         #if beginning of the game print welcome message
-        if not self.player_moves and self.player.destination.order == 1:
-            self.showWelcome()
+        if not self.player.moves and (self.player.destination == self.destinations[0]):
+            self.show_welcome()
 
-        if self.player.weapon is None:
+        if self.player.weapon:
             weapon =  self.player.weapon.name
         else: 
             weapon = ""
@@ -109,19 +108,20 @@ Looks like your super power - {power}
         # print weapon
         print(stylize("Weapon : " + weapon, colored.fg(84)))
         # print health
-        print(stylize("Health :" + str(self.player.showHealth()), colored.fg(15) + colored.bg(1)))
+        print(stylize("Health :" + str(self.player.show_health()), colored.fg(15) + colored.bg(1)))
 
         #print destination scenario if just arrived
-        if not self.player_moves:
+        if not self.player.moves:
             self.msg.append(self.player.destination.scenario)
             self.player.destination.scenario is None
         
         # print the quick look script - if there is an item
-        if self.player.health > 0 and self.player.destination.items and not self.msg:
+
+        if self.player.health > 0 and ((self.player.zone.items == False) and not self.msg):
             self.msg.append(str('''
 You have a quick look around you and see what appears to be a {item} 
 on the ground in front of you.
-            ''').format(item = self.player.destination.items[0].name))
+            ''').format(item = self.player.zone.items[0].name))
                 
         if self.msg:
             print("{0}".format("="*75))
@@ -131,7 +131,7 @@ on the ground in front of you.
             print("{0}".format("="*75))
         print(stylize("What next!?!", colored.fg(84)))
 
-    def showVehicle(self):
+    def show_vehicle(self):
         #print out details of the chosen transport for this game
         name = self.transport.name.upper()
         name = "*".join(name)
@@ -139,16 +139,35 @@ on the ground in front of you.
         self.msg.append(self.transport.description)
         self.msg.append(self.transport.msg['look'])  
 
-    def showNavigator(self):
-        self.msg.append(str("Vehicle category: {category}").format(category=self.player.transport.category.upper()))
-        self.msg.append(str("Fuel: {fuel}").format(fuel=self.player.transport.fuel))
-        self.msg.append(str("Weapon: {weapon}").format(weapon=self.player.transport.weapon.upper()))
+    def show_navigator(self):
+        self.msg.append(str("Vehicle category: {category}").format(category=self.transport.category.upper()))
+        self.msg.append(str("Fuel: {fuel}").format(fuel=self.transport.fuel))
+        self.msg.append(str("Current location: {location}").format(location=self.player.destination.name.upper()))
         self.player.destination.voyage_list(self, "list")
         
     def players(self):
         
         for key, value in self.player_characters.items():
            print(str(key) + ") " + value['name'] + " ( " + value['power'] + " )")
+
+    def select_weapon(self):
+        print('''There's a big stack of weapons on the floor in front of you!''')
+        i = 1
+        for weapon in self.player.zone.weapons:
+            print(str(i) + ") " + weapon.name)
+            print(weapon.description)
+            i += 1
+        print(stylize("Pick up one of these weapons? Type a number:", colored.fg(84)))
+        weapon_select = input('>')
+        try:
+            val = int(weapon_select)
+        except ValueError:
+            print(stylize("Doesn't look like there is a weapon like that...", colored.fg(1)))
+            time.sleep(1)
+            print(stylize("Try again...", colored.fg(84)))
+            weapon_select = input('>')
+        if int(weapon_select) in items['weapons']:
+            self.player.weapon =  self.player.zone.weapons[int(weapon_select)]   
 
     def command(self, command):
 
@@ -175,7 +194,7 @@ on the ground in front of you.
             #'help' command - available throughout game
             if command[0] == 'help':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 self.help()
 
             #'restart' command - available throughout game
@@ -185,40 +204,23 @@ on the ground in front of you.
             #'fly' command
             if command[0] == 'fly':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
 
-                if "spaceship" in self.player_moves:
-                    self.player_moves.append(command[0])
+                if "spaceship" in self.player.moves:
+                    self.player.moves.append(command[0])
                      # check that can go to their desired destination
-                    if command[1] in self.player.destination.voyage:
+
+                    if command[1] in self.player.destination.voyages:
                         directional_move = command[1]
-                        voyages = self.player.destination.voyage
+                        voyages = self.player.destination.voyages
                         new_destination = voyages[directional_move]
-
-                        destination_list = self.destinations
-                        destination_objects = []
-                        destination_items = []
-
-                        #create objects
-                        for obj in destination_list[new_destination]['object']:
-                            ob = Object(objects[obj]['name'], objects[obj]['description'], objects[obj]['move'], objects[obj]['msg'])
-                            destination_objects.append(ob)
-
-                        #create items
-                        for itm in destination_list[new_destination]['item']:
-                            it = Item(items[itm]['name'], items[itm]['description'], items[itm]['msg'])
-                            destination_items.append(it)
-
-                        self.player.destination = Destination(destination_list[new_destination]['name'], destination_list[new_destination]['order'], destination_list[new_destination]['voyage'], destination_objects, destination_items, destination_list[new_destination]['thing'], destination_list[new_destination]['scenario'], destination_list[new_destination]['colour'])
-
-                        #create instance of non player character
-                        new_non_player_character = self.player.destination.non_player_character
-                        non_player_character_list = self.non_player_characters
-                        self.player.destination.thing = NonPlayerCharacter(non_player_character_list[new_non_player_character]['name'], non_player_character_list[new_non_player_character]['species'], non_player_character_list[new_non_player_character]['weakness'], non_player_character_list[new_non_player_character]['status'], non_player_character_list[new_non_player_character]['strength'], non_player_character_list[new_non_player_character]['health'], non_player_character_list[new_non_player_character]['encounter'])
+                        self.player.destination = self.destinations[new_destination]
+                        self.player.zone = self.destinations[new_destination].zones[0]
+                        
                         self.msg.append(str('''
 After a quick interstellar hop through the universe you've arrived on {destination}
                         ''').format(destination = self.player.destination.name))            
-                        self.player_moves.clear()
+                        self.player.moves.clear()
                     else:
                         self.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
                 else:
@@ -226,22 +228,20 @@ After a quick interstellar hop through the universe you've arrived on {destinati
                     self.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
                     if not self.player.transport:
                         self.msg.append("But it must be your lucky day as you happen to have a ")
-                        self.showVehicle()
+                        self.show_vehicle()
 
             #'items' command
             if command[0] == 'items':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 self.player.list_inventory(self, "", "list")
 
             #'get' command
             if command[0] == 'get':
                 self.msg.clear()
-                self.player_moves.append(command[0])
-                if command[1] and self.player.destination.item:
-                    for itm in self.player.destination.item:
-                        if command[1] and command[1] == itm.name:
-                            itm.get(self, command[1])
+                self.player.moves.append(command[0])
+                if command[1] == self.player.zone.items.name:
+                    self.player.zone.items.get(self, command[1])
                 else:
                     self.msg.clear()
                     self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
@@ -249,7 +249,7 @@ After a quick interstellar hop through the universe you've arrived on {destinati
             #'drop' command
             if command[0] == 'drop':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 if self.player.list_inventory(self, command[1], "check") == True:
                     for itm in self.player.inventory:
                         if itm.name == command[1]:
@@ -258,7 +258,7 @@ After a quick interstellar hop through the universe you've arrived on {destinati
             #'eat' command
             if command[0] == 'eat':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 if self.player.list_inventory(self, command[1], "check") == True:
                     for itm in self.player.inventory:
                         if itm.name == command[1]:
@@ -266,7 +266,7 @@ After a quick interstellar hop through the universe you've arrived on {destinati
 
             #'drink' command
             if command[0] == 'drink':
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 if self.player.list_inventory(self, command[1], "check") == True:
                     for itm in self.player.inventory:
                         if itm.name == command[1]:
@@ -275,7 +275,7 @@ After a quick interstellar hop through the universe you've arrived on {destinati
             # 'attack' command
             if command[0] == 'fight':
                 self.msg.clear()
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 if self.player.destination.thing and self.player.destination.thing.health > 0:
                     #launch an attack
                     self.player.destination.thing.fight(self)
@@ -285,39 +285,39 @@ After a quick interstellar hop through the universe you've arrived on {destinati
                     
             # 'talk' move
             if command[0] == 'talk':      
-                self.player_moves.append(command[0]) 
+                self.player.moves.append(command[0]) 
                 
                 if self.player.destination.thing:
                     #have a chat
                     self.player.destination.talk(self.chatbot)
                 else:
-                    self.msg.append(stylize("There's nothing here to talk to!", colored.fg(1)))
+                    self.msg.append(stylize("There's no one here to talk to!", colored.fg(1)))
 
 
             # 'look' command
             if command[0] == 'look':   
-                self.msg.clear()       
-                self.player_moves.append(command[0]) 
+                self.msg.clear()     
+                self.player.moves.append(command[0]) 
                 if self.player.list_inventory(self, command[1], "check") == True:
-                    self.showNavigator()
+                    self.show_navigator()
                 else:    
                     self.player.look(self, command[1])    
 
             # 'go' command
             if command[0] == 'go':
                 self.msg.clear()
-                self.player_moves.append(command[0])
-                self.player_moves.append(command[1])
+                self.player.moves.append(command[0])
+                self.player.moves.append(command[1])
                 self.player.go(self, command[1])
                 
             # 'fart' command
             if command[0] == 'fart':
-                self.player_moves.append(command[0])
+                self.player.moves.append(command[0])
                 self.player.fart(self)
 
             # 'open' command
             if command[0] == 'open':      
-                self.player_moves.append(command[0]) 
+                self.player.moves.append(command[0]) 
                 if "key" in self.player.inventory:
                     self.msg.clear()
                     self.msg.append("You open the box with your key and in the bottom you see the " + self.player.destination.crystal)
