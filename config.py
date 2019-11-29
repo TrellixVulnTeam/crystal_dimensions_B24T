@@ -112,32 +112,51 @@ the ocean but enough of this nostalgia where is the Portal?''',
 #game zones
 zones = {
         1: {
-        'name': 'Zone 1',
-        'scenario': '''zone 1 lorem ipsum.'''
+        'name': 'The forest',
+        'scenario': '''A copse of tall rigid trees zig zagged across the hill. 
+Their silky green leaves drift down from their spikey branches onto the damp forest floor.'''
         },
         2: {
-        'name': 'Zone 2',
-        'scenario': '''zone 2 lorem ipsum.'''
+        'name': 'The graveyard',
+        'scenario': '''Uneven rows of massive tombs stretch into the distance.
+There is a path weaving through the graves of a thousand dead bodies...
+But it is overgrown and riddled with potholes. Night or day this 
+place has an atmosphere - dark, always dark.'''
         },
         3: {
-        'name': 'Zone 3',
-        'scenario': '''zone 3 lorem ipsum.'''
+        'name': 'The town of nothing',
+        'scenario': '''Destroyed and hollow, rows of abandoned homes 
+lay quiet and eerie. Roads weave through the buildings and debris, 
+in the distance you can make out hundreds if not thousand of candles 
+flickering in the ancient ruins, maybe despite the deserted appearance 
+there is life...'''
         },
         4: {
-        'name': 'Zone 4',
-        'scenario': '''zone 4 lorem ipsum.'''
+        'name': 'The lost lake',
+        'scenario': '''The cold clear water shimmers like molten glass 
+on the surface of the forgotten lake. The marshy banks surrounding the dark
+lake is covered in a glowing green moss - you've seen this vegetation before 
+and recall it to be the home to poisonous balck and red beatles. Where they live
+nothing else does...'''
         },
         5: {
-        'name': 'Zone 5',
-        'scenario': '''zone 5 lorem ipsum.'''
+        'name': 'Rainbow falls',
+        'scenario': '''A flowing torrent of candy colours descends form the sky, 
+crashing into the rock pools hundreds of feet below. A multi-coloured mist that's
+warm and tingly stops you fomr seeing much but despite this it's somehow magical'''
         },
         6: {
-        'name': 'Zone 6',
-        'scenario': '''zone 6 lorem ipsum.'''
+        'name': 'Alien Corp',
+        'scenario': '''Three sky scrapers, all glass and carbon fibre tower climb high
+into the nights sky. Each with a matrix of illumination - they look like alien spaceships 
+just landed - a bright neon sign reads "ALIEN CORP PLC"'''
         },
         7: {
-        'name': 'Zone 7',
-        'scenario': '''zone 7 lorem ipsum.'''
+        'name': 'Stone statue',
+        'scenario': '''The sand is whippin gup off the dessert floor, partly hiding
+the giant stone statue in fornt of you. It must be at least 20 feet tall. It looks
+like a fierce warrior going into battle. It is wielding an emormous sharp scord above
+it's head. The statue looks like granite but it has a fur coat of moss''
         },
         8: {
         'name': 'Zone 8',
@@ -427,6 +446,7 @@ but wear your eyes would be, there are black holes.''',
 you're pleased it's safely in your possession''', "look": '''What's that shiny thing relfecting the light a little way off, 
 you can just about see the light bouncing of it is purple - the build crystal is purple...'''},
         "category": "crystal"
+        
     },
     3: {
         "name": "Unite Crystal",

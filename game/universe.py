@@ -38,7 +38,7 @@ class Destination:
 
 class Zone():
 #create a game zone to find items and fight enemies
-    def __init__(self, name, objects, items, crystal, non_player_characters, scenario, weapons=None):
+    def __init__(self, name, objects, items, winning_items, non_player_characters, scenario, weapons=None):
         self.name = name 
         self.objects = objects 
         self.items = items
@@ -46,7 +46,7 @@ class Zone():
             self.weapons = []
         else: 
             self.weapons = weapons
-        self.crystal = crystal
+        self.winning_items = winning_items
         self.non_player_characters = non_player_characters 
         self.scenario = scenario
 
@@ -180,7 +180,7 @@ class Key(Item):
 class WinningItem(Item):
 #create winning items - these must be collected to win game!
     def __init__(self, name, description, msg, category, collected):
-       super().__init__(name, description, msg, category, collected)
+        super().__init__(name, description, msg, category, collected)
 
     def place_to_win(self):
         pass

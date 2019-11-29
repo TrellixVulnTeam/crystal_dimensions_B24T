@@ -58,7 +58,7 @@ class PlayerCharacter:
         go_msg = game.player.zone.objects.msg['go']
 
         if command in go_directions:
-            game.msg.append(str("Moving swiftly to the {direction}").format(direction=command))
+            game.msg.append(str("Moving swiftly {direction}").format(direction=command))
             game.player.zone = game.player.destination.zones[go_directions[command]]
             game.msg.append(game.player.zone.scenario)
 
@@ -89,7 +89,7 @@ class PlayerCharacter:
                 game.select_weapon()
             else:
                 game.msg.append("You have a good look around...")
-                tip = ""
+            tip = ""
             if len(game.player.moves) < 4:
                 tip = stylize(" (tip: go " + game.player.zone.objects.name + ")", colored.fg(1))
             game.msg.append(game.player.zone.objects.msg['look'] + tip)
