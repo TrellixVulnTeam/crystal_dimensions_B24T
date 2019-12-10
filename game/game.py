@@ -124,10 +124,12 @@ on the ground in front of you.
             ''').format(item = self.player.zone.items[0].name))
                 
         if self.msg:
+            print("")
             print("{0}".format("="*75))
             for m in self.msg:
                 print (m)
                 time.sleep(.500)
+            print("")
             print("{0}".format("="*75))
         print(stylize("What next!?!", colored.fg(84)))
 
@@ -143,6 +145,7 @@ on the ground in front of you.
         self.msg.append(str("Vehicle category: {category}").format(category=self.transport.category.upper()))
         self.msg.append(str("Fuel: {fuel}").format(fuel=self.transport.fuel))
         self.msg.append(str("Current location: {location}").format(location=self.player.destination.name.upper()))
+        self.msg.append(str("Zone: {zone}").format(zone=self.player.zone.name.upper()))
         self.player.destination.voyage_list(self, "list")
         
     def players(self):
@@ -157,17 +160,18 @@ on the ground in front of you.
             print(str(i) + ") " + weapon.name)
             print(weapon.description)
             i += 1
-        print(stylize("Pick up one of these weapons? Type a number:", colored.fg(84)))
+        print(stylize('''Pick up one of these weapons? Type a number:''', colored.fg(84)))
         weapon_select = input('>')
         try:
             val = int(weapon_select)
         except ValueError:
-            print(stylize("Doesn't look like there is a weapon like that...", colored.fg(1)))
+            print(stylize('''Doesn't look like there is a weapon like that...''', colored.fg(1)))
             time.sleep(1)
-            print(stylize("Try again...", colored.fg(84)))
+            print(stylize('''Try again...''', colored.fg(84)))
             weapon_select = input('>')
         if int(weapon_select) in items['weapons']:
-            self.player.weapon =  self.player.zone.weapons[int(weapon_select)]   
+            self.player.weapon =  self.player.zone.weapons[int(weapon_select)-1]
+            self.msg.append(self.player.weapon.msg['get']) 
 
     def command(self, command):
 
@@ -177,7 +181,7 @@ on the ground in front of you.
             clear()
             ascii_banner = pyfiglet.figlet_format("GAME OVER")
             print(ascii_banner)
-            print(stylize("Hey - Im afraid you're not longer with us. Type restart to play again.", colored.fg(1)))
+            print(stylize('''Hey - Im afraid you're not longer with us. Type restart to play again.''', colored.fg(1)))
 
         elif command[0] in self.commands:
             
@@ -197,6 +201,13 @@ on the ground in front of you.
                 self.player.moves.append(command[0])
                 self.help()
 
+            #'check' command - available throughout game
+            if command[0] == 'check':
+                self.msg.clear()
+                self.player.moves.append(command[0])
+                if command[1] == "location":
+                    self.msg.append(str('''Your location: {destination}, {zone}''').format(destination=self.player.destination.name.upper(), zone=self.player.zone.name.upper()))
+
             #'restart' command - available throughout game
             if command[0] == 'restart':
                 self.restart()
@@ -205,30 +216,7 @@ on the ground in front of you.
             if command[0] == 'fly':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-
-                if "spaceship" in self.player.moves:
-                    self.player.moves.append(command[0])
-                     # check that can go to their desired destination
-
-                    if command[1] in self.player.destination.voyages:
-                        directional_move = command[1]
-                        voyages = self.player.destination.voyages
-                        new_destination = voyages[directional_move]
-                        self.player.destination = self.destinations[new_destination]
-                        self.player.zone = self.destinations[new_destination].zones[0]
-                        
-                        self.msg.append(str('''
-After a quick interstellar hop through the universe you've arrived on {destination}
-                        ''').format(destination = self.player.destination.name))            
-                        self.player.moves.clear()
-                    else:
-                        self.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
-                else:
-                    self.msg.clear()
-                    self.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
-                    if not self.player.transport:
-                        self.msg.append("But it must be your lucky day as you happen to have a ")
-                        self.show_vehicle()
+                self.player.destination.fly(self, command[1])
 
             #'items' command
             if command[0] == 'items':
@@ -240,8 +228,13 @@ After a quick interstellar hop through the universe you've arrived on {destinati
             if command[0] == 'get':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if command[1] == self.player.zone.items.name:
+                if command[1].lower() == self.player.zone.items.name.lower():
                     self.player.zone.items.get(self, command[1])
+                elif command[1].lower() == self.player.zone.winning_items.name.lower():
+                    if self.player.zone.non_player_characters.health > 0:
+                       self.player.zone.non_player_characters.encounter(self) 
+                    else:
+                        self.player.zone.winning_items.get(self, command[1])
                 else:
                     self.msg.clear()
                     self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
@@ -276,32 +269,39 @@ After a quick interstellar hop through the universe you've arrived on {destinati
             if command[0] == 'fight':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if self.player.destination.thing and self.player.destination.thing.health > 0:
+                if self.player.zone.non_player_characters and self.player.zone.non_player_characters.health > 0:
                     #launch an attack
-                    self.player.destination.thing.fight(self)
+                    self.player.zone.non_player_characters.fight(self)
                 else:
                     self.msg.clear()
                     self.msg.append(stylize(commands['fight']['error'], colored.fg(1)))
+            # end attack        
                     
             # 'talk' move
             if command[0] == 'talk':      
                 self.player.moves.append(command[0]) 
                 
-                if self.player.destination.thing:
+                if self.player.zone.non_player_characters:
                     #have a chat
-                    self.player.destination.talk(self.chatbot)
+                    self.player.zone.non_player_characters.talk(self.chatbot)
                 else:
                     self.msg.append(stylize("There's no one here to talk to!", colored.fg(1)))
+            # end talk        
 
 
             # 'look' command
             if command[0] == 'look':   
-                self.msg.clear()     
+                self.msg.clear()   
                 self.player.moves.append(command[0]) 
+                
+                if len(command) == 1:
+                        command.append("around")
+                
                 if self.player.list_inventory(self, command[1], "check") == True:
                     self.show_navigator()
-                else:    
-                    self.player.look(self, command[1])    
+                else:
+                    self.player.look(self, command[1])   
+            # end look     
 
             # 'go' command
             if command[0] == 'go':
@@ -309,21 +309,33 @@ After a quick interstellar hop through the universe you've arrived on {destinati
                 self.player.moves.append(command[0])
                 self.player.moves.append(command[1])
                 self.player.go(self, command[1])
+            # end go    
                 
             # 'fart' command
             if command[0] == 'fart':
                 self.player.moves.append(command[0])
                 self.player.fart(self)
+            # end fart    
 
             # 'open' command
-            if command[0] == 'open':      
-                self.player.moves.append(command[0]) 
-                if "key" in self.player.inventory:
-                    self.msg.clear()
-                    self.msg.append("You open the box with your key and in the bottom you see the " + self.player.destination.crystal)
-                else:
-                    self.msg.clear()
-                    self.msg.append(stylize("You don't have anything to open " + command[1] + " with...perhaps you need to find a key", colored.fg(1)))
+            if command[0] == 'open':
+                self.player.moves.append(command[0])
+                self.player.zone.objects.open(self)
+            # end open
+
+            # 'climb' command
+            if command[0] == 'climb':
+                self.player.moves.append(command[0])
+                self.player.zone.objects.climb(self)
+            # end climb
+
+            # 'read' command
+            if command[0] == 'read':
+                self.player.moves.append(command[0])
+                self.player.zone.objects.read(self)
+            # end read
+
+
         else:
             self.msg.clear()
             self.msg.append(stylize("Sorry, but you can't do that!", colored.fg(1)))

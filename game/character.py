@@ -13,6 +13,7 @@ from colored import stylize
 import pyfiglet
 from game.utils import spinning_cursor
 from config import commands
+from game.universe import Item, WinningItem
 
 # pip install chatterbot
 from chatterbot import ChatBot
@@ -23,7 +24,7 @@ from chatterbot.trainers import ListTrainer
 
 
 class PlayerCharacter:
-
+#create a choice of hero players to play the game
     def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, moves=None):
         self.name = name
         self.power = power
@@ -50,7 +51,7 @@ class PlayerCharacter:
         return health_hearts
         
     def go(self, game, command):
-        go_directions = {"forward": 2, "back": 0, "left": 1, "right": 3}
+        go_directions = {"north": 2, "south": 0, "west": 1, "east": 3}
         go_styles = ["jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
         obj_name = ""
         
@@ -58,8 +59,8 @@ class PlayerCharacter:
         go_msg = game.player.zone.objects.msg['go']
 
         if command in go_directions:
-            game.msg.append(str("Moving swiftly {direction}").format(direction=command))
             game.player.zone = game.player.destination.zones[go_directions[command]]
+            game.msg.append(str("Travelling {direction} you reach the {zone}").format(direction=command.title(), zone=game.player.zone.name))
             game.msg.append(game.player.zone.scenario)
 
         elif command == obj_name:
@@ -78,23 +79,30 @@ class PlayerCharacter:
 
     def look(self, game, command):
         if command == "closer" and "look" in game.player.moves:
-            if game.player.zone.items.collected == False:
+            if game.player.zone.items.collected == False or game.player.zone.winning_items.collected == False:
                 game.msg.append("You get closer and see that...")
-                game.msg.append("the item you could see looks a lot like a " + game.player.zone.items.name)
-                game.msg.append(game.player.zone.items.description)
+                if game.player.zone.items.collected == False:
+                    game.msg.append("the item you could see looks a lot like a " + game.player.zone.items.name)
+                    game.msg.append(game.player.zone.items.description)
+                if game.player.zone.winning_items.collected == False:
+                    game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
+                    game.msg.append(game.player.zone.winning_items.description)
             else:
-                game.msg.append("You look closer but that just does not appear to be anything here to see...")  
+                game.msg.append("You look closer but there doesn't appear to be anything here to see...")  
         elif command == "around":
             if game.player.zone == game.destinations[0].zones[0] and game.player.weapon == "":
                 game.select_weapon()
             else:
                 game.msg.append("You have a good look around...")
             tip = ""
-            if len(game.player.moves) < 4:
-                tip = stylize(" (tip: go " + game.player.zone.objects.name + ")", colored.fg(1))
+            tip = stylize(" (tip: go " + game.player.zone.objects.name + ")", colored.fg(1))
             game.msg.append(game.player.zone.objects.msg['look'] + tip)
             if game.player.zone.items.collected == False:
                 game.msg.append(game.player.zone.items.msg['look'])
+            
+            if isinstance(game.player.zone.winning_items, WinningItem):
+                if game.player.zone.winning_items.collected == False:
+                    game.msg.append(game.player.zone.winning_items.msg['look'])    
         else:
             game.msg.append(stylize(commands['look']['error'], colored.fg(1)))
     
@@ -126,8 +134,8 @@ confirms it. ***Deadly***'''
             game.msg.append("Your back pack items:")
             if self.inventory:
                 for item in self.inventory:
-                    game.msg.append(str(item.name) + " (" + str(item.category) + ")",)       
-                game.msg.append(stylize(str("Remember you can only hold {capacity} items in your pack").format(capacity=10), colored.fg(1)))
+                    game.msg.append(str(item.name.title()) + " (" + str(item.category) + ")",)       
+                game.msg.append(stylize(str("Remember you can only hold {capacity} items in your pack").format(capacity=8), colored.fg(1)))
             else:
                 game.msg.append(stylize("[ No items in your inventory. ]", colored.fg(1)))
         elif task == "check":
@@ -138,21 +146,34 @@ confirms it. ***Deadly***'''
 
 
 class NonPlayerCharacter:
-
-    def __init__(self, name, species, weakness, status, strength, health, encounter):
+#create npc, friends and foe to populate the game and spice it up!
+    def __init__(self, name, species, appearance, weakness, status, strength, health, msg):
         self.name = name
         self.species = species
+        self.appearance = appearance
         self.weakness = weakness
         self.status = status
         self.strength = strength
         self.health = health
-        self.encounter = encounter  
+        self.msg = msg 
+
+    def encounter(self, game):
+    #encounter a npc    
+        game.msg.append('''Before you can get it...''')
+        game.msg.append(self.msg['encounter'])
+        game.msg.append(str('''
+It's {name} from the species {species}''').format(name=self.name, species=self.species))
+        game.msg.append(self.appearance.title())    
+        game.msg.append(str('''You know of these guys and you know them to be {status}''').format(status=self.status))
 
     def fight(self, game):
-        #dice based fighting engine
+    #dice based fighting engine
+
+        #intro to fight
+        game.msg.append(self.msg['fight'])   
 
         #thing strength
-        thing_strength = self.strength
+        npc_strength = self.strength
 
         #player strength
         player_strength = game.player.strength
@@ -195,13 +216,13 @@ class NonPlayerCharacter:
 
             min = 1
 
-            thing_attack_pts = random.randint(min,thing_strength)
+            npc_attack_pts = random.randint(min,npc_strength)
             player_attack_pts = random.randint(min,player_strength)
 
             attack_choice = random.choice(list(attacks))
             defence_choice = random.choice(list(defence))
 
-            if thing_attack_pts > player_attack_pts:
+            if npc_attack_pts > player_attack_pts:
                 spinning_cursor(3)
                 print("You launch an attack but " + self.name)
                 print (defence[defence_choice]['moves'])
@@ -221,7 +242,10 @@ class NonPlayerCharacter:
                 attack_again = 'n'    
 
                 if game.player.health == 0:
+                    game.msg.append(self.msg['win'])
                     game.msg.append("Oh no you have just died at the hands of " + self.name)
+                    time.sleep(4)
+                    game.msg.append(self.msg['win'])
                     attack_again = 'n'  
                 elif game.player.health > 0:
                     attack_again = input("Attack again? y/n > ")
@@ -233,7 +257,8 @@ class NonPlayerCharacter:
                 self.health = self.health - 1
                 if self.health == 0:
                     print ("You have just killed " + self.name) 
-                    time.sleep(4)
+                    time.sleep(1)
+                    game.msg.append(self.msg['win'])
                     # set attack to no
                     attack_again = 'n'
 
@@ -260,6 +285,12 @@ class NonPlayerCharacter:
 
             except(KeyboardInterrupt, EOFError, SystemExit):
                 break
+
+class Boss(NonPlayerCharacter):
+#create the boss - this character will guard the final object - they must be defeated to win the game!
+    def __init__(self, name, species, appearance, weakness, status, strength, health, encounter):
+        super().__init__(name, species, appearance, weakness, status, strength, health, encounter)
+
     
    
 

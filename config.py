@@ -26,7 +26,9 @@ commands = {
         'talk': {'input': '', 'hidden': False, 'error' : "There's not a soul about to talk to..."},
         'use': {'input': 'power', 'hidden': False, 'error' : ""},
         'inspect': {'input': 'planet', 'hidden': True, 'error' : "Nothing to inspect"},
-        'open': {'input': 'item', 'hidden': True, 'error' : "Nothing to open"},
+        'open': {'input': 'object', 'hidden': True, 'error' : "Nothing to open"},
+        'climb': {'input': 'object', 'hidden': True, 'error' : "Nothing to climb"},
+        'read': {'input': 'object', 'hidden': True, 'error' : "Nothing to read"},
         'eat': {'input': 'food', 'hidden': True, 'error' : "Blueurgh! that's not edible"},
         'drink': {'input': 'item', 'hidden': True, 'error' : "Drink what!?! there's only engine fuel here..."},
         'dance': {'input': 'name', 'hidden': True, 'error' : "That's not a dance!!"},
@@ -60,12 +62,10 @@ is parked just out of sight on the mud flats.
 destinations = {
         1: {
         'name': 'Sector 9',
-        'voyages': {'north': 3, 'east': 2, 'south': 4, 'west': 5},
-        'crystal': False,
-        'scenario': '''You check your handheld navigation system, 
+        'voyages': {'north': 3, 'south': 4},
+        'scenario': '''You check your handy navigator, 
 from here you can fly to the South, where you'll find planet Sapsa 
 and it's not far or fly North to Yanus.
-
 It occurs to you that both planets could have the crystals you
 so desperately need but that you also risk bumping into trouble...''',
         'colour': 125 
@@ -73,7 +73,6 @@ so desperately need but that you also risk bumping into trouble...''',
         2: {
         'name': 'Taiga planet',
         'voyages': {'north': 3, 'west': 5, 'south': 4},
-        'crystal': True,
         'scenario': '''You struggle to find somewhere to land, 
 with great skill you park in the middle of what 
 appears to be the only dry land surrounded by swamp. 
@@ -84,7 +83,6 @@ the new planet you've landed on.''',
         3: {
         'name': 'Yanus planet',
         'voyages': {'east': 2, 'west': 5, 'south': 4},
-        'crystal': True,
         'scenario': '''You land with a bump on an empty piece of land - there's a twilight glow
 to the sky and the air is dry. Stepping out of the spaceship, the ground 
 is rocky, almost crunching under foot.''',
@@ -93,7 +91,6 @@ is rocky, almost crunching under foot.''',
         4: {
         'name': 'Sapsa planet',
         'voyages': {'east': 2, 'north': 3, 'west': 5},
-        'crystal': True,
         'scenario': '''You pull off a super smooth landing in a clearing and 
 run towards what looks like vegetation - travelling around the solar system 
 has made you hungry.''',
@@ -101,8 +98,7 @@ has made you hungry.''',
     },
         5: { 
         'name': 'Earth',
-        'voyages': {'north': 3, 'south': 4},
-        'crystal': False,
+        'voyages': {'north': 3, 'south': 4, 'east': 2},
         'scenario': '''You've arrived on Earth, memories flood back, the summer breeze, the trees, 
 the ocean but enough of this nostalgia where is the Portal?''',
         'colour': 21
@@ -112,19 +108,20 @@ the ocean but enough of this nostalgia where is the Portal?''',
 #game zones
 zones = {
         1: {
-        'name': 'The forest',
+        'name': 'Forest',
         'scenario': '''A copse of tall rigid trees zig zagged across the hill. 
-Their silky green leaves drift down from their spikey branches onto the damp forest floor.'''
+Their silky green leaves drift down from their spikey branches onto the 
+damp forest floor.'''
         },
         2: {
-        'name': 'The graveyard',
+        'name': 'Graveyard',
         'scenario': '''Uneven rows of massive tombs stretch into the distance.
 There is a path weaving through the graves of a thousand dead bodies...
 But it is overgrown and riddled with potholes. Night or day this 
 place has an atmosphere - dark, always dark.'''
         },
         3: {
-        'name': 'The town of nothing',
+        'name': 'Town of nothing',
         'scenario': '''Destroyed and hollow, rows of abandoned homes 
 lay quiet and eerie. Roads weave through the buildings and debris, 
 in the distance you can make out hundreds if not thousand of candles 
@@ -132,7 +129,7 @@ flickering in the ancient ruins, maybe despite the deserted appearance
 there is life...'''
         },
         4: {
-        'name': 'The lost lake',
+        'name': 'Lost lake',
         'scenario': '''The cold clear water shimmers like molten glass 
 on the surface of the forgotten lake. The marshy banks surrounding the dark
 lake is covered in a glowing green moss - you've seen this vegetation before 
@@ -141,74 +138,102 @@ nothing else does...'''
         },
         5: {
         'name': 'Rainbow falls',
-        'scenario': '''A flowing torrent of candy colours descends form the sky, 
-crashing into the rock pools hundreds of feet below. A multi-coloured mist that's
-warm and tingly stops you fomr seeing much but despite this it's somehow magical'''
+        'scenario': '''A flowing torrent of candy colours descends from 
+the sky, crashing into the rock pools hundreds of feet below. A multi-coloured 
+mist that's warm and tingly stops you fomr seeing much but despite this 
+it's somehow magical'''
         },
         6: {
         'name': 'Alien Corp',
-        'scenario': '''Three sky scrapers, all glass and carbon fibre tower climb high
-into the nights sky. Each with a matrix of illumination - they look like alien spaceships 
-just landed - a bright neon sign reads "ALIEN CORP PLC"'''
+        'scenario': '''Three sky scrapers, all glass and carbon fibre 
+tower climb high into the nights sky. Each with a matrix of illumination - 
+they look like alien spaceships just landed 
+- a bright neon sign reads "ALIEN CORP PLC"'''
         },
         7: {
         'name': 'Stone statue',
-        'scenario': '''The sand is whippin gup off the dessert floor, partly hiding
-the giant stone statue in fornt of you. It must be at least 20 feet tall. It looks
-like a fierce warrior going into battle. It is wielding an emormous sharp scord above
-it's head. The statue looks like granite but it has a fur coat of moss''
+        'scenario': '''The sand is whipping up off the dessert floor, 
+partly hiding the giant stone statue in front of you. It must be at least 
+20 feet tall. It looks like a fierce warrior going into battle - it's 
+wielding an emormous sharp scord above it's head. The statue looks like 
+granite but it has a fur coat of moss'''
         },
         8: {
-        'name': 'Zone 8',
-        'scenario': '''zone 8 lorem ipsum.'''
+        'name': 'Rocky mountain',
+        'scenario': '''The kilometer high peak looks over many towns, 
+the spectacular views attracts thousands of visitors from all over the 
+Galagamatic Universe. It takes a lot of effort to climb this high above 
+the clouds and there isn't much in the way of buildings when you reach 
+the summit, just rocks and the occasional lookout post.'''
         },
         9: {
-        'name': 'Zone 9',
-        'scenario': '''zone 9 lorem ipsum.'''
+        'name': 'Crazy camp',
+        'scenario': '''This is weirdest alien retreat camp you've seen. 
+The stripy tents are full of the Universe's most wildiest warriors, 
+drinking, eating messily and brawling. It's total chaos and very noisey 
+so fairly easy to keep a low profile aorund here...'''
         },
         10: {
-        'name': 'Zone 10',
-        'scenario': '''zone 10 lorem ipsum.'''
+        'name': 'General stores',
+        'scenario': '''A shop standing on its own in what appears to be 
+the middle of nowhere. Inside there are endless aisles of random things 
+- pretty much everything from food to weapons to playing cards. You'll be 
+able to buy pretty much anything here - for sure you'''
         },
         11: {
-        'name': 'Zone 11',
-        'scenario': '''zone 11 lorem ipsum.'''
+        'name': 'Cranky cave',
+        'scenario': '''The mysterious dark openning leads to an orange 
+chamber full of stalactites and stalagmites. There is a hole in the roof 
+of the cave providing the only light - luminescent light like an underwater 
+world. You can see a giant rock blocking the exit from the cave.'''
         },
         12: {
-        'name': 'Zone 12',
-        'scenario': '''zone 12 lorem ipsum.'''
+        'name': 'Square',
+        'scenario': '''A bustling lively place - more activity than you've seen for a while.
+There are market stalls and people seeling street food - 
+the smell is making you hungry. It is easy to get lost in the crowd...
+and it would be easy to hide important things here!
+'''
         },
         13: {
-        'name': 'Zone 13',
-        'scenario': '''zone 13 lorem ipsum.'''
+        'name': 'Forbidden desert',
+        'scenario': '''This is avast arid area - srtretching furhter than a thousand days of travelling,
+it's a hostile place with deep crators that remind you of a 
+planet you once visited. The sand whips up in you face 
+making it hard to see'''
         },
         14: {
-        'name': 'Zone 14',
-        'scenario': '''zone 14 lorem ipsum.'''
+        'name': 'Frosty plains',
+        'scenario': '''Bright white everywhere and a fierce blinding light 
+relecting off the ice - it takes a proper explorer to make it through 
+the Frosty plains -  suriving any amount of time here is super tough 
+so it better be worth your while!!'''
         },
         15: {
-        'name': 'Zone 15',
+        'name': 'Control tower',
         'scenario': '''zone 15 lorem ipsum.'''
         },
         16: {
-        'name': 'Zone 16',
+        'name': 'Dino jungle',
         'scenario': '''zone 16 lorem ipsum.'''
         },
         17: {
-        'name': 'Zone 17',
+        'name': 'Battle bridge',
         'scenario': '''zone 13 lorem ipsum.'''
         },
         18: {
-        'name': 'Zone 18',
+        'name': 'Smelly swamp',
         'scenario': '''zone 14 lorem ipsum.'''
         },
         19: {
-        'name': 'Zone 19',
+        'name': 'The crossroads',
         'scenario': '''zone 15 lorem ipsum.'''
         },
         20: {
-        'name': 'Zone 20',
-        'scenario': '''zone 16 lorem ipsum.'''
+        'name': 'Portal',
+        'scenario': '''You have reached the portal - the end of your mission is in sight.
+The chamber of crystals is backlight with a throbing glow. You must place each one
+carefully and prey to the Galagamatic gods that you'r enot too late...''',
         },
 }
 #player characters
@@ -238,93 +263,98 @@ player_characters = {
 #non player characters
 non_player_characters = {
     1 : {
-        'name': 'gabaloni',
-        'species': 'Dankans',
-        'appearance': '''
+        "name": "Gabaloni",
+        "species": "Dankans",
+        "appearance": '''
 big green slimey hairy lizzard with a long spikey tail. They're really 
 strong and fierce fighters.
         ''',
-        'art': ''' ''',
-        'encounter': '''
-A tall shadow moves quickly across the floor and before you know it 
-- you are face to face with a mean looking monster!
-        ''',
-        'weakness': 'stupidity',
-        'status': 'foe',
-        'strength': 6,
-        'health': 3
+        "art": ''' ''',
+        "weakness": "stupidity",
+        "status": "dangerous",
+        "strength": 6,
+        "health": 3,
+        "msg": {"encounter": '''A tall shadow moves quickly across the floor and before you know it 
+- you are face to face with a mean looking monster!''', "fight": '''
+Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
+It's hard to imagine something so strong falling like this - 
+seeing is believing - all the life drains from him and his tail 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''} 
     },
     2 : {
-        'name': 'pacini',
-        'species': 'Scepti',
-        'appearance': '''
+        "name": "Pacini",
+        "species": "Scepti",
+        "appearance": '''
 small and fast with a cunning smile. They carry daggers in each hand. 
 Be careful as these guys are super intelligent.
         ''',
-        'art': '''
-
-        ''',
-        'encounter': '''
-Something darts about in the corner of your vision, then speeds past you, 
+        "art": '''''',
+        "weakness": "greed",
+        "status": "dangerous",
+        "strength": 5,
+        "health": 3,
+        "msg": {"encounter": '''Something darts about in the corner of your vision, then speeds past you, 
 too fast to make out. Then whatever it is calls out - "I'll fight you for 
-that spaceship"
-        ''',
-        'weakness': 'greed',
-        'status': 'foe',
-        'strength': 5,
-        'health': 3
+the crystal"''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, 
+then smash you into a pulp!*!*!"''', "lose": '''
+It's hard to imagine something so strong falling like this - 
+seeing is believing - all the life drains from him and his tail 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''} 
     },
     3 : {
-        'name': 'dilly',
-        'species': 'Labadu',
-        'appearance': '''
+        "name": "Dilly",
+        "species": "Labadu",
+        "appearance": '''
 two and half feet high with delicate features, pointy ears and pink hair. 
 You know them to be loyal and really chatty.
         ''',
-        'art': '',
-        'encounter': '''
-There's a russle behind you, sounds like someone tripping over and then you 
-get a tap on the shoulder - turning round you see it and smile.
-        ''',
-        'weakness': 'clumsy',
-        'status': 'friend',
-        'strength': 2,
-        'health': 2
+        "art": '',
+        "weakness": "clumsy",
+        "status": "friendly",
+        "strength": 2,
+        "health": 2,
+        "msg": {"encounter": '''There's a russle behind you, sounds like someone tripping over and then you 
+get a tap on the shoulder - turning round you see it and smile.''', "fight": '''"I'm friendly folk - I really don;t want to fight with you..."''', "lose": '''
+It's hard to imagine something so strong falling like this - 
+seeing is believing - all the life drains from him and his tail 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''}
     },
     4 : {
-        'name': 'sapdeez',
-        'species': 'Calltee',
-        'appearance': '''
+        "name": "Sapdeez",
+        "species": "Calltee",
+        "appearance": '''
 heavy build with wings and a beak. It has armoured scales and they like to 
 destroy everything in their path.
         ''',
-        'art': '',            
-        'encounter': '''
-Loud swooshing and squarking screaches in your ears and you dive for shelter, 
-it swoops over your head once more before landing 4 feet away and you get a 
-proper look.
-        ''',
-        'weakness': 'slow',
-        'status': 'foe',
-        'strength': 5,
-        'health': 2
+        "art": '''''',            
+        "weakness": "slow",
+        "status": "dangerous",
+        "strength": 5,
+        "health": 2,
+        "msg": {"encounter": '''Loud swooshing and squarking screaches in your ears 
+and you dive for shelter, it swoops over your head once more before landing 
+four feet away and you get a proper look.''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
+It's hard to imagine something so strong falling like this - 
+seeing is believing - all the life drains from him and his tail 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''}
     },
     5 : {
-        'name': 'lord devilhanger',
-        'species': 'Galati',
-        'appearance': '''
+        "name": "Lord Devilhanger",
+        "species": "Galati",
+        "appearance": '''
 deathly pale, 8 feet tall human like creature. He carries a blunderbuss riffle on his back 
 and shoots anything that gets in his way.
         ''',
-        'art': '',               
-        'encounter': '''
-As you have feared the mission is not quite in the bag - standing between you and the portal 
-is the fiercest of the foes that you have faced so far...
-        ''',
-        'weakness': 'vanity',
-        'status': 'foe',
-        'strength': 8,
-        'health': 5
+        "art": '''''',               
+        "weakness": "vanity",
+        "status": "boss",
+        "strength": 8,
+        "health": 5,
+        "msg": {"encounter": '''As you feared the mission is not quite in the bag - 
+standing between you and the portal is the fiercest of the foes that you have faced so far...''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
+It's hard to imagine something so strong falling like this - 
+seeing is believing - all the life drains from him and his tail 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''}
         }
 }
 
@@ -341,7 +371,7 @@ to get you to the local shops and back...''',
         "weapon": "Lazers",
         "msg": {"go": '''You stroll up to your spaceship, with a push of a button 
 you open the hatch, then you climb aboard and fire up the engines - 
-you're ready to fly out into the Galagamtic Universe...
+you're ready to fly out into the Galagamatic Universe...
 
 Might be worth having a look at your navigator 
 to see where to go next!''', 
@@ -354,11 +384,12 @@ and ready to go - whenever you are...'''
 #objects
 objects = {
     1: {
-        "name": "portal",
-        "description": "Large black metal container with no obvious markings",
-        "move": {"enter"},
-        "msg": {"go": '''You're now inches away from the portal.''', "look": '''
-You see something you think might be the portal'''} 
+        "name": "computer console",
+        "description": "Two meter high navy pillar box with a screen illuminated on one side.",
+        "move": {"read"},
+        "msg": {"go": '''Standing in front of the screen you can read some info in a language 
+you don't understand...''', "look": '''
+You see what looks like a telephone boothe...is it doctor who?'''}
     },
     2: {
         "name": "box",
@@ -384,7 +415,8 @@ inside to have a look around - could be hiding something interesting''', "look":
 It look like it has been prepared for a feast 
 but there is no one around it''',
         "move": {"under"},
-        "msg": {"go": '''You run up to the table keen to see if there are any signs of life...''', "look": '''There in front of you is a long wooden table'''
+        "msg": {"go": '''Standing in front of the table 
+you're keen to see if there are any signs of life...''', "look": '''There in front of you is a long wooden table'''
        }
     }
 }
@@ -444,7 +476,8 @@ when you look into this crystal you see your reflection
 but wear your eyes would be, there are black holes.''',
         "msg": {"get": '''It's the build crystal, this one creeps you right out but 
 you're pleased it's safely in your possession''', "look": '''What's that shiny thing relfecting the light a little way off, 
-you can just about see the light bouncing of it is purple - the build crystal is purple...'''},
+you can just about see the light bouncing of it is purple 
+- the build crystal is purple...'''},
         "category": "crystal"
         
     },
@@ -460,7 +493,7 @@ It could be some kind of energy source - its worth a closer look.'''},
     }},
         "keys": {
     1: {
-        "name": "skeleton key",
+        "name": "key",
         "description": '''It's a Large iron key with a Ruby encrusted bit and a 
 ornate looking blade.''',
         "msg": {"get": '''You pocket the skeleton key - this will unlock anything''', "look": '''Is that a key you can see, looks like someone has tried to hide it 
@@ -472,36 +505,34 @@ ornate looking blade.''',
         "name": "potion",
         "description": '''A small leather flask with clear liquid inside.
 Smells like vanilla pods.''',
-        "type": "drink",
         "msg": {"get": '''Supplies always come in handy - I wonder if the potion has any kick to it?''', "look": '''There's a bottle - looks too special to be water...''',
 "drink": '''With a gulp and a slurp you down the potion.
 A few moments later the hallucinations kick in -
-you might need to lie down for while...'''},
-        "category": "magic",
+you might need to lie down for while...''', "magic": '''But miraculously this potion has hidden powers and your strength increases!!!'''},
+        "category": "drink",
         "spell": "",
-        "health": -1,
-        "strength": 0
+        "health": 0,
+        "strength": 2
     }},
         "food": {
     1: {
         "name": "cake",
         "description": '''That's one big slice of sticky chocolate cake.''',
-        "type": "food",
         "msg": {"get": '''Save this food in case of hunger or the need for a boost!''', "look": '''Your eyes must be decieving you - 
 it looks like cake ****chocolate cake!?!****''', "food": '''You gobble it down so quickly it's like it has evapourated - and then
 you start to feel bloated, you really need to fart dude
  or you might explode...'''},
         "category": "food",
-        "health": 0,
+        "health": -1,
     },
     2: {
         "name": "water",
         "description": '''Blue. Cold. Wet. Delicious''',
-        "type": "food",
-        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "drink": '''You take a couple fo big gulps,
-it is water and it's as refreshing as you'd hoped it would be...'''},
+        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "drink": '''You take a couple of big gulps,
+it is water and it's as refreshing as you'd hoped it would be...
+Your health increase :) '''},
         "category": "drink",
-        "health": 0,
+        "health": 1,
     }}
 }
 

@@ -11,8 +11,8 @@ import colored
 from colored import stylize
 from config import commands, title, author, mission, player_characters, destinations, zones, transport, non_player_characters, objects, items
 from game.game import Game
-from game.character import PlayerCharacter
-from game.universe import Destination, Zone, Transport, Object, Item, Weapon, Food, Magic, Key, WinningItem
+from game.character import PlayerCharacter, NonPlayerCharacter, Boss
+from game.universe import Destination, Zone, Transport, Object, Item, Weapon, Food, Magic, Key, WinningItem, Clue
 from game.utils import chunks
 
 #setup empty new game variables
@@ -20,15 +20,18 @@ msg = []
 inventory = []
 game_items = []
 game_weapons = []
+game_non_player_characters = []
+game_boss = ""
 game_winning_items = []
 game_keys = []
 game_magic = []
 game_food = []
+game_clues = []
 game_objects = []
 game_zones = []
 game_destinations = []
 
-#create the destinations, zones, transport, weapons, items and objects for a new game
+#create the destinations, zones, non-player characters, transport, weapons, items and objects for a new game
 
 #create transport for game
 game_transport = Transport(transport[0]['name'], transport[0]['description'], transport[0]['category'], transport[0]['capacity'], transport[0]['fuel'], transport[0]['weapon'], transport[0]['msg'])
@@ -38,6 +41,13 @@ game_transport = Transport(transport[0]['name'], transport[0]['description'], tr
 #weapons
 for weapon in items['weapons'].items(): 
     game_weapons.append(Weapon(weapon[1]['name'], weapon[1]['description'], weapon[1]['msg'], weapon[1]['category'], False, 0, 0, weapon[1]['player']))
+
+#create non player characters for game
+for game_non_player_character in non_player_characters:
+    if non_player_characters[game_non_player_character]['status'] == "boss":
+        game_boss = Boss(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg'])
+    else:
+        game_non_player_characters.append(NonPlayerCharacter(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg']))
 
 #winning items
 for winning_item in items['winning_items'].items():
@@ -60,30 +70,52 @@ game_items.extend(game_food)
 
 #create objects for game
 for game_object in objects:
-    game_objects.append(Object(objects[game_object]['name'], objects[game_object]['description'], objects[game_object]['move'], objects[game_object]['msg']))
+    game_objects.append(Object(objects[game_object]['name'], objects[game_object]['description'], objects[game_object]['move'], '', objects[game_object]['msg']))
 
 #create zones for game
 for game_zone in zones:
     zone_item = random.choice(game_items)
     zone_object = random.choice(game_objects)
-    game_zones.append(Zone(zones[game_zone]['name'], zone_object, zone_item, '', '', zones[game_zone]['scenario']))
+    game_zones.append(Zone(zones[game_zone]['name'], zone_object, zone_item, '', zones[game_zone]['scenario']))
+
+final_zone = game_zones.pop()
+final_zone.non_player_characters = game_boss
+
+random.shuffle(game_zones)
+
+x = len(game_winning_items)
+
+while x > 0:
+    game_zones[x-1].winning_items = game_winning_items[x-1]
+    game_zones[x-1].non_player_characters = game_non_player_characters[x-1]
+    game_clues.append(Clue(game_zones[x-1], "unread"))
+    x -= 1
+
+#hide clues in objects
+i = 0
+for clue in game_clues:
+    game_objects[i].clue = clue
+    i += 1
 
 n = len(zones) / (len(destinations))
-game_zones = list(chunks(game_zones, int(n)))
+random.shuffle(game_zones)
+game_zones.append(final_zone)
+
+game_zones_group = list(chunks(game_zones, int(n)))
 
 #create destinations for game
 i = 0
 for game_destination in destinations:
-    game_destinations.append(Destination(destinations[game_destination]['name'], destinations[game_destination]['voyages'], destinations[game_destination]['scenario'], destinations[game_destination]['colour'], game_zones[i]))
+    game_destinations.append(Destination(destinations[game_destination]['name'], destinations[game_destination]['voyages'], destinations[game_destination]['scenario'], destinations[game_destination]['colour'], game_zones_group[i]))
     i += 1
 
 new_game = Game(title, author, mission, player_characters, game_destinations, game_transport, "", commands, msg)
 
 #display inital credits and game play instructions
-#new_game.show_intro()
+new_game.show_intro()
 
 #display help - list of moves
-#new_game.help()
+# new_game.help()
 
 while True:
 
