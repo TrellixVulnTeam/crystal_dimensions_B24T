@@ -211,23 +211,40 @@ so it better be worth your while!!'''
         },
         15: {
         'name': 'Control tower',
-        'scenario': '''zone 15 lorem ipsum.'''
+        'scenario': '''An architectural wonder - it travels up into the sky, a gloriously oval concrete column 
+crowned with a spacehsip like control centre. The better be a lift as there's not a hope in hell of 
+climbing to the top. You can just about make out little spacescraft coming and going 
+from what must be a landing pad near the top.'''
         },
         16: {
         'name': 'Dino jungle',
-        'scenario': '''zone 16 lorem ipsum.'''
+        'scenario': '''Is that a leg or a tree moving ahead of you, as your eys scan up you see 
+it's the leg of an enormous dinosaur of the likes you don't recognise 
+from the picture books. The jungle is dense and steamy and there are loud exotic sounds 
+coming from the tree tops. This is an exicing and dangerous place you find yourself, you will
+need to keep a low profile...'''
         },
         17: {
         'name': 'Battle bridge',
-        'scenario': '''zone 13 lorem ipsum.'''
+        'scenario': '''Standing at the edge of the ravine - in front of you is a wire bridge 
+creating a fragile border territory between the two enemy districts. Looking far down the 
+vertical rock face you can see there is no option but to cross the bridge, you might want to 
+close your eyes!!'''
         },
         18: {
         'name': 'Smelly swamp',
-        'scenario': '''zone 14 lorem ipsum.'''
+        'scenario': '''Nothing can prepare you for the stench - the smell of a thoudands 
+eggy farts fills your nostrills. You navigator tells you this is a swamp but it looks 
+deceptively firm under foot so beware. The plants that are able to grow in this smelly
+atmosphere ar elike none you have ever seen, vidid colours, ouzing slimey sap.
+It could have magce healing properties, then again it could just as easily 
+be deadly poison...'''
         },
         19: {
         'name': 'The crossroads',
-        'scenario': '''zone 15 lorem ipsum.'''
+        'scenario': '''A neat sign reads North, South, East and West - pointing off
+down each of the four dusty roads. There are vehicle tracks crossing paths, this crossroads
+feels strangely familiar despite having never been here before - which way next...?*!?'''
         },
         20: {
         'name': 'Portal',
