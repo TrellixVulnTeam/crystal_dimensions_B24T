@@ -11,7 +11,8 @@ import time
 import colored
 from colored import stylize
 import pyfiglet
-from config import commands, destinations
+from config import win, commands, destinations, items
+from game.utils import clear
 
 class Destination:
 #destination class - used in conjunction with Hero to create the players destination
@@ -208,6 +209,7 @@ class Food(Item):
     def drink(self, game, command):
 
         if command == self.name and self.category == "drink":
+            game.msg.clear()
             game.msg.append(self.msg['drink'])
             game.player.health = game.player.health + self.health
             game.player.inventory.remove(self)
@@ -251,8 +253,20 @@ class WinningItem(Item):
         else: 
             self.non_player_character = non_player_character
 
-    def place_to_win(self):
-        pass
+    def place_to_win(self, game, command):
+        if command.lower() == self.name.lower():
+            game.msg.clear()
+            game.msg.append(self.msg['place'])
+            game.player.winning_items.append(self)
+            winning_items_total = len(items['winning_items'])
+            if len(game.player.winning_items) == winning_items_total:
+                clear()
+                game.msg.append(win)
+                ascii_banner = pyfiglet.figlet_format("YOU WIN!")
+                print(ascii_banner)
+            else:
+                game.msg.clear()
+                game.msg.append(stylize(commands['place']['error'], colored.fg(1))) 
 
 class Clue():
 #create cluses to be hidden in objects

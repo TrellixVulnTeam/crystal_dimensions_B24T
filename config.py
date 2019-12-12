@@ -21,7 +21,8 @@ commands = {
         'items': {'input': '', 'hidden': False, 'error' : ""},
         'info': {'input': 'item', 'hidden': True, 'error' : ""},
         'help': {'input': '', 'hidden': False, 'error' : ""},
-        'look': {'input': 'direction', 'hidden': False, 'error' : "What's that look for!?! (may have been your clumsy typing...)"}, 
+        'look': {'input': 'around/ closer', 'hidden': False, 'error' : "What's that look for!?! (may have been your clumsy typing...)"}, 
+        'place': {'input': 'crystals', 'hidden': False, 'error' : "#FAIL - You don't have all the crystals"},
         'quit': {'input': '', 'hidden': False, 'error' : ""},
         'talk': {'input': '', 'hidden': False, 'error' : "There's not a soul about to talk to..."},
         'use': {'input': 'power', 'hidden': False, 'error' : ""},
@@ -56,6 +57,11 @@ deep in the Norfolk arena - sector 9 on the planet Grampsian.
 The sea is on the horizon and your spaceship 
 is parked just out of sight on the mud flats.
 '''
+
+win = '''
+Amazingly you have placed the last crystal
+just in time to save planet Earth. Your
+mission is successful - Thank you!'''
 
 
 #destinations
@@ -211,10 +217,11 @@ so it better be worth your while!!'''
         },
         15: {
         'name': 'Control tower',
-        'scenario': '''An architectural wonder - it travels up into the sky, a gloriously oval concrete column 
-crowned with a spacehsip like control centre. The better be a lift as there's not a hope in hell of 
-climbing to the top. You can just about make out little spacescraft coming and going 
-from what must be a landing pad near the top.'''
+        'scenario': '''An architectural wonder - it travels up up up up into the sky, 
+a gloriously oval concrete column crowned with a spacehsip like control centre. 
+The better be a lift as there's not a hope in hell of climbing to the top. You can just 
+about make out small space shuttles coming and going from what must be a 
+landing pad near the top.'''
         },
         16: {
         'name': 'Dino jungle',
@@ -250,7 +257,7 @@ feels strangely familiar despite having never been here before - which way next.
         'name': 'Portal',
         'scenario': '''You have reached the portal - the end of your mission is in sight.
 The chamber of crystals is backlight with a throbing glow. You must place each one
-carefully and prey to the Galagamatic gods that you'r enot too late...''',
+carefully and pray to the Galagamatic gods that you're not too late...''',
         },
 }
 #player characters
@@ -296,7 +303,8 @@ strong and fierce fighters.
 Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
 It's hard to imagine something so strong falling like this - 
 seeing is believing - all the life drains from him and his tail 
-becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''} 
+becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, 
+erasing any memory of your failed heroics'''} 
     },
     2 : {
         "name": "Pacini",
@@ -314,9 +322,9 @@ Be careful as these guys are super intelligent.
 too fast to make out. Then whatever it is calls out - "I'll fight you for 
 the crystal"''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, 
 then smash you into a pulp!*!*!"''', "lose": '''
-It's hard to imagine something so strong falling like this - 
-seeing is believing - all the life drains from him and his tail 
-becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''} 
+And just as quickly as he appeared - pooofff - 
+his body evaporates in a puff of smoke''', "win": '''Grinning, he wipes his blades clean of your blood 
+- not the easiest battle but a win none the less!'''} 
     },
     3 : {
         "name": "Dilly",
@@ -351,9 +359,8 @@ destroy everything in their path.
         "msg": {"encounter": '''Loud swooshing and squarking screaches in your ears 
 and you dive for shelter, it swoops over your head once more before landing 
 four feet away and you get a proper look.''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
-It's hard to imagine something so strong falling like this - 
-seeing is believing - all the life drains from him and his tail 
-becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''}
+How you beat this guy is a bit of a mystery - but now it lies fallen in front of you - 
+you start to breath more normally, relieved and greatful it isn't you lying dead on the floor.''', "win": '''Flappy his wings he sores up into the sky - he's left your body for the night demons...'''}
     },
     5 : {
         "name": "Lord Devilhanger",
@@ -483,7 +490,9 @@ Where you're going - you're defintely going to need a weapon!'''},
 material running through the middle.''',
         "msg": {"get": '''Nice work, another precious crystal and 
 another step closer to completing your mission''', "look": '''You spot what looks like a stone but something tells 
-you it is more than that'''},
+you it is more than that''', "place": '''Placing the cystal into the slot carefully so as not to damage it - 
+as it slots into position the black material at it's centre 
+turns to gold!'''},
         "category": "crystal"
     },
     2: {
@@ -492,9 +501,11 @@ you it is more than that'''},
 when you look into this crystal you see your reflection
 but wear your eyes would be, there are black holes.''',
         "msg": {"get": '''It's the build crystal, this one creeps you right out but 
-you're pleased it's safely in your possession''', "look": '''What's that shiny thing relfecting the light a little way off, 
-you can just about see the light bouncing of it is purple 
-- the build crystal is purple...'''},
+you're pleased it's safely in your possession''', "look": '''What's that shiny thing reflecting the light a little way off, 
+you can just about see the light bouncing off - deep purple 
+- the build crystal is purple...''', "place": '''Holding it in both hands you drop it lightly into place -
+it changes colour as it lowers into the portal - 
+now a million shade so '''},
         "category": "crystal"
         
     },
@@ -503,9 +514,12 @@ you can just about see the light bouncing of it is purple
         "description": '''This is the most beautiful thing you have ever seen.
 Radiating warmth and energy, the Unite Crystal has an 
 iridescent glow that lights up it's surroundings.''',
-        "msg": {"get": '''Wow you barely manage to take your eyes off the Crsytal as you stow it away safely.
+        "msg": {"get": '''Wow you barely manage to take your eyes off the crystal as you stow it away safely.
 The rumours were right this is the most powerful crystal and you've got it!!''', "look": '''There's glow coming up from somewhere in the undergrowth.
-It could be some kind of energy source - its worth a closer look.'''},
+It could be some kind of energy source - its worth a closer look.''', "place": '''Its hard to let go of this one - it has a magnetic beauty,
+giving it away is like parting with a gold ring. You close your eyes and thrust it into the portal
+- a flash of bright light shoots out and it's sucked out of your 
+hands and out of sight forever...'''},
         "category": "crystal"
     }},
         "keys": {
@@ -550,7 +564,15 @@ it is water and it's as refreshing as you'd hoped it would be...
 Your health increase :) '''},
         "category": "drink",
         "health": 1,
-    }}
+    },
+    3: {
+        "name": "bread",
+        "description": '''Looks like a cream cheese bagel, fancy that, your favourite''',
+        "msg": {"get": '''Keep this bread in case you need an energy boost!''', "look": '''A brown paper bag is lying on the floor in front of you keeping somehting safe, looks like a food bag of some sort.''', "food": '''You feel lucky to have found your favourite snack out here - you savour
+each mouthful - its a good one, chewy with plenty of cream cheese.'''},
+        "category": "food",
+        "health": 1,
+    },}
 }
 
 conversation = [

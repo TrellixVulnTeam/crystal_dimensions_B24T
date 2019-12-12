@@ -11,7 +11,7 @@ import time
 import colored
 from colored import stylize
 import pyfiglet
-from game.universe import Destination, Object, Item
+from game.universe import Destination, Object, Item, WinningItem
 from game.character import NonPlayerCharacter
 from game.utils import clear
 from config import commands, intro, objects, items, conversation
@@ -176,7 +176,7 @@ on the ground in front of you.
     def command(self, command):
 
         command = command.lower().split(" ", 1)
-        if self.player.health == 0:
+        if self.player.health <= 0:
             # tell player they are dead and need to restart the game
             clear()
             ascii_banner = pyfiglet.figlet_format("GAME OVER")
@@ -194,12 +194,14 @@ on the ground in front of you.
                 print(str("{title} by {author}").format(title = self.title, author = self.author))
                 print('{0}'.format('='*75))
                 exit()
+            # end quit
             
             #'help' command - available throughout game
             if command[0] == 'help':
                 self.msg.clear()
                 self.player.moves.append(command[0])
                 self.help()
+            # end help
 
             #'check' command - available throughout game
             if command[0] == 'check':
@@ -207,22 +209,26 @@ on the ground in front of you.
                 self.player.moves.append(command[0])
                 if command[1] == "location":
                     self.msg.append(str('''Your location: {destination}, {zone}''').format(destination=self.player.destination.name.upper(), zone=self.player.zone.name.upper()))
+            # end check
 
             #'restart' command - available throughout game
             if command[0] == 'restart':
                 self.restart()
+            # end restart
 
             #'fly' command
             if command[0] == 'fly':
                 self.msg.clear()
                 self.player.moves.append(command[0])
                 self.player.destination.fly(self, command[1])
+            # end fly
 
             #'items' command
             if command[0] == 'items':
                 self.msg.clear()
                 self.player.moves.append(command[0])
                 self.player.list_inventory(self, "", "list")
+            # end items
 
             #'get' command
             if command[0] == 'get':
@@ -230,7 +236,7 @@ on the ground in front of you.
                 self.player.moves.append(command[0])
                 if command[1].lower() == self.player.zone.items.name.lower():
                     self.player.zone.items.get(self, command[1])
-                elif command[1].lower() == self.player.zone.winning_items.name.lower():
+                elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
                     if self.player.zone.non_player_characters.health > 0:
                        self.player.zone.non_player_characters.encounter(self) 
                     else:
@@ -238,6 +244,7 @@ on the ground in front of you.
                 else:
                     self.msg.clear()
                     self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
+            # end get
             
             #'drop' command
             if command[0] == 'drop':
@@ -247,25 +254,35 @@ on the ground in front of you.
                     for itm in self.player.inventory:
                         if itm.name == command[1]:
                             itm.drop(self, command[1])  
+            # end drop                
 
             #'eat' command
             if command[0] == 'eat':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if self.player.list_inventory(self, command[1], "check") == True:
-                    for itm in self.player.inventory:
-                        if itm.name == command[1]:
-                            itm.eat(self, command[1])
+                if command[1]:
+                    if self.player.list_inventory(self, command[1], "check") == True:
+                        for itm in self.player.inventory:
+                            if itm.name == command[1]:
+                                itm.eat(self, command[1])
+                else:
+                    self.player.moves.append("Eat what?")                 
+            # end eat
 
             #'drink' command
             if command[0] == 'drink':
+                self.msg.clear()
                 self.player.moves.append(command[0])
-                if self.player.list_inventory(self, command[1], "check") == True:
-                    for itm in self.player.inventory:
-                        if itm.name == command[1]:
-                            itm.drink(self, command[1])
+                if command[1]:
+                    if self.player.list_inventory(self, command[1], "check") == True:
+                        for itm in self.player.inventory:
+                            if itm.name == command[1]:
+                                itm.drink(self, command[1])
+                else:
+                    self.player.moves.append("Drink what?")                
+            # end drink 
 
-            # 'attack' command
+            # 'fight' command
             if command[0] == 'fight':
                 self.msg.clear()
                 self.player.moves.append(command[0])
@@ -275,7 +292,7 @@ on the ground in front of you.
                 else:
                     self.msg.clear()
                     self.msg.append(stylize(commands['fight']['error'], colored.fg(1)))
-            # end attack        
+            # end fight        
                     
             # 'talk' move
             if command[0] == 'talk':      
@@ -287,7 +304,6 @@ on the ground in front of you.
                 else:
                     self.msg.append(stylize("There's no one here to talk to!", colored.fg(1)))
             # end talk        
-
 
             # 'look' command
             if command[0] == 'look':   
@@ -335,6 +351,18 @@ on the ground in front of you.
                 self.player.zone.objects.read(self)
             # end read
 
+            # 'place' command
+            if command[0] == 'place':
+                self.msg.append(command[1])
+                self.player.moves.append(command[0])
+                if self.destinations[-1].zones[-1] == self.player.zone and self.player.list_inventory(self, command[1], "check") == True:
+                    for w_itm in self.player.inventory:
+                        if w_itm.name.lower() == command[1]:
+                            self.msg.append("whoops some-ting wong")
+                            w_itm.place_to_win(self, command[1])
+                else:
+                    self.msg.append("whoops some-ting wong")
+            # end place
 
         else:
             self.msg.clear()

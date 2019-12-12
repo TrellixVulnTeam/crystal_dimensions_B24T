@@ -25,7 +25,7 @@ from chatterbot.trainers import ListTrainer
 
 class PlayerCharacter:
 #create a choice of hero players to play the game
-    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, moves=None):
+    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, winning_items=None, moves=None):
         self.name = name
         self.power = power
         self.weapon = weapon
@@ -35,6 +35,10 @@ class PlayerCharacter:
         self.zone = zone
         self.inventory = inventory
         self.transport = transport
+        if winning_items is None:
+            self.winning_items = []
+        else: 
+            self.winning_items = winning_items
         if moves is None:
             self.moves = []
         else: 
@@ -52,7 +56,7 @@ class PlayerCharacter:
         
     def go(self, game, command):
         go_directions = {"north": 2, "south": 0, "west": 1, "east": 3}
-        go_styles = ["jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
+        go_styles = ["swagger over to the", "jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
         obj_name = ""
         
         obj_name = game.player.zone.objects.name  
@@ -84,9 +88,10 @@ class PlayerCharacter:
                 if game.player.zone.items.collected == False:
                     game.msg.append("the item you could see looks a lot like a " + game.player.zone.items.name)
                     game.msg.append(game.player.zone.items.description)
-                if game.player.zone.winning_items.collected == False:
-                    game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
-                    game.msg.append(game.player.zone.winning_items.description)
+                if isinstance(game.player.zone.winning_items, WinningItem):
+                    if game.player.zone.winning_items.collected == False:
+                        game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
+                        game.msg.append(game.player.zone.winning_items.description)
             else:
                 game.msg.append("You look closer but there doesn't appear to be anything here to see...")  
         elif command == "around":
@@ -169,14 +174,27 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
     def fight(self, game):
     #dice based fighting engine
 
+        attack = 'n'
+
         #intro to fight
-        game.msg.append(self.msg['fight'])   
+        print(self.msg['fight'])   
+        print(stylize(str('''{name} are you ready to commence battle with {npc}?''').format(name=game.player.name, npc=self.name), colored.fg(1)))   
+
+        attack = input("Start fight (y/n) > ")
+
+        if attack == 'y':
+            if game.player.weapon:
+                print(str('''You have your trusty {weapon} - this will add strength to your attack''').format(weapon=game.player.weapon.name))
+                player_strength = game.player.strength + 1
+            else:
+                player_strength = game.player.strength
+            powers = input(str("Do you want to use {power} to fight {npc}? (y/n)").format(power=game.player.power, npc=self.name))
+            #player strength
+            if powers == 'y':
+                player_strength + 2
 
         #thing strength
         npc_strength = self.strength
-
-        #player strength
-        player_strength = game.player.strength
 
         #attacks
         attacks = {
@@ -186,7 +204,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                     },
                 2 : {
                         'name': 'power punch',
-                        'moves': 'deliver a big bunch to the gut and knock them flying!'
+                        'moves': 'deliver a big punch to the gut and knock them flying!'
                     },
                 3 : {
                         'name': 'big bang',
@@ -210,9 +228,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                     }
                 }
 
-        attack_again = 'y'
-
-        while attack_again == 'y' and game.player.health > 0:
+        while attack == 'y' and game.player.health > 0:
 
             min = 1
 
@@ -239,16 +255,14 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 # print health
                 print(stylize("Health :" + str(health_hearts), colored.fg(15) + colored.bg(1)))
 
-                attack_again = 'n'    
+                attack = 'n'    
 
                 if game.player.health == 0:
-                    game.msg.append(self.msg['win'])
                     game.msg.append("Oh no you have just died at the hands of " + self.name)
-                    time.sleep(4)
                     game.msg.append(self.msg['win'])
-                    attack_again = 'n'  
+                    attack = 'n'  
                 elif game.player.health > 0:
-                    attack_again = input("Attack again? y/n > ")
+                    attack = input("Attack again? y/n > ")
             else:
                 spinning_cursor(2)
                 print ("You " + attacks[attack_choice]['moves'])
@@ -256,21 +270,19 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 print ("Their health has been damaged")
                 self.health = self.health - 1
                 if self.health == 0:
-                    print ("You have just killed " + self.name) 
-                    time.sleep(1)
-                    game.msg.append(self.msg['win'])
+                    game.msg.append("You have just killed " + self.name) 
+                    game.msg.append(self.msg['lose'])
                     # set attack to no
-                    attack_again = 'n'
+                    attack = 'n'
 
         else: 
             if self.health > 0:
                 print("There is strength in not fighting.")
                 time.sleep(1)
-                time.sleep(1)
                 print(self.name + " from the " + self.species + " species...")
                 time.sleep(1)
                 print("Do you have a mobile? If so why not google it?")
-                time.sleep(4)
+                time.sleep(2)
 
         return
 

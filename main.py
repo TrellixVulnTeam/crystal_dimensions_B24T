@@ -115,7 +115,7 @@ new_game = Game(title, author, mission, player_characters, game_destinations, ga
 new_game.show_intro()
 
 #display help - list of moves
-# new_game.help()
+new_game.help()
 
 while True:
 
