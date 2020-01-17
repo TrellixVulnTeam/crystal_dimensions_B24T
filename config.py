@@ -558,13 +558,13 @@ ornate looking blade.''',
     }},
         "credits": {
     1: {"name": "Two Galag-Zags",
-        "msg": {"collect": "Watch the Zags and the Zigs will look after themselves!", "spend": "Well its what it was intended for..." },
+        "msg": {"look": "Shiny crrrr's - need some of that", "collect": "Watch the Zags and the Zigs will look after themselves!", "spend": "Well its what it was intended for..." },
         "value": 2},
     2: {"name": "Ten Galag-Zigs",
-        "msg": {"collect": "This has got a reassuring weight about it - should buy me some tings", "spend": "I hope it was worth it..." },
+        "msg": {"look": "Is that credits you can see?", "collect": "This has got a reassuring weight about it - should buy me some tings", "spend": "I hope it was worth it..." },
         "value": 10},
     3: {"name": "A Galag-Zig-Zag",
-        "msg": {"collect": "CHING CHING - I'm in the CRrrrr's", "spend": "Ouch that hurt" },
+        "msg": {"look": "Bling! Looks like some credits kicking around in front of you", "collect": "CHING CHING - I'm in the CRrrrr's", "spend": "Ouch that hurt" },
         "value": 25}    
         },
         "magic": {
@@ -614,7 +614,7 @@ each mouthful - its a good one, chewy with plenty of cream cheese.'''},
         "description": '''Looks like a vegan fruity energy bar''',
         "msg": {"get": '''You've heard of these - even Super Heroes need a boost from time to time.
 Could be useful in a fight - The advert says it boosts your health 
-and your strength...double whammy!!!'''},
+and your strength...double whammy!!!''', "look": '''A bar of something has been discarded inches from your feet...could be a tasty treat'''},
         "category": "food",     
         "health": 1,
         "strength": 1   
@@ -622,11 +622,12 @@ and your strength...double whammy!!!'''},
     5: {
         "name": "wild berries",
         "description": '''They look like raspberries - your absolute favourite''',
-        "msg": {"get": '''Going to be hard not just to scoff these fruity gems'''},
+        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', "look": '''You love fresh berries but what was it that your mum told you about picking wild fruit!?!?'''},
         "category": "food",             
         "health": -1,
         "strength": -1   
-    }}
+    }
+}
 }
 
 conversation = [
