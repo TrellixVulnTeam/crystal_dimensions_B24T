@@ -258,6 +258,7 @@ class Key(Item):
             self.object = []
         else: 
             self.object = object
+       
         
 class WinningItem(Item):
 #create winning items - these must be collected to win game!
@@ -282,13 +283,13 @@ class WinningItem(Item):
             else:
                 game.msg.append(stylize(commands['place']['error'], colored.fg(1))) 
 
-class Credit():
+
+class Credit(Item):
 #create credits
-    def __init__(self, name, msg, collected, value):
-        self.name = name
-        self.msg = msg
-        self.collected = collected
+    def __init__(self, name, description, msg, category, collected, value):
+        super().__init__(name, description, msg, category, collected)
         self.value = value
+
 
 class Clue():
 #create cluses to be hidden in objects

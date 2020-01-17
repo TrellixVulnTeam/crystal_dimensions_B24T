@@ -558,12 +558,15 @@ ornate looking blade.''',
     }},
         "credits": {
     1: {"name": "Two Galag-Zags",
+        "description": "Credits to spend if you can find a shop to spend them in...",
         "msg": {"look": "Shiny crrrr's - need some of that", "collect": "Watch the Zags and the Zigs will look after themselves!", "spend": "Well its what it was intended for..." },
         "value": 2},
     2: {"name": "Ten Galag-Zigs",
+        "description": "Credits to spend if you can find a shop to spend them in...",
         "msg": {"look": "Is that credits you can see?", "collect": "This has got a reassuring weight about it - should buy me some tings", "spend": "I hope it was worth it..." },
         "value": 10},
     3: {"name": "A Galag-Zig-Zag",
+        "description": "Credits to spend if you can find a shop to spend them in...",
         "msg": {"look": "Bling! Looks like some credits kicking around in front of you", "collect": "CHING CHING - I'm in the CRrrrr's", "spend": "Ouch that hurt" },
         "value": 25}    
         },
@@ -614,7 +617,7 @@ each mouthful - its a good one, chewy with plenty of cream cheese.'''},
         "description": '''Looks like a vegan fruity energy bar''',
         "msg": {"get": '''You've heard of these - even Super Heroes need a boost from time to time.
 Could be useful in a fight - The advert says it boosts your health 
-and your strength...double whammy!!!''', "look": '''A bar of something has been discarded inches from your feet...could be a tasty treat'''},
+and your strength...double whammy!!!''', "look": '''A bar of something has been discarded inches from your feet...could be a tasty treat''', "food": '''A zing in your mouth lets you know your body has scored some energy - it's pretty tasty too'''},
         "category": "food",     
         "health": 1,
         "strength": 1   
@@ -622,7 +625,7 @@ and your strength...double whammy!!!''', "look": '''A bar of something has been 
     5: {
         "name": "wild berries",
         "description": '''They look like raspberries - your absolute favourite''',
-        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', "look": '''You love fresh berries but what was it that your mum told you about picking wild fruit!?!?'''},
+        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', "look": '''You love fresh berries but what was it that your mum told you about picking wild fruit!?!?''',"food": '''Not bad tasting but at the same time slightly odd texture and flavour - it's made you feel a bit queezy'''},
         "category": "food",             
         "health": -1,
         "strength": -1   

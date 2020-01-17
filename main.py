@@ -59,9 +59,9 @@ for key in items['keys'].items():
     game_keys.append(Key(key[1]['name'], key[1]['description'], key[1]['msg'], key[1]['category'], False, ''))
 game_items.extend(game_keys)
 
-#keys
+#credits
 for credit in items['credits'].items():
-    game_credits.append(Credit(credit[1]['name'], credit[1]['msg'], False, credit[1]['value']))
+    game_credits.append(Credit(credit[1]['name'], credit[1]['description'], credit[1]['msg'], 'credits', False, credit[1]['value']))
 game_items.extend(game_credits)
     
 #magic
