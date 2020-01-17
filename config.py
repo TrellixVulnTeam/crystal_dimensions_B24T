@@ -21,8 +21,10 @@ commands = {
         'items': {'input': '', 'hidden': False, 'error' : ""},
         'info': {'input': 'item', 'hidden': True, 'error' : ""},
         'help': {'input': '', 'hidden': False, 'error' : ""},
-        'look': {'input': 'around/ closer', 'hidden': False, 'error' : "What's that look for!?! (may have been your clumsy typing...)"}, 
-        'place': {'input': 'crystals', 'hidden': False, 'error' : "#FAIL - You don't have all the crystals"},
+        'look': {'input': 'around or closer', 'hidden': False, 'error' : "What's that look for!?! (may have been your clumsy typing...)"}, 
+        'place': {'input': 'crystal name', 'hidden': False, 'error' : '''BUT the Earth is stil not safe...
+you haven't placed all the crystals yet..do you have the others?
+You need to be quick!'''}, 
         'quit': {'input': '', 'hidden': False, 'error' : ""},
         'talk': {'input': '', 'hidden': False, 'error' : "There's not a soul about to talk to..."},
         'use': {'input': 'power', 'hidden': False, 'error' : ""},
@@ -62,6 +64,8 @@ win = '''
 Amazingly you have placed the last crystal
 just in time to save planet Earth. Your
 mission is successful - Thank you!'''
+
+pack_max = 6
 
 
 #destinations
@@ -307,7 +311,7 @@ becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands o
 erasing any memory of your failed heroics'''} 
     },
     2 : {
-        "name": "Pacini",
+        "name": "Pancini",
         "species": "Scepti",
         "appearance": '''
 small and fast with a cunning smile. They carry daggers in each hand. 
@@ -375,10 +379,15 @@ and shoots anything that gets in his way.
         "strength": 8,
         "health": 5,
         "msg": {"encounter": '''As you feared the mission is not quite in the bag - 
-standing between you and the portal is the fiercest of the foes that you have faced so far...''', "fight": '''Are you ready for serious brawl, he screams "I will play with you, then smash you into a pulp!*!*!"''', "lose": '''
-It's hard to imagine something so strong falling like this - 
-seeing is believing - all the life drains from him and his tail 
-becomes flappy and shrivelled like a salt soaked slug.''', "win": '''He stands over your dead body - tail swiping from left to right, erasing any memory of your failed heroics'''}
+standing between you and the portal is the fiercest of the foes that you have faced so far...''', "fight": '''The earth shakes beneath your feet as 
+he thunder towards you...you know you don't have a choice but to stay and fight
+- lets hope you survive this one''', "lose": '''
+in a swirl of dust and debris, Lord D starts to disintegrate - 
+his flesh turning into black particals and spinning into 
+the vortex of pure darkness that's opended up in front of you. 
+You did it - the ultimate evil one has been vanquished''', "win": '''You came so close but he has done his job and done away with
+you like you were a piece of muck on his shoe. He kicks your dead body into orbit
+and walks away...planet Earth is now doomed'''}
         }
 }
 
@@ -391,7 +400,8 @@ It can carry a couple of passangers and enough fuel
 to get you to the local shops and back...''',
         "category": "spaceship",
         "capacity": 3,
-        "fuel": 100,
+        "fuel_tank": 40,
+        "fuel_usage": 13,
         "weapon": "Lazers",
         "msg": {"go": '''You stroll up to your spaceship, with a push of a button 
 you open the hatch, then you climb aboard and fire up the engines - 
@@ -404,6 +414,22 @@ and ready to go - whenever you are...'''
         }
     },
 }
+
+#shop
+shop = {
+        0: {
+        "name": "General store",    
+        "description": '''Basic looking counter with a local standing behind it 
+waiting to take your credits...''',
+        "msg": {"go": '''You go up to the counter and start a conversation with the shop
+keeper...''',
+"look": '''You can see That there is a small shop - 
+have you got anyhting you need to buy...or maybe even sell''',
+        "products": {"fuel": {"credits": 10}, "food": {"credits": 15}}
+        }
+    },
+}
+
 
 #objects
 objects = {
@@ -434,13 +460,12 @@ inside to have a look around - could be hiding something interesting''', "look":
         }
     },
     4: {
-        "name": "table",
-        "description": '''It's a long wooden table covered in elaborate carvings. 
-It look like it has been prepared for a feast 
-but there is no one around it''',
-        "move": {"under"},
-        "msg": {"go": '''Standing in front of the table 
-you're keen to see if there are any signs of life...''', "look": '''There in front of you is a long wooden table'''
+        "name": "bunker",
+        "description": '''It has a tough outer shell - looks bomb proof. There's
+a door on one side, its slightly ajar.''',
+        "move": {"enter"},
+        "msg": {"go": '''The door is open and you can make out a desk
+with some files on it...''', "look": '''There in the sdistance what looks like a bunker...'''
        }
     }
 }
@@ -490,7 +515,7 @@ Where you're going - you're defintely going to need a weapon!'''},
 material running through the middle.''',
         "msg": {"get": '''Nice work, another precious crystal and 
 another step closer to completing your mission''', "look": '''You spot what looks like a stone but something tells 
-you it is more than that''', "place": '''Placing the cystal into the slot carefully so as not to damage it - 
+you it is more than that''', "place": '''Placing the crystal into the slot carefully so as not to damage it - 
 as it slots into position the black material at it's centre 
 turns to gold!'''},
         "category": "crystal"
@@ -516,8 +541,8 @@ Radiating warmth and energy, the Unite Crystal has an
 iridescent glow that lights up it's surroundings.''',
         "msg": {"get": '''Wow you barely manage to take your eyes off the crystal as you stow it away safely.
 The rumours were right this is the most powerful crystal and you've got it!!''', "look": '''There's glow coming up from somewhere in the undergrowth.
-It could be some kind of energy source - its worth a closer look.''', "place": '''Its hard to let go of this one - it has a magnetic beauty,
-giving it away is like parting with a gold ring. You close your eyes and thrust it into the portal
+It could be some kind of energy source - its worth a closer look.''', "place": '''Oh precious, it's hard to let go of this one - it has a magnetic beauty,
+giving it away is like parting with the hobbit's ring. You close your eyes and thrust it into the portal
 - a flash of bright light shoots out and it's sucked out of your 
 hands and out of sight forever...'''},
         "category": "crystal"
@@ -531,6 +556,17 @@ ornate looking blade.''',
 - but failed as there it is bold as brass, right in front of you!'''},
         "category": "key"
     }},
+        "credits": {
+    1: {"name": "Two Galag-Zags",
+        "msg": {"collect": "Watch the Zags and the Zigs will look after themselves!", "spend": "Well its what it was intended for..." },
+        "value": 2},
+    2: {"name": "Ten Galag-Zigs",
+        "msg": {"collect": "This has got a reassuring weight about it - should buy me some tings", "spend": "I hope it was worth it..." },
+        "value": 10},
+    3: {"name": "A Galag-Zig-Zag",
+        "msg": {"collect": "CHING CHING - I'm in the CRrrrr's", "spend": "Ouch that hurt" },
+        "value": 25}    
+        },
         "magic": {
     1: {
         "name": "potion",
@@ -566,13 +602,31 @@ Your health increase :) '''},
         "health": 1,
     },
     3: {
-        "name": "bread",
+        "name": "bagel",
         "description": '''Looks like a cream cheese bagel, fancy that, your favourite''',
-        "msg": {"get": '''Keep this bread in case you need an energy boost!''', "look": '''A brown paper bag is lying on the floor in front of you keeping somehting safe, looks like a food bag of some sort.''', "food": '''You feel lucky to have found your favourite snack out here - you savour
+        "msg": {"get": '''Keep this bread in case you need an energy boost!''', "look": '''A brown paper bag is lying on the floor in front of you keeping something safe, looks like a food bag of some sort.''', "food": '''You feel lucky to have found your favourite snack out here - you savour
 each mouthful - its a good one, chewy with plenty of cream cheese.'''},
         "category": "food",
         "health": 1,
-    },}
+    },
+    4: {
+        "name": "energy bar",
+        "description": '''Looks like a vegan fruity energy bar''',
+        "msg": {"get": '''You've heard of these - even Super Heroes need a boost from time to time.
+Could be useful in a fight - The advert says it boosts your health 
+and your strength...double whammy!!!'''},
+        "category": "food",     
+        "health": 1,
+        "strength": 1   
+    },
+    5: {
+        "name": "wild berries",
+        "description": '''They look like raspberries - your absolute favourite''',
+        "msg": {"get": '''Going to be hard not just to scoff these fruity gems'''},
+        "category": "food",             
+        "health": -1,
+        "strength": -1   
+    }}
 }
 
 conversation = [

@@ -140,18 +140,18 @@ on the ground in front of you.
         self.msg.append(stylize(name, colored.fg(84)))
         self.msg.append(self.transport.description)
         self.msg.append(self.transport.msg['look'])  
-
-    def show_navigator(self):
-        self.msg.append(str("Vehicle category: {category}").format(category=self.transport.category.upper()))
-        self.msg.append(str("Fuel: {fuel}").format(fuel=self.transport.fuel))
-        self.msg.append(str("Current location: {location}").format(location=self.player.destination.name.upper()))
-        self.msg.append(str("Zone: {zone}").format(zone=self.player.zone.name.upper()))
-        self.player.destination.voyage_list(self, "list")
         
     def players(self):
         
         for key, value in self.player_characters.items():
            print(str(key) + ") " + value['name'] + " ( " + value['power'] + " )")
+
+    def over(self):
+        # tell player they are dead and need to restart the game
+        ascii_banner = pyfiglet.figlet_format("GAME OVER")
+        self.msg.append(ascii_banner)
+        self.msg.append(stylize('''Hey - Im afraid you're not longer with us. Type restart to play again.''', colored.fg(1)))
+
 
     def select_weapon(self):
         print('''There's a big stack of weapons on the floor in front of you!''')
@@ -209,6 +209,8 @@ on the ground in front of you.
                 self.player.moves.append(command[0])
                 if command[1] == "location":
                     self.msg.append(str('''Your location: {destination}, {zone}''').format(destination=self.player.destination.name.upper(), zone=self.player.zone.name.upper()))
+                elif self.player.list_inventory(self, command[1], "check") == True:
+                    self.player.show_navigator(self)
             # end check
 
             #'restart' command - available throughout game
@@ -220,7 +222,7 @@ on the ground in front of you.
             if command[0] == 'fly':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                self.player.destination.fly(self, command[1])
+                self.player.transport.voyage(self, command[1])
             # end fly
 
             #'items' command
@@ -234,26 +236,28 @@ on the ground in front of you.
             if command[0] == 'get':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if command[1].lower() == self.player.zone.items.name.lower():
-                    self.player.zone.items.get(self, command[1])
-                elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
-                    if self.player.zone.non_player_characters.health > 0:
-                       self.player.zone.non_player_characters.encounter(self) 
+                if command[1]:
+                    if command[1].lower() == self.player.zone.items.name.lower():
+                        self.player.zone.items.get(self, command[1])
+                    elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
+                        if self.player.zone.non_player_characters.health > 0:
+                            self.player.zone.non_player_characters.encounter(self) 
+                        else:
+                            self.player.zone.winning_items.get(self, command[1])
                     else:
-                        self.player.zone.winning_items.get(self, command[1])
-                else:
-                    self.msg.clear()
-                    self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
+                        self.msg.clear()
+                        self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
             # end get
             
             #'drop' command
             if command[0] == 'drop':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if self.player.list_inventory(self, command[1], "check") == True:
-                    for itm in self.player.inventory:
-                        if itm.name == command[1]:
-                            itm.drop(self, command[1])  
+                if command[1]:
+                    if self.player.list_inventory(self, command[1], "check") == True:
+                        for itm in self.player.inventory:
+                            if itm.name == command[1]:
+                                itm.drop(self, command[1])  
             # end drop                
 
             #'eat' command
@@ -312,19 +316,20 @@ on the ground in front of you.
                 
                 if len(command) == 1:
                         command.append("around")
-                
-                if self.player.list_inventory(self, command[1], "check") == True:
-                    self.show_navigator()
-                else:
-                    self.player.look(self, command[1])   
+
+                self.player.look(self, command[1]) 
+                  
             # end look     
 
             # 'go' command
             if command[0] == 'go':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                self.player.moves.append(command[1])
-                self.player.go(self, command[1])
+                if command[1]:
+                    self.player.moves.append(command[1])
+                    self.player.go(self, command[1])
+                else:
+                    self.player.moves.append("Go where?")    
             # end go    
                 
             # 'fart' command

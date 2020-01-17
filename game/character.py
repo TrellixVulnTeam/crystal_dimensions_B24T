@@ -12,7 +12,7 @@ import colored
 from colored import stylize
 import pyfiglet
 from game.utils import spinning_cursor
-from config import commands
+from config import commands, pack_max
 from game.universe import Item, WinningItem
 
 # pip install chatterbot
@@ -44,6 +44,7 @@ class PlayerCharacter:
         else: 
             self.moves = moves
 
+
     def show_health(self):
         health = self.health
         h = 1
@@ -53,6 +54,13 @@ class PlayerCharacter:
             health_hearts += " \u2764 "
             h += 1   
         return health_hearts
+    
+    def show_navigator(self, game):
+        game.msg.append(str("Vehicle category: {category}").format(category=self.transport.category.upper()))
+        game.msg.append(str("Fuel: {fuel}").format(fuel=self.transport.fuel_tank))
+        game.msg.append(str("Current location: {location}").format(location=self.destination.name.upper()))
+        game.msg.append(str("Zone: {zone}").format(zone=self.zone.name.upper()))
+        game.player.destination.voyage_list(game, "list")
         
     def go(self, game, command):
         go_directions = {"north": 2, "south": 0, "west": 1, "east": 3}
@@ -66,7 +74,9 @@ class PlayerCharacter:
             game.player.zone = game.player.destination.zones[go_directions[command]]
             game.msg.append(str("Travelling {direction} you reach the {zone}").format(direction=command.title(), zone=game.player.zone.name))
             game.msg.append(game.player.zone.scenario)
-
+            if game.destinations[-1].zones[-1] == self.zone:
+                self.zone.non_player_characters.encounter(game)
+                
         elif command == obj_name:
             go_style = random.choice(go_styles)
             game.msg.append(str("You {go} {object}").format(go = go_style, object = obj_name))
@@ -76,24 +86,24 @@ class PlayerCharacter:
             if game.player.transport == "":
                 game.player.transport = game.transport    
             game.msg.append(game.player.transport.msg['go'])
-
         else:
             game.msg.append(stylize(commands['go']['error'], colored.fg(1)))
 
 
     def look(self, game, command):
         if command == "closer" and "look" in game.player.moves:
-            if game.player.zone.items.collected == False or game.player.zone.winning_items.collected == False:
-                game.msg.append("You get closer and see that...")
+            game.msg.append("You get closer ")
+            if game.player.zone.items.collected == False:
                 if game.player.zone.items.collected == False:
-                    game.msg.append("the item you could see looks a lot like a " + game.player.zone.items.name)
-                    game.msg.append(game.player.zone.items.description)
+                    game.msg.append(" and see that the item you could see looks a lot like a " + game.player.zone.items.name)
+                    if hasattr(game.player.zone.items, 'description'): 
+                        game.msg.append(game.player.zone.items.description)
                 if isinstance(game.player.zone.winning_items, WinningItem):
                     if game.player.zone.winning_items.collected == False:
-                        game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
+                        game.msg.append("and... Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
                         game.msg.append(game.player.zone.winning_items.description)
             else:
-                game.msg.append("You look closer but there doesn't appear to be anything here to see...")  
+                game.msg.append("...but there doesn't appear to be anything here to see...")  
         elif command == "around":
             if game.player.zone == game.destinations[0].zones[0] and game.player.weapon == "":
                 game.select_weapon()
@@ -140,7 +150,7 @@ confirms it. ***Deadly***'''
             if self.inventory:
                 for item in self.inventory:
                     game.msg.append(str(item.name.title()) + " (" + str(item.category) + ")",)       
-                game.msg.append(stylize(str("Remember you can only hold {capacity} items in your pack").format(capacity=8), colored.fg(1)))
+                game.msg.append(stylize(str("Remember you can only hold {capacity} items in your pack").format(capacity=pack_max), colored.fg(1)))
             else:
                 game.msg.append(stylize("[ No items in your inventory. ]", colored.fg(1)))
         elif task == "check":
@@ -188,7 +198,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 player_strength = game.player.strength + 1
             else:
                 player_strength = game.player.strength
-            powers = input(str("Do you want to use {power} to fight {npc}? (y/n)").format(power=game.player.power, npc=self.name))
+            powers = input(str("Do you want to use {power} to fight {npc}? (y/n) >").format(power=game.player.power, npc=self.name))
             #player strength
             if powers == 'y':
                 player_strength + 2
@@ -255,11 +265,15 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 # print health
                 print(stylize("Health :" + str(health_hearts), colored.fg(15) + colored.bg(1)))
 
-                attack = 'n'    
+                if game.player.health == 1:
+                    game.msg.append(stylize("Your health is on it's last legs - lose one more and you are dead...just saying!", colored.fg(1)))
+
+                attack = 'n'
 
                 if game.player.health == 0:
                     game.msg.append("Oh no you have just died at the hands of " + self.name)
                     game.msg.append(self.msg['win'])
+                    game.over()
                     attack = 'n'  
                 elif game.player.health > 0:
                     attack = input("Attack again? y/n > ")

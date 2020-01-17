@@ -12,7 +12,7 @@ from colored import stylize
 from config import commands, title, author, mission, player_characters, destinations, zones, transport, non_player_characters, objects, items
 from game.game import Game
 from game.character import PlayerCharacter, NonPlayerCharacter, Boss
-from game.universe import Destination, Zone, Transport, Object, Item, Weapon, Food, Magic, Key, WinningItem, Clue
+from game.universe import Destination, Zone, Transport, Object, Item, Weapon, Food, Magic, Key, Credit, WinningItem, Clue
 from game.utils import chunks
 
 #setup empty new game variables
@@ -24,6 +24,7 @@ game_non_player_characters = []
 game_boss = ""
 game_winning_items = []
 game_keys = []
+game_credits = []
 game_magic = []
 game_food = []
 game_clues = []
@@ -34,7 +35,7 @@ game_destinations = []
 #create the destinations, zones, non-player characters, transport, weapons, items and objects for a new game
 
 #create transport for game
-game_transport = Transport(transport[0]['name'], transport[0]['description'], transport[0]['category'], transport[0]['capacity'], transport[0]['fuel'], transport[0]['weapon'], transport[0]['msg'])
+game_transport = Transport(transport[0]['name'], transport[0]['description'], transport[0]['category'], transport[0]['capacity'], transport[0]['fuel_tank'], transport[0]['fuel_usage'], transport[0]['weapon'], transport[0]['msg'])
 
 #items are a little more copmlex as they come in a variety of shapes and sizes
 
@@ -57,6 +58,11 @@ for winning_item in items['winning_items'].items():
 for key in items['keys'].items():
     game_keys.append(Key(key[1]['name'], key[1]['description'], key[1]['msg'], key[1]['category'], False, ''))
 game_items.extend(game_keys)
+
+#keys
+for credit in items['credits'].items():
+    game_credits.append(Credit(credit[1]['name'], credit[1]['msg'], False, credit[1]['value']))
+game_items.extend(game_credits)
     
 #magic
 for magic in items['magic'].items():

@@ -11,7 +11,7 @@ import time
 import colored
 from colored import stylize
 import pyfiglet
-from config import win, commands, destinations, items
+from config import win, commands, pack_max, destinations, items
 from game.utils import clear
 
 class Destination:
@@ -34,31 +34,11 @@ class Destination:
         if task == "list":
             game.msg.append(str("Suggested destinations:"))
             for direction, value in self.voyages.items():
-                game.msg.append(str(destinations[value]['name']) + str(" ( direction: " + direction + " )"))   
-        game.msg.append(stylize(str("Remember you'll need enough fuel to reach your destination!").format(capacity=10), colored.fg(1)))
+                game.msg.append(str(destinations[value]['name']) + str(" (direction: " + direction.upper() + ")"))   
+        game.msg.append(stylize(str("You'll need fuel to reach your destination!").format(capacity=10), colored.fg(1)))
 
-    def fly(self, game, command):
-        if "spaceship" in game.player.moves:
-            game.player.moves.append(command)
-            # check that can go to their desired destination
-
-            if command in game.player.destination.voyages:
-                voyages = game.player.destination.voyages
-                new_destination = voyages[command] - 1
-                game.player.destination = game.destinations[new_destination]
-                game.player.zone = game.destinations[new_destination].zones[0]
-                game.msg.append(str('''After a quick interstellar hop through the universe 
-you've arrived on {destination}
-''').format(destination = game.player.destination.name))            
-                game.player.moves.clear()
-            else:
-                game.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
-        else:
-            game.msg.clear()
-            game.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
-            if not game.player.transport:
-                game.msg.append("But it must be your lucky day as you happen to have a ")
-                game.show_vehicle()
+    def fly(self):
+        pass
 
 class Zone():
 #create a game zone to find items and fight enemies
@@ -75,22 +55,51 @@ class Zone():
         if non_player_characters is None:
             self.non_player_characters = []
         else: 
-            self.non_player_characters = non_player_characters    
+            self.non_player_characters = non_player_characters        
         
 class Transport:
 #create a vehicle to carry the player  + non player characters around the game
 
-    def __init__(self, name, description, category, capacity, fuel, weapon, msg):
+    def __init__(self, name, description, category, capacity, fuel_tank, fuel_usage, weapon, msg):
         self.name = name
         self.description = description
         self.category = category
         self.capacity = capacity
-        self.fuel = fuel
+        self.fuel_tank = fuel_tank
+        self.fuel_usage = fuel_usage
         self.weapon = weapon
         self.msg = msg   
 
-    def voyage(self):
-        pass
+    def voyage(self, game, command):
+    #take your transport on a voyage across the game...
+        if "spaceship" in game.player.moves:
+            #check for fuel
+            if game.player.transport.fuel_tank >=10:
+                game.player.moves.append(command)
+                # check that can go to their desired destination
+                if command in game.player.destination.voyages:
+                    voyages = game.player.destination.voyages
+                    new_destination = voyages[command] - 1
+                    #set the new player destination and zone
+                    game.player.destination = game.destinations[new_destination]
+                    game.player.zone = game.destinations[new_destination].zones[0]
+                    #spend the fuel
+                    game.player.transport.fuel_tank = game.player.transport.fuel_tank - game.player.transport.fuel_usage
+
+                    game.msg.append(str('''After a quick interstellar hop through the universe 
+you've arrived on {destination}
+    ''').format(destination = game.player.destination.name))            
+                    game.player.moves.clear()
+                else:
+                    game.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
+            else:
+                game.msg.append(stylize("You don't have enough fuel to make the trip dude...", colored.fg(1)))    
+        else:
+            game.msg.clear()
+            game.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
+            if not game.player.transport:
+                game.msg.append("But it must be your lucky day as you happen to have a ")
+                game.show_vehicle()
 
 class Object:  
 #create physical objects in the game
@@ -151,12 +160,16 @@ class Item:
     
     def get(self, game, command):
         if command.lower() == self.name.lower():
-            # display a helpful message
-            game.msg.append(str("Yay - you've got the " + self.name))
-            game.msg.append(self.msg['get'])
-            game.player.inventory.append(self)
-            self.collected = True
-
+            # check the number of items pack
+            pack_total = len(game.player.inventory)
+            if pack_total < pack_max:
+                # display a helpful message
+                game.msg.append(str("Yay - you've got the " + self.name))
+                game.msg.append(self.msg['get'])
+                game.player.inventory.append(self)
+                self.collected = True
+            else:
+                game.msg.append(stylize('''You can't pick up this item as your pack is full!!''', colored.fg(1)))
         else:
             # otherwise, if the item isn't there to get
             # tell them they can't get it
@@ -228,6 +241,8 @@ class Magic(Food):
 
         if command == self.name and self.category == "drink":
             game.msg.append(self.msg['drink'])
+            game.msg.append(self.msg['magic'])
+            game.player.health = game.player.health + self.health
             game.player.strength = game.player.strength + self.strength
             game.player.inventory.remove(self)
         else:
@@ -263,10 +278,17 @@ class WinningItem(Item):
                 clear()
                 game.msg.append(win)
                 ascii_banner = pyfiglet.figlet_format("YOU WIN!")
-                print(ascii_banner)
+                game.msg.append(ascii_banner)
             else:
-                game.msg.clear()
                 game.msg.append(stylize(commands['place']['error'], colored.fg(1))) 
+
+class Credit():
+#create credits
+    def __init__(self, name, msg, collected, value):
+        self.name = name
+        self.msg = msg
+        self.collected = collected
+        self.value = value
 
 class Clue():
 #create cluses to be hidden in objects
