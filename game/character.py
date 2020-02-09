@@ -24,8 +24,8 @@ from chatterbot.trainers import ListTrainer
 
 
 class PlayerCharacter:
-#create a choice of hero players to play the game
-    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, winning_items=None, moves=None):
+    """Create the hero players"""
+    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
         self.name = name
         self.power = power
         self.weapon = weapon
@@ -35,6 +35,7 @@ class PlayerCharacter:
         self.zone = zone
         self.inventory = inventory
         self.transport = transport
+        self.credits = credits
         if winning_items is None:
             self.winning_items = []
         else: 
@@ -56,8 +57,15 @@ class PlayerCharacter:
         return health_hearts
     
     def show_navigator(self, game):
-        game.msg.append(str("Vehicle category: {category}").format(category=self.transport.category.upper()))
-        game.msg.append(str("Fuel: {fuel}").format(fuel=self.transport.fuel_tank))
+        if self.transport == "":
+            category = ""
+            fuel_tank = ""
+        else:
+            category = self.transport.category
+            fuel_tank = self.transport.fuel_tank
+
+        game.msg.append(str("Vehicle category: {category}").format(category=category.upper()))
+        game.msg.append(str("Fuel: {fuel}").format(fuel=fuel_tank))
         game.msg.append(str("Current location: {location}").format(location=self.destination.name.upper()))
         game.msg.append(str("Zone: {zone}").format(zone=self.zone.name.upper()))
         game.player.destination.voyage_list(game, "list")
@@ -65,10 +73,6 @@ class PlayerCharacter:
     def go(self, game, command):
         go_directions = {"north": 2, "south": 0, "west": 1, "east": 3}
         go_styles = ["swagger over to the", "jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
-        obj_name = ""
-        
-        obj_name = game.player.zone.objects.name  
-        go_msg = game.player.zone.objects.msg['go']
 
         if command in go_directions:
             game.player.zone = game.player.destination.zones[go_directions[command]]
@@ -77,14 +81,19 @@ class PlayerCharacter:
             if game.destinations[-1].zones[-1] == self.zone:
                 self.zone.non_player_characters.encounter(game)
                 
-        elif command == obj_name:
+        elif command == game.player.zone.objects.name.lower():
             go_style = random.choice(go_styles)
-            game.msg.append(str("You {go} {object}").format(go = go_style, object = obj_name))
-            game.msg.append(go_msg)         
+            game.msg.append(str("You {go} {object}").format(go = go_style, object = game.player.zone.objects.name))
+            game.msg.append(game.player.zone.objects.msg['go'])         
 
         elif command == game.transport.name:
             if game.player.transport == "":
-                game.player.transport = game.transport    
+                game.player.transport = game.transport 
+                if self.list_inventory(game, "fuel tank", "check") == True:
+                        for itm in self.inventory:
+                            if itm.name == "fuel tank":
+                                game.player.transport.fuel_tank += 15
+                                game.player.inventory.remove(itm)
             game.msg.append(game.player.transport.msg['go'])
         else:
             game.msg.append(stylize(commands['go']['error'], colored.fg(1)))
@@ -92,15 +101,15 @@ class PlayerCharacter:
 
     def look(self, game, command):
         if command == "closer" and "look" in game.player.moves:
-            game.msg.append("You get closer ")
+            game.msg.append("You shuffle a little closer and...")
             if game.player.zone.items.collected == False:
                 if game.player.zone.items.collected == False:
-                    game.msg.append(" and see that the item you could see looks a lot like a " + game.player.zone.items.name)
+                    game.msg.append("see that the item in front of you looks a lot like a " + game.player.zone.items.name)
                     if hasattr(game.player.zone.items, 'description'): 
                         game.msg.append(game.player.zone.items.description)
                 if isinstance(game.player.zone.winning_items, WinningItem):
                     if game.player.zone.winning_items.collected == False:
-                        game.msg.append("and... Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
+                        game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
                         game.msg.append(game.player.zone.winning_items.description)
             else:
                 game.msg.append("...but there doesn't appear to be anything here to see...")  
@@ -110,7 +119,8 @@ class PlayerCharacter:
             else:
                 game.msg.append("You have a good look around...")
             tip = ""
-            tip = stylize(" (tip: go " + game.player.zone.objects.name + ")", colored.fg(1))
+            tip = stylize('''
+(tip: go ''' + game.player.zone.objects.name + ''')''', colored.fg(1))
             game.msg.append(game.player.zone.objects.msg['look'] + tip)
             if game.player.zone.items.collected == False:
                 game.msg.append(game.player.zone.items.msg['look'])
@@ -129,7 +139,7 @@ class PlayerCharacter:
             1: '''
 You ease and squeeze - a dense dark smell
 oouzes from your buttocks. A nearby bird falls from her perch,
-has the smell killed her!?!
+I think the smell has killed her!**!!
 ''',
             2: '''
 PARP PARP PARP - your but cheeks sing and
@@ -161,7 +171,7 @@ confirms it. ***Deadly***'''
 
 
 class NonPlayerCharacter:
-#create npc, friends and foe to populate the game and spice it up!
+    """Create NPC, friends and foe to populate the game and spice it up!"""
     def __init__(self, name, species, appearance, weakness, status, strength, health, msg):
         self.name = name
         self.species = species
@@ -313,7 +323,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 break
 
 class Boss(NonPlayerCharacter):
-#create the boss - this character will guard the final object - they must be defeated to win the game!
+    """create the boss - this character will guard the final object - they must be defeated to win the game!"""
     def __init__(self, name, species, appearance, weakness, status, strength, health, encounter):
         super().__init__(name, species, appearance, weakness, status, strength, health, encounter)
 

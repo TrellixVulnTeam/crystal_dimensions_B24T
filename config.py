@@ -15,7 +15,7 @@ import pyfiglet
 commands = {
         'fight': {'input': '', 'hidden': False, 'error': "There's nothing to fight here..."},
         'fly': {'input': 'direction', 'hidden': False, 'error' : "Steady on... you'll need wings to fly!"},
-        'go': {'input': 'object', 'hidden': False, 'error' : "There isn't one of those to go to...*!*"},
+        'go': {'input': 'direction or object', 'hidden': False, 'error' : "There isn't one of those to go to...*!*"},
         'get': {'input': 'item', 'hidden': False, 'error' : "Sorry you can't get that item here :("},
         'drop': {'input': 'item', 'hidden': True, 'error' : "Sorry that item doesn't exist...yet"}, 
         'items': {'input': '', 'hidden': False, 'error' : ""},
@@ -36,6 +36,8 @@ You need to be quick!'''},
         'drink': {'input': 'item', 'hidden': True, 'error' : "Drink what!?! there's only engine fuel here..."},
         'dance': {'input': 'name', 'hidden': True, 'error' : "That's not a dance!!"},
         'fart': {'input': '', 'hidden': True, 'error' : "You can only fart smelly air dude!"},
+        'buy': {'input': '', 'hidden': False, 'error' : "You'll need to find a shop before buy anything"},
+        'sell': {'input': '', 'hidden': True, 'error' : "No one to sell to aroudn here..."},
         'check': {'input': 'misc', 'hidden': True, 'error' : "Nothing to check"},
         'restart': {'input': '', 'hidden': True, 'error' : ""}
         }
@@ -184,7 +186,7 @@ drinking, eating messily and brawling. It's total chaos and very noisey
 so fairly easy to keep a low profile aorund here...'''
         },
         10: {
-        'name': 'General stores',
+        'name': 'Market place',
         'scenario': '''A shop standing on its own in what appears to be 
 the middle of nowhere. Inside there are endless aisles of random things 
 - pretty much everything from food to weapons to playing cards. You'll be 
@@ -401,7 +403,7 @@ to get you to the local shops and back...''',
         "category": "spaceship",
         "capacity": 3,
         "fuel_tank": 40,
-        "fuel_usage": 13,
+        "fuel_usage": 17,
         "weapon": "Lazers",
         "msg": {"go": '''You stroll up to your spaceship, with a push of a button 
 you open the hatch, then you climb aboard and fire up the engines - 
@@ -418,18 +420,27 @@ and ready to go - whenever you are...'''
 #shop
 shop = {
         0: {
-        "name": "General store",    
+        "name": "Shop",    
         "description": '''Basic looking counter with a local standing behind it 
 waiting to take your credits...''',
-        "msg": {"go": '''You go up to the counter and start a conversation with the shop
-keeper...''',
-"look": '''You can see That there is a small shop - 
-have you got anyhting you need to buy...or maybe even sell''',
-        "products": {"fuel": {"credits": 10}, "food": {"credits": 15}}
+        "msg": {"go": '''You go up to the counter and start a conversation with the shop keeper...''', "look": '''You can see That there is a small shop - 
+have you got anything you need to buy...or maybe even sell''', "buy": '''Great to do business with you'''},
+        "products": {
+                1: {
+                "name": "fuel",
+                "credits": 12
+                },
+                2: {
+                "name": "food",
+                "credits": 10
+                },
+                3: {
+                "name": "water",
+                "credits": 2
+                }
         }
-    },
-}
-
+        }
+        }
 
 #objects
 objects = {
@@ -482,6 +493,7 @@ items = {
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
 Where you're going - you're defintely going to need a weapon!'''},
         "category": "weapon",
+        "value": 20,
         "player": 1
         },
         2: {
@@ -494,6 +506,7 @@ The swords are your favourite but you are happy to finish the job with a pistol 
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
 Where you're going - you're defintely going to need a weapon!'''},
         "category": "weapon",
+        "value": 15,
         "player": 2
         },
         3: {
@@ -506,6 +519,7 @@ its leathal but you need some cover to use it range effectively''',
 ready to do battle with the bad guys...''', "look": '''Right by your feet is your weapon. 
 Where you're going - you're defintely going to need a weapon!'''},
         "category": "weapon",
+        "value": 18,
         "player": 3
         }},
         "winning_items": {
@@ -554,35 +568,49 @@ hands and out of sight forever...'''},
 ornate looking blade.''',
         "msg": {"get": '''You pocket the skeleton key - this will unlock anything''', "look": '''Is that a key you can see, looks like someone has tried to hide it 
 - but failed as there it is bold as brass, right in front of you!'''},
-        "category": "key"
+        "category": "key",
+        "value": 10
     }},
         "credits": {
-    1: {"name": "Two Galag-Zags",
-        "description": "Credits to spend if you can find a shop to spend them in...",
-        "msg": {"look": "Shiny crrrr's - need some of that", "collect": "Watch the Zags and the Zigs will look after themselves!", "spend": "Well its what it was intended for..." },
-        "value": 2},
-    2: {"name": "Ten Galag-Zigs",
-        "description": "Credits to spend if you can find a shop to spend them in...",
-        "msg": {"look": "Is that credits you can see?", "collect": "This has got a reassuring weight about it - should buy me some tings", "spend": "I hope it was worth it..." },
-        "value": 10},
-    3: {"name": "A Galag-Zig-Zag",
-        "description": "Credits to spend if you can find a shop to spend them in...",
-        "msg": {"look": "Bling! Looks like some credits kicking around in front of you", "collect": "CHING CHING - I'm in the CRrrrr's", "spend": "Ouch that hurt" },
-        "value": 25}    
+    1: {
+        "name": "Two Galag-Zags",
+        "description": '''Credits to spend if you can find a shop to spend them in...''',
+        "msg": {"look": '''Shiny crrrr's - need some of that''', 
+        "get": '''Watch the Zags and the Zigs will look after themselves!''', 
+        "spend": '''Well its what it was intended for...''' },
+        "value": 2
+        },
+    2: {
+        "name": "Ten Galag-Zigs",
+        "description": '''Credits to spend if you can find a shop to spend them in...''',
+        "msg": {"look": '''what's on the floor, is that some free crrrrr's?''', 
+        "get": '''This has got a reassuring weight about it - should buy some tings''', 
+        "spend": '''hmmm I hope that was worth it...''' },
+        "value": 10
+        },
+    3: {
+        "name": "A Galag-Zig-Zag",
+        "description": '''Credits to spend if you can find a shop to spend them in...''',
+        "msg": {"look": '''Bling! Looks like some credits kicking around in front of you''', 
+        "get": '''CHING CHING - I'm in the CRrrrr's''', 
+        "spend": '''Ouch that hurt''' },
+        "value": 25
+        }    
         },
         "magic": {
     1: {
         "name": "potion",
         "description": '''A small leather flask with clear liquid inside.
 Smells like vanilla pods.''',
-        "msg": {"get": '''Supplies always come in handy - I wonder if the potion has any kick to it?''', "look": '''There's a bottle - looks too special to be water...''',
+        "msg": {"get": '''Supplies always come in handy - you wonder if the potion has a kick to it?''', "look": '''There's a bottle - looks too special to be water...''',
 "drink": '''With a gulp and a slurp you down the potion.
 A few moments later the hallucinations kick in -
 you might need to lie down for while...''', "magic": '''But miraculously this potion has hidden powers and your strength increases!!!'''},
         "category": "drink",
         "spell": "",
         "health": 0,
-        "strength": 2
+        "strength": 2,
+        "value": 12,
     }},
         "food": {
     1: {
@@ -594,41 +622,57 @@ you start to feel bloated, you really need to fart dude
  or you might explode...'''},
         "category": "food",
         "health": -1,
+        "value": 2,
     },
     2: {
         "name": "water",
         "description": '''Blue. Cold. Wet. Delicious''',
-        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', "look": '''A small bamboo flask holding what looks like water''', "drink": '''You take a couple of big gulps,
+        "msg": {"get": '''Water seems precious around here - you might get thirsty!''', 
+        "look": '''A small bamboo flask holding what looks like water''', 
+        "drink": '''You take a couple of big gulps,
 it is water and it's as refreshing as you'd hoped it would be...
 Your health increase :) '''},
         "category": "drink",
-        "health": 1,
+        "health": 0,
+        "value": 2,
     },
     3: {
         "name": "bagel",
         "description": '''Looks like a cream cheese bagel, fancy that, your favourite''',
-        "msg": {"get": '''Keep this bread in case you need an energy boost!''', "look": '''A brown paper bag is lying on the floor in front of you keeping something safe, looks like a food bag of some sort.''', "food": '''You feel lucky to have found your favourite snack out here - you savour
+        "msg": {"get": '''Keep this bread in case you need an energy boost!''', 
+        "look": '''A brown paper bag is lying on the floor in front of you keeping something 
+safe, looks like a food bag of some sort.''', 
+        "food": '''You feel lucky to have found your favourite snack out here - you savour
 each mouthful - its a good one, chewy with plenty of cream cheese.'''},
         "category": "food",
         "health": 1,
+        "value": 10
     },
     4: {
         "name": "energy bar",
         "description": '''Looks like a vegan fruity energy bar''',
         "msg": {"get": '''You've heard of these - even Super Heroes need a boost from time to time.
 Could be useful in a fight - The advert says it boosts your health 
-and your strength...double whammy!!!''', "look": '''A bar of something has been discarded inches from your feet...could be a tasty treat''', "food": '''A zing in your mouth lets you know your body has scored some energy - it's pretty tasty too'''},
+and your strength...double whammy!!!''', "look": '''A bar of something has been discarded inches from your feet...
+could be a tasty treat''', "food": '''A zing in your mouth lets you know your body has scored some energy - it's pretty tasty too'''},
         "category": "food",     
         "health": 1,
-        "strength": 1   
+        "strength": 1,  
+        "value": 15,
     },
     5: {
         "name": "wild berries",
         "description": '''They look like raspberries - your absolute favourite''',
-        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', "look": '''You love fresh berries but what was it that your mum told you about picking wild fruit!?!?''',"food": '''Not bad tasting but at the same time slightly odd texture and flavour - it's made you feel a bit queezy'''},
+        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', 
+        "look": '''You love fresh berries but what was it that your mum told you about picking 
+wild fruit!?!?''',
+        "food": '''Not bad tasting but at the same time slightly odd texture and flavour - 
+it's made you feel a bit sick...And then you are sick, 
+really sick, you lose health and strength :('''},
         "category": "food",             
         "health": -1,
-        "strength": -1   
+        "strength": -1,
+        "value": 5,
     }
 }
 }

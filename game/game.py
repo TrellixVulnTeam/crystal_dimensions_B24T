@@ -24,7 +24,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
 
 class Game:
-#main game class object, complete with heler functions, help, quit, restart, move etc..
+    """Main game class object, complete with heler functions, help, quit, restart, move etc.."""
     
     def __init__(self, title, author, mission, player_characters, destinations, transport, player, commands, msg):
         self.title = title
@@ -56,9 +56,9 @@ class Game:
         clear()
         ascii_banner = pyfiglet.figlet_format("BYE BYE!")
         print(ascii_banner)
-        print('{0}'.format('='*75))
+        print('{0}'.format('='*115))
         print(self.title + " by " + self.author)
-        print('{0}'.format('='*75))
+        print('{0}'.format('='*115))
         exit()
 
     #Restarts the current program.
@@ -107,6 +107,8 @@ Looks like your super power - {power}
         print(stylize("Power : " + self.player.power, colored.fg(84)))
         # print weapon
         print(stylize("Weapon : " + weapon, colored.fg(84)))
+        # print credits
+        print(stylize("Credits : " + str(self.player.credits), colored.fg(84)))
         # print health
         print(stylize("Health :" + str(self.player.show_health()), colored.fg(15) + colored.bg(1)))
 
@@ -154,6 +156,7 @@ on the ground in front of you.
 
 
     def select_weapon(self):
+        clear()
         print('''There's a big stack of weapons on the floor in front of you!''')
         i = 1
         for weapon in self.player.zone.weapons:
@@ -238,7 +241,7 @@ on the ground in front of you.
                 self.player.moves.append(command[0])
                 if command[1]:
                     if command[1].lower() == self.player.zone.items.name.lower():
-                        self.player.zone.items.get(self, command[1])
+                        self.player.zone.items.get(self, command[1])    
                     elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
                         if self.player.zone.non_player_characters.health > 0:
                             self.player.zone.non_player_characters.encounter(self) 
@@ -330,9 +333,32 @@ on the ground in front of you.
                     self.player.go(self, command[1])
                 else:
                     self.player.moves.append("Go where?")    
-            # end go    
-                
-            # 'fart' command
+            # end go   
+
+            # 'buy' command
+            if command[0] == 'buy':
+                self.msg.clear()
+                self.player.moves.append(command[0])
+                if self.player.zone.objects.name.lower() == "shop" and "shop" in self.player.moves:
+                    self.player.zone.objects.buy(self)
+                else:
+                    self.msg.clear()
+                    self.msg.append(stylize("Sorry, but you can't do that here - you need a shop!", colored.fg(1))) 
+            # end buy   
+
+            # 'sell' command
+            if command[0] == 'sell':
+                self.msg.clear()
+                self.player.moves.append(command[0])
+                if self.player.zone.objects.name.lower() == "shop" and "shop" in self.player.moves:
+                    self.player.zone.objects.sell(self)
+                else:
+                    self.msg.clear()
+                    self.msg.append(stylize("Sorry, but you can't do that here - you need a shop!", colored.fg(1))) 
+            # end buy
+
+
+            # 'fart' command d
             if command[0] == 'fart':
                 self.player.moves.append(command[0])
                 self.player.fart(self)
