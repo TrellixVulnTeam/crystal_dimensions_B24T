@@ -24,7 +24,8 @@ from chatterbot.trainers import ListTrainer
 
 
 class PlayerCharacter:
-    """Create the hero players"""
+    #Create the hero players
+    ß
     def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
         self.name = name
         self.power = power
@@ -107,10 +108,10 @@ class PlayerCharacter:
                     game.msg.append("see that the item in front of you looks a lot like a " + game.player.zone.items.name)
                     if hasattr(game.player.zone.items, 'description'): 
                         game.msg.append(game.player.zone.items.description)
-                if isinstance(game.player.zone.winning_items, WinningItem):
-                    if game.player.zone.winning_items.collected == False:
-                        game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
-                        game.msg.append(game.player.zone.winning_items.description)
+            if game.player.zone.winning_items != "":
+                if game.player.zone.winning_items.collected == False:
+                    game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
+                    game.msg.append(game.player.zone.winning_items.description)
             else:
                 game.msg.append("...but there doesn't appear to be anything here to see...")  
         elif command == "around":
@@ -118,16 +119,18 @@ class PlayerCharacter:
                 game.select_weapon()
             else:
                 game.msg.append("You have a good look around...")
-            tip = ""
-            tip = stylize('''
-(tip: go ''' + game.player.zone.objects.name + ''')''', colored.fg(1))
-            game.msg.append(game.player.zone.objects.msg['look'] + tip)
-            if game.player.zone.items.collected == False:
-                game.msg.append(game.player.zone.items.msg['look'])
+                tip = ""
+                tip = stylize('''\n(tip: go ''' + game.player.zone.objects.name + ''')''', colored.fg(1))
             
-            if isinstance(game.player.zone.winning_items, WinningItem):
-                if game.player.zone.winning_items.collected == False:
-                    game.msg.append(game.player.zone.winning_items.msg['look'])    
+                if game.player.zone.items.collected == False:
+                    game.msg.append(game.player.zone.items.msg['look'])
+            
+                if isinstance(game.player.zone.winning_items, WinningItem):
+                    if game.player.zone.winning_items.collected == False:
+                        game.msg.append(game.player.zone.winning_items.msg['look'])   
+
+                game.msg.append(game.player.zone.objects.msg['look'] + tip)
+
         else:
             game.msg.append(stylize(commands['look']['error'], colored.fg(1)))
     
@@ -156,7 +159,7 @@ confirms it. ***Deadly***'''
 
     def list_inventory(self, game, command, task):
         if task == "list":
-            game.msg.append("Your back pack items:")
+            game.msg.append(stylize("Your pack items:", colored.fg(84)))
             if self.inventory:
                 for item in self.inventory:
                     game.msg.append(str(item.name.title()) + " (" + str(item.category) + ")",)       
@@ -171,7 +174,8 @@ confirms it. ***Deadly***'''
 
 
 class NonPlayerCharacter:
-    """Create NPC, friends and foe to populate the game and spice it up!"""
+    #Create NPC, friends and foe to populate the game and spice it up!
+    
     def __init__(self, name, species, appearance, weakness, status, strength, health, msg):
         self.name = name
         self.species = species
@@ -184,6 +188,7 @@ class NonPlayerCharacter:
 
     def encounter(self, game):
     #encounter a npc    
+
         game.msg.append('''Before you can get it...''')
         game.msg.append(self.msg['encounter'])
         game.msg.append(str('''
@@ -323,7 +328,8 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 break
 
 class Boss(NonPlayerCharacter):
-    """create the boss - this character will guard the final object - they must be defeated to win the game!"""
+    #create the boss - this character will guard the final object - they must be defeated to win the game!
+    
     def __init__(self, name, species, appearance, weakness, status, strength, health, encounter):
         super().__init__(name, species, appearance, weakness, status, strength, health, encounter)
 

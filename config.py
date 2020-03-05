@@ -423,7 +423,7 @@ shop = {
         "name": "Shop",    
         "description": '''Basic looking counter with a local standing behind it 
 waiting to take your credits...''',
-        "msg": {"go": '''You go up to the counter and start a conversation with the shop keeper...''', "look": '''You can see That there is a small shop - 
+        "msg": {"go": '''You go up to the counter and start a conversation with the shop keeper...''', "look": '''You can see that there is a small shop - 
 have you got anything you need to buy...or maybe even sell''', "buy": '''Great to do business with you'''},
         "products": {
                 1: {
@@ -476,7 +476,7 @@ inside to have a look around - could be hiding something interesting''', "look":
 a door on one side, its slightly ajar.''',
         "move": {"enter"},
         "msg": {"go": '''The door is open and you can make out a desk
-with some files on it...''', "look": '''There in the sdistance what looks like a bunker...'''
+with some files on it...''', "look": '''There in the distance what looks like a bunker...'''
        }
     }
 }
@@ -532,7 +532,8 @@ another step closer to completing your mission''', "look": '''You spot what look
 you it is more than that''', "place": '''Placing the crystal into the slot carefully so as not to damage it - 
 as it slots into position the black material at it's centre 
 turns to gold!'''},
-        "category": "crystal"
+        "category": "crystal",
+        "value": 60
     },
     2: {
         "name": "Build Crystal",
@@ -545,7 +546,8 @@ you can just about see the light bouncing off - deep purple
 - the build crystal is purple...''', "place": '''Holding it in both hands you drop it lightly into place -
 it changes colour as it lowers into the portal - 
 now a million shade so '''},
-        "category": "crystal"
+        "category": "crystal",
+        "value": 50
         
     },
     3: {
@@ -559,7 +561,8 @@ It could be some kind of energy source - its worth a closer look.''', "place": '
 giving it away is like parting with the hobbit's ring. You close your eyes and thrust it into the portal
 - a flash of bright light shoots out and it's sucked out of your 
 hands and out of sight forever...'''},
-        "category": "crystal"
+        "category": "crystal",
+        "value": 75
     }},
         "keys": {
     1: {
@@ -662,11 +665,11 @@ could be a tasty treat''', "food": '''A zing in your mouth lets you know your bo
     },
     5: {
         "name": "wild berries",
-        "description": '''They look like raspberries - your absolute favourite''',
-        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', 
-        "look": '''You love fresh berries but what was it that your mum told you about picking 
+        "description": '''They look like raspberries - you love fresh berries but what was it that your mum told you about picking 
 wild fruit!?!?''',
-        "food": '''Not bad tasting but at the same time slightly odd texture and flavour - 
+        "msg": {"get": '''Going to be hard not just to scoff these fruity gems''', 
+        "look": '''There are berries hanging off a plant just in front of you...''',
+        "food": '''Not bad tasting but they do have really glooopy texture - 
 it's made you feel a bit sick...And then you are sick, 
 really sick, you lose health and strength :('''},
         "category": "food",             

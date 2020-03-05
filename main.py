@@ -55,7 +55,7 @@ game_shop = Shop(shop[0]['name'], shop[0]['description'], 'buy/sell', '', shop[0
 
 #winning items
 for winning_item in items['winning_items'].items():
-    game_winning_items.append(WinningItem(winning_item[1]['name'], winning_item[1]['description'], winning_item[1]['msg'], winning_item[1]['category'], 50, False))
+    game_winning_items.append(WinningItem(winning_item[1]['name'], winning_item[1]['description'], winning_item[1]['msg'], winning_item[1]['category'], winning_item[1]['value'], False))
 
 #keys
 for key in items['keys'].items():
@@ -64,7 +64,7 @@ game_items.extend(game_keys)
 
 #credits
 for credit in items['credits'].items():
-    game_credits.append(Credit(credit[1]['name'], credit[1]['description'], credit[1]['msg'], 'credits', False, credit[1]['value']))
+    game_credits.append(Credit(credit[1]['name'], credit[1]['description'], credit[1]['msg'], 'credits', credit[1]['value'], False))
 game_items.extend(game_credits)
     
 #magic
@@ -74,7 +74,7 @@ game_items.extend(game_magic)
     
 #food and drink
 for food in items['food'].items():
-    game_food.append(Food(food[1]['name'], food[1]['description'], food[1]['msg'], food[1]['category'], False, food[1]['value'], food[1]['health']))        
+    game_food.append(Food(food[1]['name'], food[1]['description'], food[1]['msg'], food[1]['category'], food[1]['value'], False, food[1]['health']))        
 game_items.extend(game_food)
 
 #create objects for game
@@ -147,7 +147,7 @@ while True:
             if int(character) in new_game.player_characters:
                                 
                 #add player to game
-                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], "", new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['health'], "", "", inventory, "", 10)
+                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], "", new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['health'], "", "", inventory, "", 0)
 
                 # starting destination
                 new_game.player.destination = new_game.destinations[0]   

@@ -16,7 +16,7 @@ from game.character import NonPlayerCharacter
 from game.utils import clear
 from config import commands, intro, objects, items, conversation
 
-# pip install chatterbot
+# you need to pip install chatterbot or use requirements.txt
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 
@@ -46,7 +46,7 @@ class Game:
     def help(self):
         #print all the moves
         self.msg.clear()
-        self.msg.append("Useful commands\n")
+        self.msg.append("Useful commands:\n")
         for command in self.commands:
             if self.commands[command]['hidden'] is False:
                 self.msg.append(stylize(command + " [ " + self.commands[command]['input'] + " ]", colored.fg(84)))
@@ -56,13 +56,14 @@ class Game:
         clear()
         ascii_banner = pyfiglet.figlet_format("BYE BYE!")
         print(ascii_banner)
-        print('{0}'.format('='*115))
+        print('{0}'.format('='*95))
         print(self.title + " by " + self.author)
-        print('{0}'.format('='*115))
+        print('{0}'.format('='*95))
         exit()
 
-    #Restarts the current program.
+    
     def restart(self):
+    #Restarts the current program.
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
@@ -73,9 +74,9 @@ class Game:
         print(stylize(ascii_banner, colored.fg(84)))
         time.sleep(1)
         # print an introduction to the game
-        print('{0}'.format('='*75))
+        print('{0}'.format('='*95))
         print("Designed by " + self.author)
-        print('{0}'.format('='*75))
+        print('{0}'.format('='*95))
         time.sleep(1)
         print(self.mission) 
 
@@ -116,8 +117,6 @@ Looks like your super power - {power}
         if not self.player.moves:
             self.msg.append(self.player.destination.scenario)
             self.player.destination.scenario is None
-        
-        # print the quick look script - if there is an item
 
         if self.player.health > 0 and ((self.player.zone.items == False) and not self.msg):
             self.msg.append(str('''
@@ -126,13 +125,15 @@ on the ground in front of you.
             ''').format(item = self.player.zone.items[0].name))
                 
         if self.msg:
-            print("")
-            print("{0}".format("="*75))
+            print ("\n")
+            print("{0}".format("="*95))
             for m in self.msg:
                 print (m)
+                print("")
                 time.sleep(.500)
-            print("")
-            print("{0}".format("="*75))
+        
+        print("{0}".format("="*95))
+        print ("")    
         print(stylize("What next!?!", colored.fg(84)))
 
     def show_vehicle(self):
@@ -225,7 +226,17 @@ on the ground in front of you.
             if command[0] == 'fly':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                self.player.transport.voyage(self, command[1])
+                if "spaceship" in self.player.moves:
+                    self.player.transport.voyage(self, command[1])
+                else:
+                    self.msg.clear()
+                    self.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
+                    if not self.player.transport:
+                        self.msg.append("But it must be your lucky day as you happen to have a ")
+                        self.show_vehicle()
+                        self.msg.append(stylize(str("\ntip: go {transport}\n").format(transport=self.transport.name), colored.fg(1)))
+
+                        
             # end fly
 
             #'items' command
@@ -267,26 +278,26 @@ on the ground in front of you.
             if command[0] == 'eat':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if command[1]:
+                if len(command) >= 2:
                     if self.player.list_inventory(self, command[1], "check") == True:
                         for itm in self.player.inventory:
                             if itm.name == command[1]:
                                 itm.eat(self, command[1])
                 else:
-                    self.player.moves.append("Eat what?")                 
+                    self.msg.append("Eat what?")                 
             # end eat
 
             #'drink' command
             if command[0] == 'drink':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if command[1]:
+                if len(command) >= 2:
                     if self.player.list_inventory(self, command[1], "check") == True:
                         for itm in self.player.inventory:
                             if itm.name == command[1]:
                                 itm.drink(self, command[1])
                 else:
-                    self.player.moves.append("Drink what?")                
+                    self.msg.append("Drink what?")                
             # end drink 
 
             # 'fight' command

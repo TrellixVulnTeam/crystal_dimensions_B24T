@@ -36,8 +36,6 @@ class Destination:
             for direction, value in self.voyages.items():
                 game.msg.append(str(destinations[value]['name']) + str(" (direction: " + direction.upper() + ")"))   
 
-    def fly(self):
-        pass
 
 class Zone():
     """Create a game zone to find items and fight enemies"""
@@ -58,7 +56,7 @@ class Zone():
             self.non_player_characters = non_player_characters        
         
 class Transport:
-#create a vehicle to carry the player  + non player characters around the game
+    """create a vehicle to carry the player  + non player characters around the game"""
 
     def __init__(self, name, description, category, capacity, fuel_tank, fuel_usage, weapon, msg):
         self.name = name
@@ -71,38 +69,32 @@ class Transport:
         self.msg = msg   
 
     def voyage(self, game, command):
-    #take your transport on a voyage across the game...
-        if "spaceship" in game.player.moves:
-            #check for fuel
-            if game.player.transport.fuel_tank >=10:
-                game.player.moves.append(command)
-                # check that can go to their desired destination
-                if command in game.player.destination.voyages:
-                    voyages = game.player.destination.voyages
-                    new_destination = voyages[command] - 1
-                    #set the new player destination and zone
-                    game.player.destination = game.destinations[new_destination]
-                    game.player.zone = game.destinations[new_destination].zones[0]
-                    #spend the fuel
-                    game.player.transport.fuel_tank = game.player.transport.fuel_tank - game.player.transport.fuel_usage
+        #take your transport on a voyage across the game...
+        #check for fuel
+        if game.player.transport.fuel_tank >=10:
+            game.player.moves.append(command)
+            # check that can go to their desired destination
+            if command in game.player.destination.voyages:
+                voyages = game.player.destination.voyages
+                new_destination = voyages[command] - 1
+                #set the new player destination and zone
+                game.player.destination = game.destinations[new_destination]
+                game.player.zone = game.destinations[new_destination].zones[0]
+                #spend the fuel
+                game.player.transport.fuel_tank = game.player.transport.fuel_tank - game.player.transport.fuel_usage
 
-                    game.msg.append(str('''After a quick interstellar hop through the universe 
+                game.msg.append(str('''After a quick interstellar hop through the universe 
 you've arrived on {destination}
-    ''').format(destination = game.player.destination.name))            
-                    game.player.moves.clear()
-                else:
-                    game.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
+''').format(destination = game.player.destination.name))            
+                game.player.moves.clear()
             else:
-                game.msg.append(stylize("You don't have enough fuel to make the trip dude...", colored.fg(1)))    
+                game.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
         else:
-            game.msg.clear()
-            game.msg.append(stylize(commands['fly']['error'], colored.fg(1)))
-            if not game.player.transport:
-                game.msg.append("But it must be your lucky day as you happen to have a ")
-                game.show_vehicle()
+            game.msg.append(stylize("You don't have enough fuel to make the trip dude...", colored.fg(1)))    
+            
 
 class Object:  
-    """Create physical objects in the game"""
+    #Create physical objects in the game
 
     def __init__(self, name, description, move, clue, msg):
         self.name = name
@@ -146,7 +138,7 @@ bingo, it opens without so much as a creeeeek...
             game.msg.append(str('''Alas not a language you understand...''').format(item=self.name))        
 
 class Shop(Object):
-    """create a shop extending objects (place a shop in a zone and one per destination)"""
+    #create a shop extending objects (place a shop in a zone and one per destination)ß
     
     def __init__(self, name, description, move, clue, msg, products=None):
         super().__init__(name, description, move, clue, msg)
@@ -185,9 +177,12 @@ class Shop(Object):
 
     def sell(self, game):
         print("What would you like to sell?")
+        print("\n")
+        print("Your back pack items:")
         # show updated list of pack items
         for item in game.player.inventory:
             print(item.name)
+        print("\n")    
         print(stylize('''Name something:''', colored.fg(84)))
         item_select = input('>')
         if game.player.list_inventory(game, item_select.lower(), "check") == True:
@@ -208,7 +203,7 @@ class Shop(Object):
         
 
 class Item:
-    """create items (pick-ups) in the game"""
+    #create items (pick-ups) in the game
 
     def __init__(self, name, description, msg, category, value, collected):
         self.name = name
@@ -248,8 +243,9 @@ class Item:
             game.destination.item.append(self)  
 
 class Weapon(Item):
-    """create weapons for the player"""
-    def __init__(self, name, description, msg, category, value, collected, damage, rounds, player):
+    #create weapons for the player
+
+    def __init__(self, name, descrßiption, msg, category, value, collected, damage, rounds, player):
         super().__init__(name, description, msg, category, value, collected)
         self.damage = damage
         self.rounds = rounds
@@ -291,7 +287,8 @@ class Food(Item):
             game.msg.append(stylize(commands['food']['error'], colored.fg(1)))  
 
 class Magic(Food):
-    """create magic potion items"""
+    #create magic potion items
+    
     def __init__(self, name, description, msg, category, value, collected, spell, health, strength):
         super().__init__(name, description, msg, category, value, health, collected)
         self.spell = spell
@@ -310,7 +307,8 @@ class Magic(Food):
             game.msg.append(stylize(commands['magic']['error'], colored.fg(1)))  
 
 class Key(Item):
-    """Create key items"""
+    #Create key items
+
     def __init__(self, name, description, msg, category, value, collected, object=None):
         super().__init__(name, description, msg, category, value, collected)
         if object is None:
@@ -319,7 +317,7 @@ class Key(Item):
             self.object = object     
         
 class WinningItem(Item):
-    """create winning items - these must be collected to win game!"""
+    #create winning items - these must be collected to win game!ß
     
     def __init__(self, name, description, msg, category, value, collected, non_player_character=None):
         super().__init__(name, description, msg, category, value, collected)
@@ -344,7 +342,7 @@ class WinningItem(Item):
 
 
 class Credit(Item):
-    """Create credits"""
+    #Create creditsß
 
     def __init__(self, name, description, msg, category, value, collected):
         super().__init__(name, description, msg, category, value, collected)
@@ -364,7 +362,7 @@ class Credit(Item):
             game.msg.append(stylize(commands['get']['error'], colored.fg(1)))
             
 class Clue():
-    """create cluses to be hidden in objects"""
+    #create cluses to be hidden in objectsß
     
     def __init__(self, zone, status):
         self.zone = zone
