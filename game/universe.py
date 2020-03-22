@@ -15,13 +15,14 @@ from config import win, commands, pack_max, destinations, items, shop
 from game.utils import clear
 
 class Destination:
-    """Destination class - used in conjunction with Hero to create the players destination"""
+    #Destination class - used in conjunction with Hero to create the players destination
 
-    def __init__(self, name, voyages, scenario, colour, zones):
+    def __init__(self, name, voyages, scenario, colour, artwork, zones):
         self.name = name
         self.voyages = voyages
         self.scenario = scenario
         self.colour = colour
+        self.artwork = artwork
         self.zones = zones
 
     def title(self):
@@ -38,7 +39,7 @@ class Destination:
 
 
 class Zone():
-    """Create a game zone to find items and fight enemies"""
+    #Create a game zone to find items and fight enemies
 
     def __init__(self, name, objects, items, winning_items, scenario, weapons=None, non_player_characters=None):
         self.name = name 
@@ -56,7 +57,7 @@ class Zone():
             self.non_player_characters = non_player_characters        
         
 class Transport:
-    """create a vehicle to carry the player  + non player characters around the game"""
+    #create a vehicle to carry the player  + non player characters around the game
 
     def __init__(self, name, description, category, capacity, fuel_tank, fuel_usage, weapon, msg):
         self.name = name
@@ -138,7 +139,7 @@ bingo, it opens without so much as a creeeeek...
             game.msg.append(str('''Alas not a language you understand...''').format(item=self.name))        
 
 class Shop(Object):
-    #create a shop extending objects (place a shop in a zone and one per destination)ß
+    #create a shop extending objects (place a shop in a zone and one per destination)
     
     def __init__(self, name, description, move, clue, msg, products=None):
         super().__init__(name, description, move, clue, msg)
@@ -245,7 +246,7 @@ class Item:
 class Weapon(Item):
     #create weapons for the player
 
-    def __init__(self, name, descrßiption, msg, category, value, collected, damage, rounds, player):
+    def __init__(self, name, description, msg, category, value, collected, damage, rounds, player):
         super().__init__(name, description, msg, category, value, collected)
         self.damage = damage
         self.rounds = rounds
@@ -255,7 +256,7 @@ class Weapon(Item):
         pass    
 
 class Food(Item):
-    """Create edible items"""
+    #Create edible items
     def __init__(self, name, description, msg, category, value, collected, health):
         super().__init__(name, description, msg, category, value, collected)
         self.health = health
@@ -317,7 +318,7 @@ class Key(Item):
             self.object = object     
         
 class WinningItem(Item):
-    #create winning items - these must be collected to win game!ß
+    #create winning items - these must be collected to win game!
     
     def __init__(self, name, description, msg, category, value, collected, non_player_character=None):
         super().__init__(name, description, msg, category, value, collected)
@@ -331,6 +332,7 @@ class WinningItem(Item):
             game.msg.clear()
             game.msg.append(self.msg['place'])
             game.player.winning_items.append(self)
+            game.player.inventory.remove(self)
             winning_items_total = len(items['winning_items'])
             if len(game.player.winning_items) == winning_items_total:
                 clear()
@@ -342,7 +344,7 @@ class WinningItem(Item):
 
 
 class Credit(Item):
-    #Create creditsß
+    #Create credits
 
     def __init__(self, name, description, msg, category, value, collected):
         super().__init__(name, description, msg, category, value, collected)
@@ -362,7 +364,7 @@ class Credit(Item):
             game.msg.append(stylize(commands['get']['error'], colored.fg(1)))
             
 class Clue():
-    #create cluses to be hidden in objectsß
+    #create cluses to be hidden in objects
     
     def __init__(self, zone, status):
         self.zone = zone

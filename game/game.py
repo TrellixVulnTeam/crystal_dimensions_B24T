@@ -8,13 +8,14 @@ import sys
 import os
 import random
 import time
+import pygame
 import colored
 from colored import stylize
 import pyfiglet
 from game.universe import Destination, Object, Item, WinningItem
 from game.character import NonPlayerCharacter
 from game.utils import clear
-from config import commands, intro, objects, items, conversation
+from config import commands, intro, soundtrack, objects, items, conversation
 
 # you need to pip install chatterbot or use requirements.txt
 from chatterbot import ChatBot
@@ -50,7 +51,7 @@ class Game:
         for command in self.commands:
             if self.commands[command]['hidden'] is False:
                 self.msg.append(stylize(command + " [ " + self.commands[command]['input'] + " ]", colored.fg(84)))
-        self.msg.append(stylize("\nTip: there are all some hidden moves...\n", colored.fg(1)))
+        self.msg.append(stylize("\nTip: there are hidden moves...\n", colored.fg(1)))
     
     def quit(self):
         clear()
@@ -66,6 +67,14 @@ class Game:
     #Restarts the current program.
         python = sys.executable
         os.execl(python, python, * sys.argv)
+
+    def play_soundtrack(self):
+    #plays soundtrack in background
+        pygame.mixer.init()
+        pygame.mixer.music.load("music/" + soundtrack)
+        pygame.mixer.music.set_volume(0.4)
+        pygame.mixer.music.play()
+
 
     def show_intro(self):
         clear()
@@ -89,9 +98,17 @@ Looks like your super power - {power}
        
     def show_status(self):
         clear()
-        # print the player's current status
+        #print the player's current status
         ascii_banner = pyfiglet.figlet_format(self.player.destination.name)
         print(stylize(ascii_banner, colored.fg(self.player.destination.colour)))
+
+        #show destination artwork 
+        a = open(self.player.destination.artwork, 'r')
+        artwork = a.read()
+        a.read()
+        print(stylize(artwork, colored.fg(self.player.destination.colour)))
+        a.close()
+
 
         #if beginning of the game print welcome message
         if not self.player.moves and (self.player.destination == self.destinations[0]):
@@ -103,9 +120,14 @@ Looks like your super power - {power}
             weapon = ""
 
         # print player
+        print ("\n")
         print(stylize("Player : " + self.player.name, colored.fg(84)))
         # print powers
         print(stylize("Power : " + self.player.power, colored.fg(84)))
+        #print strength
+        print(stylize("Strength : " + str(self.player.strength), colored.fg(84)))
+        #print speed
+        print(stylize("Speed : " + str(self.player.speed), colored.fg(84)))
         # print weapon
         print(stylize("Weapon : " + weapon, colored.fg(84)))
         # print credits
@@ -142,7 +164,7 @@ on the ground in front of you.
         name = "*".join(name)
         self.msg.append(stylize(name, colored.fg(84)))
         self.msg.append(self.transport.description)
-        self.msg.append(self.transport.msg['look'])  
+        self.msg.append(self.transport.msg.get('look'))  
         
     def players(self):
         
@@ -151,13 +173,13 @@ on the ground in front of you.
 
     def over(self):
         # tell player they are dead and need to restart the game
+        clear()
         ascii_banner = pyfiglet.figlet_format("GAME OVER")
         self.msg.append(ascii_banner)
         self.msg.append(stylize('''Hey - Im afraid you're not longer with us. Type restart to play again.''', colored.fg(1)))
 
 
     def select_weapon(self):
-        clear()
         print('''There's a big stack of weapons on the floor in front of you!''')
         i = 1
         for weapon in self.player.zone.weapons:
@@ -175,7 +197,7 @@ on the ground in front of you.
             weapon_select = input('>')
         if int(weapon_select) in items['weapons']:
             self.player.weapon =  self.player.zone.weapons[int(weapon_select)-1]
-            self.msg.append(self.player.weapon.msg['get']) 
+            self.msg.append(self.player.weapon.msg.get('get'))
 
     def command(self, command):
 
@@ -250,17 +272,20 @@ on the ground in front of you.
             if command[0] == 'get':
                 self.msg.clear()
                 self.player.moves.append(command[0])
-                if command[1]:
-                    if command[1].lower() == self.player.zone.items.name.lower():
-                        self.player.zone.items.get(self, command[1])    
-                    elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
-                        if self.player.zone.non_player_characters.health > 0:
-                            self.player.zone.non_player_characters.encounter(self) 
+                if len(command) > 1:
+                    if command[1]:
+                        if command[1].lower() == self.player.zone.items.name.lower():
+                            self.player.zone.items.get(self, command[1])    
+                        elif isinstance(self.player.zone.winning_items, WinningItem) and command[1].lower() == self.player.zone.winning_items.name.lower():
+                            if self.player.zone.non_player_characters.health > 0:
+                                self.player.zone.non_player_characters.encounter(self) 
+                            else:
+                                self.player.zone.winning_items.get(self, command[1])
                         else:
-                            self.player.zone.winning_items.get(self, command[1])
-                    else:
-                        self.msg.clear()
-                        self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
+                            self.msg.clear()
+                            self.msg.append(stylize(commands['get']['error'], colored.fg(1))) 
+                else:
+                    self.msg.append(stylize('You need to get an item!', colored.fg(1)))          
             # end get
             
             #'drop' command

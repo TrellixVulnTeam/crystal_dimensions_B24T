@@ -3,6 +3,15 @@
 # Date: 22 September 2019
 # RPG game design by Rudy Ashford
 
+# todo
+# ===========
+# chat with Dilly to get crystal (not fight)
+# clear game after win 
+# remove crystals when placed
+# add artwork for NPC's and destinations
+# add view health and other stats for NPC
+# superpower can only be used when full health
+
 import sys
 import os
 import random
@@ -46,9 +55,9 @@ for weapon in items['weapons'].items():
 #create non player characters for game
 for game_non_player_character in non_player_characters:
     if non_player_characters[game_non_player_character]['status'] == "boss":
-        game_boss = Boss(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg'])
+        game_boss = Boss(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['speed'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg'])
     else:
-        game_non_player_characters.append(NonPlayerCharacter(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg']))
+        game_non_player_characters.append(NonPlayerCharacter(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['speed'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg']))
 
 #create a shop for the game
 game_shop = Shop(shop[0]['name'], shop[0]['description'], 'buy/sell', '', shop[0]['msg'], shop[0]['products'])
@@ -77,7 +86,7 @@ for food in items['food'].items():
     game_food.append(Food(food[1]['name'], food[1]['description'], food[1]['msg'], food[1]['category'], food[1]['value'], False, food[1]['health']))        
 game_items.extend(game_food)
 
-#create objects for game
+#create physical objects for game
 for game_object in objects:
     game_objects.append(Object(objects[game_object]['name'], objects[game_object]['description'], objects[game_object]['move'], '', objects[game_object]['msg']))
 
@@ -117,10 +126,13 @@ for z in game_zones_group:
 #create destinations for game
 i = 0
 for game_destination in destinations:
-    game_destinations.append(Destination(destinations[game_destination]['name'], destinations[game_destination]['voyages'], destinations[game_destination]['scenario'], destinations[game_destination]['colour'], game_zones_group[i]))
+    game_destinations.append(Destination(destinations[game_destination]['name'], destinations[game_destination]['voyages'], destinations[game_destination]['scenario'], destinations[game_destination]['colour'], destinations[game_destination]['artwork'], game_zones_group[i]))
     i += 1
 
 new_game = Game(title, author, mission, player_characters, game_destinations, game_transport, "", commands, msg)
+
+#play soundtrack
+new_game.play_soundtrack()
 
 #display inital credits and game play instructions
 new_game.show_intro()
@@ -133,7 +145,7 @@ while True:
     if not new_game.player:
         # print the player choice instructions
         new_game.players()
-        print(stylize("Please choose a player:", colored.fg(84)))
+        print(stylize("Please choose a player (by entering the number):", colored.fg(84)))
         character = input('>')
         try:
             val = int(character)
@@ -144,11 +156,9 @@ while True:
             character = input('>') 
 
         while not new_game.player:    
-            if int(character) in new_game.player_characters:
-                                
+            if int(character) in new_game.player_characters:        
                 #add player to game
-                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], "", new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['health'], "", "", inventory, "", 0)
-
+                new_game.player = PlayerCharacter(new_game.player_characters[int(character)]['name'], new_game.player_characters[int(character)]['power'], "", new_game.player_characters[int(character)]['strength'], new_game.player_characters[int(character)]['speed'], new_game.player_characters[int(character)]['health'], new_game.player_characters[int(character)]['health'], "", "", inventory, game_transport, 0)
                 # starting destination
                 new_game.player.destination = new_game.destinations[0]   
                 # starting zone
@@ -166,15 +176,17 @@ while True:
 
     else:
         new_game.show_status()
-        
         # get the player's next 'command'
         # .split() breaks it up into an list array
         # eg typing 'fly east' would give the list:
         # ['fly','east']
         command = ''
-        while command == '':
-            command = input('>')
         
+        while command == '' and new_game.player.health > 0 and len(new_game.player.winning_items) != len(items['winning_items']):
+            command = input('>')
+
         new_game.command(command)
+       
+
 
 

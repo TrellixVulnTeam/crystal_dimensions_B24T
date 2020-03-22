@@ -19,7 +19,6 @@ commands = {
         'get': {'input': 'item', 'hidden': False, 'error' : "Sorry you can't get that item here :("},
         'drop': {'input': 'item', 'hidden': True, 'error' : "Sorry that item doesn't exist...yet"}, 
         'items': {'input': '', 'hidden': False, 'error' : ""},
-        'info': {'input': 'item', 'hidden': True, 'error' : ""},
         'help': {'input': '', 'hidden': False, 'error' : ""},
         'look': {'input': 'around or closer', 'hidden': False, 'error' : "What's that look for!?! (may have been your clumsy typing...)"}, 
         'place': {'input': 'crystal name', 'hidden': False, 'error' : '''BUT the Earth is stil not safe...
@@ -27,7 +26,6 @@ you haven't placed all the crystals yet..do you have the others?
 You need to be quick!'''}, 
         'quit': {'input': '', 'hidden': False, 'error' : ""},
         'talk': {'input': '', 'hidden': False, 'error' : "There's not a soul about to talk to..."},
-        'use': {'input': 'power', 'hidden': False, 'error' : ""},
         'inspect': {'input': 'planet', 'hidden': True, 'error' : "Nothing to inspect"},
         'open': {'input': 'object', 'hidden': True, 'error' : "Nothing to open"},
         'climb': {'input': 'object', 'hidden': True, 'error' : "Nothing to climb"},
@@ -45,6 +43,7 @@ You need to be quick!'''},
 #Games setup credits and mission
 title = "Crystal Dimensions"
 author = "Rudy Ashford"
+soundtrack = "soundtrack.wav"
 mission = '''
 Travel accross the Galagamatic Universe to find 
 the three crystals that hold the key to closing 
@@ -80,7 +79,8 @@ from here you can fly to the South, where you'll find planet Sapsa
 and it's not far or fly North to Yanus.
 It occurs to you that both planets could have the crystals you
 so desperately need but that you also risk bumping into trouble...''',
-        'colour': 125 
+        'colour': 125,
+        'artwork': 'artwork/sector9.txt'
     },
         2: {
         'name': 'Taiga planet',
@@ -90,7 +90,8 @@ with great skill you park in the middle of what
 appears to be the only dry land surrounded by swamp. 
 You climb out into the damp air - ready to start investigating 
 the new planet you've landed on.''',
-    'colour': 51
+    'colour': 51,
+    'artwork': 'artwork/taiga.txt'
     },  
         3: {
         'name': 'Yanus planet',
@@ -98,7 +99,8 @@ the new planet you've landed on.''',
         'scenario': '''You land with a bump on an empty piece of land - there's a twilight glow
 to the sky and the air is dry. Stepping out of the spaceship, the ground 
 is rocky, almost crunching under foot.''',
-        'colour': 214
+        'colour': 214,
+        'artwork': 'artwork/yanus.txt'
     },
         4: {
         'name': 'Sapsa planet',
@@ -106,14 +108,16 @@ is rocky, almost crunching under foot.''',
         'scenario': '''You pull off a super smooth landing in a clearing and 
 run towards what looks like vegetation - travelling around the solar system 
 has made you hungry.''',
-        'colour': 226
+        'colour': 226,
+        'artwork': 'artwork/sapsa.txt'
     },
         5: { 
         'name': 'Earth',
         'voyages': {'north': 3, 'south': 4, 'east': 2},
         'scenario': '''You've arrived on Earth, memories flood back, the summer breeze, the trees, 
 the ocean but enough of this nostalgia where is the Portal?''',
-        'colour': 21
+        'colour': 21,
+        'artwork': 'artwork/earth.txt'
     }
 }
 
@@ -272,6 +276,7 @@ player_characters = {
         'name': 'Rampage', 
         'power': 'Superhuman strength', 
         'strength': 7,
+        'speed': 3,
         'health': 5
         },
 
@@ -279,6 +284,7 @@ player_characters = {
         'name': 'Springing Tiger', 
         'power': 'Mega jump (30m)', 
         'strength': 5,
+        'speed': 6,
         'health': 5
         },
 
@@ -286,6 +292,7 @@ player_characters = {
         'name': 'Armoured Soldier', 
         'power': 'Laser eyes', 
         'strength': 6,
+        'speed': 4,
         'health': 5
         }
 }
@@ -303,6 +310,7 @@ strong and fierce fighters.
         "weakness": "stupidity",
         "status": "dangerous",
         "strength": 6,
+        "speed": 4,
         "health": 3,
         "msg": {"encounter": '''A tall shadow moves quickly across the floor and before you know it 
 - you are face to face with a mean looking monster!''', "fight": '''
@@ -323,6 +331,7 @@ Be careful as these guys are super intelligent.
         "weakness": "greed",
         "status": "dangerous",
         "strength": 5,
+        "speed": 5,
         "health": 3,
         "msg": {"encounter": '''Something darts about in the corner of your vision, then speeds past you, 
 too fast to make out. Then whatever it is calls out - "I'll fight you for 
@@ -343,6 +352,7 @@ You know them to be loyal and really chatty.
         "weakness": "clumsy",
         "status": "friendly",
         "strength": 2,
+        "speed": 4,
         "health": 2,
         "msg": {"encounter": '''There's a russle behind you, sounds like someone tripping over and then you 
 get a tap on the shoulder - turning round you see it and smile.''', "fight": '''"I'm friendly folk - I really don;t want to fight with you..."''', "lose": '''
@@ -361,6 +371,7 @@ destroy everything in their path.
         "weakness": "slow",
         "status": "dangerous",
         "strength": 5,
+        "speed": 2,
         "health": 2,
         "msg": {"encounter": '''Loud swooshing and squarking screaches in your ears 
 and you dive for shelter, it swoops over your head once more before landing 
@@ -379,6 +390,7 @@ and shoots anything that gets in his way.
         "weakness": "vanity",
         "status": "boss",
         "strength": 8,
+        "speed": 6,
         "health": 5,
         "msg": {"encounter": '''As you feared the mission is not quite in the bag - 
 standing between you and the portal is the fiercest of the foes that you have faced so far...''', "fight": '''The earth shakes beneath your feet as 
@@ -625,7 +637,7 @@ you start to feel bloated, you really need to fart dude
  or you might explode...'''},
         "category": "food",
         "health": -1,
-        "value": 2,
+        "value": 3,
     },
     2: {
         "name": "water",
@@ -637,7 +649,7 @@ it is water and it's as refreshing as you'd hoped it would be...
 Your health increase :) '''},
         "category": "drink",
         "health": 0,
-        "value": 2,
+        "value": 4,
     },
     3: {
         "name": "bagel",

@@ -4,6 +4,14 @@
 # Date: 22 September 2019
 # RPG game design by Rudy Ashford
 
+#todo 
+#create character class - and amend PC and NPC to inherit
+#add fight method to character class
+#update fight method to include specific moves form PC and NPC
+#research new AI chat thats less random
+#create friend NPC
+#create character with money and puzzles
+
 import sys
 import os
 import random
@@ -25,13 +33,15 @@ from chatterbot.trainers import ListTrainer
 
 class PlayerCharacter:
     #Create the hero players
-    ß
-    def __init__(self, name, power, weapon, strength, health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
+    
+    def __init__(self, name, power, weapon, strength, speed, health, full_health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
         self.name = name
         self.power = power
         self.weapon = weapon
         self.strength = strength
-        self.health = health   
+        self.speed = speed
+        self.health = health  
+        self.full_health = full_health
         self.destination = destination
         self.zone = zone
         self.inventory = inventory
@@ -88,14 +98,12 @@ class PlayerCharacter:
             game.msg.append(game.player.zone.objects.msg['go'])         
 
         elif command == game.transport.name:
-            if game.player.transport == "":
-                game.player.transport = game.transport 
-                if self.list_inventory(game, "fuel tank", "check") == True:
-                        for itm in self.inventory:
-                            if itm.name == "fuel tank":
-                                game.player.transport.fuel_tank += 15
-                                game.player.inventory.remove(itm)
-            game.msg.append(game.player.transport.msg['go'])
+            if self.list_inventory(game, "fuel tank", "check") == True:
+                    for itm in self.inventory:
+                        if itm.name == "fuel tank":
+                            game.player.transport.fuel_tank += 15
+                            game.player.inventory.remove(itm)
+            game.msg.append(game.player.transport.msg.get('go'))
         else:
             game.msg.append(stylize(commands['go']['error'], colored.fg(1)))
 
@@ -176,15 +184,39 @@ confirms it. ***Deadly***'''
 class NonPlayerCharacter:
     #Create NPC, friends and foe to populate the game and spice it up!
     
-    def __init__(self, name, species, appearance, weakness, status, strength, health, msg):
+    def __init__(self, name, species, appearance, weakness, status, strength, speed, health, msg):
         self.name = name
         self.species = species
         self.appearance = appearance
         self.weakness = weakness
         self.status = status
         self.strength = strength
+        self.speed = speed
         self.health = health
         self.msg = msg 
+    
+    def show_health(self):
+        health = self.health
+        h = 1
+        health_hearts = ""
+
+        while h <= health:
+            health_hearts += " \u2764 "
+            h += 1   
+        return health_hearts
+
+    def show_info(self, game):
+        #NPC name
+        game.msg.append(stylize("Name : " + self.name, colored.fg(84)))
+        #NPC species
+        print(stylize("Species : " + self.species, colored.fg(84)))
+        #NPC strength
+        print(stylize("Strength : " + str(self.strength), colored.fg(84)))
+        #NPC speed
+        print(stylize("Speed : " + str(self.speed), colored.fg(84)))
+        #NPC health
+        print(stylize("Health :" + str(self.show_health()), colored.fg(15) + colored.bg(1)))
+
 
     def encounter(self, game):
     #encounter a npc    
@@ -208,15 +240,17 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
         attack = input("Start fight (y/n) > ")
 
         if attack == 'y':
+            
             if game.player.weapon:
                 print(str('''You have your trusty {weapon} - this will add strength to your attack''').format(weapon=game.player.weapon.name))
                 player_strength = game.player.strength + 1
             else:
                 player_strength = game.player.strength
-            powers = input(str("Do you want to use {power} to fight {npc}? (y/n) >").format(power=game.player.power, npc=self.name))
-            #player strength
-            if powers == 'y':
-                player_strength + 2
+            if game.player.health >= game.player.full_health:
+                powers = input(str("You have full health - do you want to use {power} to fight {npc}? (y/n) >").format(power=game.player.power, npc=self.name))
+                #player strength
+                if powers == 'y':
+                    player_strength + 2
 
         #thing strength
         npc_strength = self.strength
@@ -306,14 +340,8 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
 
         else: 
             if self.health > 0:
-                print("There is strength in not fighting.")
+                print("No worries - there is indeed great strength in not fighting.")
                 time.sleep(1)
-                print(self.name + " from the " + self.species + " species...")
-                time.sleep(1)
-                print("Do you have a mobile? If so why not google it?")
-                time.sleep(2)
-
-        return
 
 
     def talk(self, chatbot):
@@ -330,8 +358,8 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
 class Boss(NonPlayerCharacter):
     #create the boss - this character will guard the final object - they must be defeated to win the game!
     
-    def __init__(self, name, species, appearance, weakness, status, strength, health, encounter):
-        super().__init__(name, species, appearance, weakness, status, strength, health, encounter)
+    def __init__(self, name, species, appearance, weakness, status, strength, speed, health, encounter):
+        super().__init__(name, species, appearance, weakness, status, strength, speed, health, encounter)
 
     
    
