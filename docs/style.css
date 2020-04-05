@@ -11,7 +11,7 @@ header > .column > h1 {
     color: #9B4DCA;
 }
 
-.content > h2 {
+.content > .column > h2 {
     text-decoration: underline;
 }
 
