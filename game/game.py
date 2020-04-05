@@ -72,8 +72,8 @@ class Game:
     #plays soundtrack in background
         pygame.mixer.init()
         pygame.mixer.music.load("music/" + soundtrack)
-        pygame.mixer.music.set_volume(0.4)
-        pygame.mixer.music.play()
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(loops=-1)
 
 
     def show_intro(self):
@@ -103,11 +103,12 @@ Looks like your super power - {power}
         print(stylize(ascii_banner, colored.fg(self.player.destination.colour)))
 
         #show destination artwork 
-        a = open(self.player.destination.artwork, 'r')
-        artwork = a.read()
-        a.read()
-        print(stylize(artwork, colored.fg(self.player.destination.colour)))
-        a.close()
+        if self.player.destination.artwork is not None:
+            a = open(self.player.destination.artwork, 'r')
+            artwork = a.read()
+            a.read()
+            print(stylize(artwork, colored.fg(self.player.destination.colour)))
+            a.close()
 
 
         #if beginning of the game print welcome message

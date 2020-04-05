@@ -18,7 +18,7 @@ import random
 import time
 import colored
 from colored import stylize
-from config import commands, title, author, mission, player_characters, destinations, zones, transport, shop, non_player_characters, objects, items
+from config import commands, title, author, soundtrack, mission, player_characters, destinations, zones, transport, shop, non_player_characters, objects, items
 from game.game import Game
 from game.character import PlayerCharacter, NonPlayerCharacter, Boss
 from game.universe import Destination, Zone, Transport, Object, Shop, Item, Weapon, Food, Magic, Key, Credit, WinningItem, Clue
@@ -132,7 +132,8 @@ for game_destination in destinations:
 new_game = Game(title, author, mission, player_characters, game_destinations, game_transport, "", commands, msg)
 
 #play soundtrack
-new_game.play_soundtrack()
+if soundtrack is not None:
+    new_game.play_soundtrack()
 
 #display inital credits and game play instructions
 new_game.show_intro()
