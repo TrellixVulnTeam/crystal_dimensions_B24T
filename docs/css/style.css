@@ -1,0 +1,92 @@
+body {
+    color: #000;
+    background-color: rgb(156, 77, 202);
+    color: yellow;
+}
+
+header {
+    padding: 50px 0 !important;
+}
+
+header > div > .column > h1 {
+    font-family: video, serif;
+    text-transform: uppercase;
+    color: rgb(8, 245, 39);
+}
+
+.navbar {
+    margin-bottom: 10px;
+  }
+  
+  .navbar ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #606c76;
+  }
+  
+  .navbar li {
+      float: left;
+      margin-bottom: 0;
+  }
+  
+  .navbar li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+  }
+  
+  .navbar li a:hover {
+      background-color: #ab5dda;
+  }
+
+.content > .column > h2 {
+    text-decoration: underline;
+    text-decoration-color: rgb(255, 0, 170);
+    color: yellow;
+} 
+
+.poo > .column > h3 {
+    padding: 15px;
+    text-align: center;  
+    border: 2px solid salmon;  
+    color: rgb(9, 255, 0);
+
+}
+
+img {
+    border: 2px solid rgb(255, 0, 170);
+    padding: 15px;
+    background-color: #000;
+    width: 100%;
+}
+
+.poo > .column > div {
+    border: 2px solid red;  
+    padding: 20px;
+    background-color: salmon;
+    color: snow;
+}
+
+section {
+    margin: 20px 0;
+}
+
+footer {
+    margin-top: 75px;
+    text-align: center;
+    background-color: #606c76;
+    padding: 20px;
+}
+
+footer > .row > .column > p {
+    text-transform: uppercase;
+    color: white;
+}
+
+
+
+
