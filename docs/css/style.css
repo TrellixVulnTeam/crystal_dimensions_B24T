@@ -12,6 +12,7 @@ header > div > .column > h1 {
     font-family: video, serif;
     text-transform: uppercase;
     color: rgb(8, 245, 39);
+    letter-spacing: 0.8px;
 }
 
 .navbar {
@@ -47,6 +48,7 @@ header > div > .column > h1 {
     text-decoration: underline;
     text-decoration-color: rgb(255, 0, 170);
     color: yellow;
+    letter-spacing: 0.8px;
 } 
 
 .poo > .column > h3 {
