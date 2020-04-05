@@ -1,0 +1,17 @@
+body {
+    color: #000;
+}
+
+header {
+    padding: 50px 0;
+}
+
+header > h1 {
+    text-transform: uppercase;
+    color: #9B4DCA;
+}
+
+.content > h2 {
+    text-decoration: underline;
+}
+
