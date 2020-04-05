@@ -6,7 +6,7 @@ header {
     padding: 50px 0;
 }
 
-header > h1 {
+header > .column > h1 {
     text-transform: uppercase;
     color: #9B4DCA;
 }
