@@ -7,8 +7,7 @@ import sys
 import os
 import random
 import time
-import colored
-from colored import stylize
+
 import pyfiglet
 
 #list of accepted commands
@@ -213,7 +212,7 @@ and it would be easy to hide important things here!
         },
         13: {
         'name': 'Forbidden desert',
-        'scenario': '''This is avast arid area - srtretching furhter than a thousand days of travelling,
+        'scenario': '''This is a vast arid area - stretching further than a thousand days of travelling,
 it's a hostile place with deep crators that remind you of a 
 planet you once visited. The sand whips up in you face 
 making it hard to see'''

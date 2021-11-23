@@ -8,8 +8,7 @@ import sys
 import os
 import random
 import time
-import colored
-from colored import stylize
+from termcolor import colored, cprint
 import pyfiglet
 from config import win, commands, pack_max, destinations, items, shop
 from game.utils import clear
@@ -28,34 +27,34 @@ class Destination:
     def title(self):
         print('{0}'.format('-'*65))
         ascii_banner = pyfiglet.figlet_format(self.name)
-        print(stylize(ascii_banner, colored.fg(self.colour)))
+        cprint(ascii_banner, 'grey')
         print('{0}'.format('-'*65))
 
     def voyage_list(self, game, task):
         if task == "list":
             game.msg.append(str("Suggested destinations:"))
             for direction, value in self.voyages.items():
-                game.msg.append(str(destinations[value]['name']) + str(" (direction: " + direction.upper() + ")"))   
+                game.msg.append(str(destinations[value]['name']) + str(" (direction: " + direction.upper() + ")"))
 
 
 class Zone():
     #Create a game zone to find items and fight enemies
 
     def __init__(self, name, objects, items, winning_items, scenario, weapons=None, non_player_characters=None):
-        self.name = name 
-        self.objects = objects 
+        self.name = name
+        self.objects = objects
         self.items = items
         self.winning_items = winning_items
         self.scenario = scenario
         if weapons is None:
             self.weapons = []
-        else: 
+        else:
             self.weapons = weapons
         if non_player_characters is None:
             self.non_player_characters = []
-        else: 
-            self.non_player_characters = non_player_characters        
-        
+        else:
+            self.non_player_characters = non_player_characters
+
 class Transport:
     #create a vehicle to carry the player  + non player characters around the game
 
@@ -67,7 +66,7 @@ class Transport:
         self.fuel_tank = fuel_tank
         self.fuel_usage = fuel_usage
         self.weapon = weapon
-        self.msg = msg   
+        self.msg = msg
 
     def voyage(self, game, command):
         #take your transport on a voyage across the game...
@@ -84,17 +83,17 @@ class Transport:
                 #spend the fuel
                 game.player.transport.fuel_tank = game.player.transport.fuel_tank - game.player.transport.fuel_usage
 
-                game.msg.append(str('''After a quick interstellar hop through the universe 
+                game.msg.append(str('''After a quick interstellar hop through the universe
 you've arrived on {destination}
-''').format(destination = game.player.destination.name))            
+''').format(destination = game.player.destination.name))
                 game.player.moves.clear()
             else:
-                game.msg.append(stylize("You can't go in that direction - you'll get lost!", colored.fg(1)))
+                game.msg.append("You can't go in that direction - you'll get lost!")
         else:
-            game.msg.append(stylize("You don't have enough fuel to make the trip dude...", colored.fg(1)))    
-            
+            game.msg.append("You don't have enough fuel to make the trip dude...")
 
-class Object:  
+
+class Object:
     #Create physical objects in the game
 
     def __init__(self, name, description, move, clue, msg):
@@ -114,9 +113,9 @@ bingo, it opens without so much as a creeeeek...
                 self.clue.read(game)
             else:
                 game.msg.clear()
-                game.msg.append(str('''Alas the {item} is empty''').format(item=self.name))    
+                game.msg.append(str('''Alas the {item} is empty''').format(item=self.name))
         else:
-            self.msg.append(stylize(str('''You don't have anything to open {item} with...perhaps you need to find a key''').format(item=self.name), colored.fg(1)))
+            self.msg.append(str('''You don't have anything to open {item} with...perhaps you need to find a key''').format(item=self.name))
 
     def climb(self, game):
         if self.clue:
@@ -136,17 +135,17 @@ bingo, it opens without so much as a creeeeek...
                 self.clue.read(game)
         else:
             game.msg.clear()
-            game.msg.append(str('''Alas not a language you understand...''').format(item=self.name))        
+            game.msg.append(str('''Alas not a language you understand...''').format(item=self.name))
 
 class Shop(Object):
     #create a shop extending objects (place a shop in a zone and one per destination)
-    
+
     def __init__(self, name, description, move, clue, msg, products=None):
         super().__init__(name, description, move, clue, msg)
         if products is None:
             self.products = []
-        else: 
-            self.products = products   
+        else:
+            self.products = products
 
     def buy(self, game):
         if game.player.credits > 1:
@@ -154,15 +153,15 @@ class Shop(Object):
             for product, product_att in self.products.items():
                 print(str("{id}) {name} - (CR: {credits})").format(id=product, name=product_att['name'],credits=product_att['credits']))
             print("0) Nothing")
-            print(stylize('''Type a number:''', colored.fg(84)))
+            cprint('Type a number:', 'green')
             product_select = input('>')
             try:
                 val = int(product_select)
             except ValueError:
-                print(stylize('''Doesn't look like they sell that here...''', colored.fg(1)))
+                cprint("Doesn't look like they sell that here...", 'red')
                 time.sleep(1)
-                print(stylize('''Try again...''', colored.fg(84)))
-                product_select = input('>')    
+                print("Try again...", 'green')
+                product_select = input('>')
             if int(product_select) in self.products:
                 if game.player.credits >= self.products[int(product_select)]['credits']:
                     game.player.credits -= self.products[int(product_select)]['credits']
@@ -170,11 +169,11 @@ class Shop(Object):
                         game.player.inventory.append(Item("fuel tank", "Not delicious but fairly nutritious", {"food": '''Actually quite filling - you feel ready for action!!'''}, "fuel", 12, True))
                     elif self.products[int(product_select)]['name'] == "food":
                         game.player.inventory.append(Food("protein pouch", "Not delicious but fairly nutritious", {"food": '''Actually quite filling - you feel ready for action!!'''}, "food", 10, True, 1))
-                    elif self.products[int(product_select)]['name'] == "water":    
+                    elif self.products[int(product_select)]['name'] == "water":
                         game.player.inventory.append(Food("water bottle", "Always good to quench your thirst", {"drink": '''Pretty delish - not thirsty anymore!'''}, "drink", 2, True, 0))
                     game.msg.append(self.msg['buy'])
         else:
-            game.msg.append(stylize('''You need some crrrr's to buy stuff around here!!?!*!''', colored.fg(1)))
+            game.msg.append("You need some crrrr's to buy stuff around here!!?!*!")
 
     def sell(self, game):
         print("What would you like to sell?")
@@ -183,8 +182,8 @@ class Shop(Object):
         # show updated list of pack items
         for item in game.player.inventory:
             print(item.name)
-        print("\n")    
-        print(stylize('''Name something:''', colored.fg(84)))
+        print("\n")
+        cprint("Name something:", 'green')
         item_select = input('>')
         if game.player.list_inventory(game, item_select.lower(), "check") == True:
             check = input("Are you sure you want to sell this? y/n: ")
@@ -201,7 +200,7 @@ class Shop(Object):
 
 
 
-        
+
 
 class Item:
     #create items (pick-ups) in the game
@@ -213,7 +212,7 @@ class Item:
         self.category = category
         self.value = value
         self.collected = collected
-    
+
     def get(self, game, command):
         if command.lower() == self.name.lower():
             # check the number of items pack
@@ -225,12 +224,12 @@ class Item:
                 game.player.inventory.append(self)
                 self.collected = True
             else:
-                game.msg.append(stylize('''You can't pick up this item as your pack is full!!''', colored.fg(1)))
+                game.msg.append("You can't pick up this item as your pack is full!!")
         else:
             # otherwise, if the item isn't there to get
             # tell them they can't get it
             game.msg.clear()
-            game.msg.append(stylize(commands['get']['error'], colored.fg(1)))
+            game.msg.append(commands['get']['error'])
 
     def drop(self, game, command):
         check = input("Are you sure you want to drop it? y/n: ")
@@ -241,7 +240,7 @@ class Item:
             # show updated list of pack items
             game.player.list_inventory(game, "", "list")
             # restore the item to the current destination as if dropped on the ground
-            game.destination.item.append(self)  
+            game.destination.item.append(self)
 
 class Weapon(Item):
     #create weapons for the player
@@ -253,7 +252,7 @@ class Weapon(Item):
         self.player = player
 
     def use(self):
-        pass    
+        pass
 
 class Food(Item):
     #Create edible items
@@ -264,17 +263,17 @@ class Food(Item):
     def eat(self, game, command):
         if command == self.name and self.category == "food":
             game.msg.append(self.msg['food'])
-            
+
             if self.health > 0:
                 game.player.health = game.player.health + self.health
-                game.msg.append((stylize("Yum that food just gave you more health.", colored.fg(201))))
+                game.msg.append("Yum that food just gave you more health.")
             else:
                 game.player.health = game.player.health + self.health
-                game.msg.append((stylize("Ouch that food was junk dude - you lose some health.", colored.fg(201))))   
+                game.msg.append("Ouch that food was junk dude - you lose some health.")
             game.player.inventory.remove(self)
         else:
             game.msg.clear()
-            game.msg.append(stylize(commands['food']['error'], colored.fg(1))) 
+            game.msg.append(commands['food']['error'])
 
     def drink(self, game, command):
 
@@ -285,11 +284,11 @@ class Food(Item):
             game.player.inventory.remove(self)
         else:
             game.msg.clear()
-            game.msg.append(stylize(commands['food']['error'], colored.fg(1)))  
+            game.msg.append(commands['food']['error'])
 
 class Magic(Food):
     #create magic potion items
-    
+
     def __init__(self, name, description, msg, category, value, collected, spell, health, strength):
         super().__init__(name, description, msg, category, value, health, collected)
         self.spell = spell
@@ -305,7 +304,7 @@ class Magic(Food):
             game.player.inventory.remove(self)
         else:
             game.msg.clear()
-            game.msg.append(stylize(commands['magic']['error'], colored.fg(1)))  
+            game.msg.append(commands['magic']['error'])
 
 class Key(Item):
     #Create key items
@@ -314,17 +313,17 @@ class Key(Item):
         super().__init__(name, description, msg, category, value, collected)
         if object is None:
             self.object = []
-        else: 
-            self.object = object     
-        
+        else:
+            self.object = object
+
 class WinningItem(Item):
     #create winning items - these must be collected to win game!
-    
+
     def __init__(self, name, description, msg, category, value, collected, non_player_character=None):
         super().__init__(name, description, msg, category, value, collected)
         if non_player_character is None:
             self.non_player_character = []
-        else: 
+        else:
             self.non_player_character = non_player_character
 
     def place_to_win(self, game, command):
@@ -340,7 +339,7 @@ class WinningItem(Item):
                 ascii_banner = pyfiglet.figlet_format("YOU WIN!")
                 game.msg.append(ascii_banner)
             else:
-                game.msg.append(stylize(commands['place']['error'], colored.fg(1))) 
+                game.msg.append(commands['place']['error'])
 
 
 class Credit(Item):
@@ -354,21 +353,21 @@ class Credit(Item):
             game.player.credits = game.player.credits + self.value
             game.msg.append(str("Yay - you've got the " + self.name))
             game.msg.append(self.msg['get'])
-            game.msg.append(stylize(str("You've just added {value} credits to your wallet!").format(value=self.value), colored.fg(1)))
+            game.msg.append(str("You've just added {value} credits to your wallet!").format(value=self.value))
             self.collected = True
-            
+
         else:
             # otherwise, if the item isn't there to get
             # tell them they can't get it
             game.msg.clear()
-            game.msg.append(stylize(commands['get']['error'], colored.fg(1)))
-            
+            game.msg.append(commands['get']['error'])
+
 class Clue():
     #create cluses to be hidden in objects
-    
+
     def __init__(self, zone, status):
         self.zone = zone
-        self.status = status 
+        self.status = status
 
     def read(self, game):
         if self.status == "unread":

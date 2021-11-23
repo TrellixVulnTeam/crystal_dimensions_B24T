@@ -4,58 +4,35 @@
 # Date: 22 September 2019
 # RPG game design by Rudy Ashford
 
-#todo 
-#create character class - and amend PC and NPC to inherit
-#add fight method to character class
-#update fight method to include specific moves form PC and NPC
-#research new AI chat thats less random
-#create friend NPC
-#create character with money and puzzles
+#todo
+#TODO create character class - and amend PC and NPC to inherit
+#TODO add fight method to character class
+#TODO update fight method to include specific moves form PC and NPC
+#TODO research new AI chat thats less random
+#TODO create friend NPC
+#TODO create character with money and puzzles
 
 import sys
 import os
 import random
 import time
-import colored
-from colored import stylize
+from termcolor import colored, cprint
 import pyfiglet
 from game.utils import spinning_cursor
 from config import commands, pack_max
 from game.universe import Item, WinningItem
 
-# pip install chatterbot
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
-
-# Create a new trainer for the chatbot
-from chatterbot.trainers import ListTrainer
-
-
-class PlayerCharacter:
-    #Create the hero players
-    
-    def __init__(self, name, power, weapon, strength, speed, health, full_health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
+class Character:
+    #Game characters
+    def __init__(self, name, species, appearance, weakness, strength, speed, health, zone):
         self.name = name
-        self.power = power
-        self.weapon = weapon
+        self.species = species
+        self.appearance = appearance
+        self.weakness = weakness
         self.strength = strength
         self.speed = speed
-        self.health = health  
-        self.full_health = full_health
-        self.destination = destination
+        self.health = health
         self.zone = zone
-        self.inventory = inventory
-        self.transport = transport
-        self.credits = credits
-        if winning_items is None:
-            self.winning_items = []
-        else: 
-            self.winning_items = winning_items
-        if moves is None:
-            self.moves = []
-        else: 
-            self.moves = moves
-
 
     def show_health(self):
         health = self.health
@@ -64,9 +41,47 @@ class PlayerCharacter:
 
         while h <= health:
             health_hearts += " \u2764 "
-            h += 1   
+            h += 1
         return health_hearts
-    
+
+    def show_info(self, game):
+        #NPC name
+        game.msg.append("Name : " + self.name)
+        #NPC species
+        cprint("Species : " + self.species, 'green')
+        #NPC strength
+        cprint("Strength : " + str(self.strength), 'green')
+        #NPC speed
+        cprint("Speed : " + str(self.speed), 'green')
+        #NPC health
+        cprint("Health :" + str(self.show_health()), 'white', 'on_red')
+
+
+class Hero(Character):
+    #Create the hero players
+
+    def __init__(self, name, power, weapon, strength, speed, health, full_health, destination, zone, inventory, transport, credits, winning_items=None, moves=None):
+        self.name = name
+        self.power = power
+        self.weapon = weapon
+        self.strength = strength
+        self.speed = speed
+        self.health = health
+        self.full_health = full_health
+        self.destination = destination
+        self.zone = zone
+        self.inventory = inventory
+        self.transport = transport
+        self.credits = credits
+        if winning_items is None:
+            self.winning_items = []
+        else:
+            self.winning_items = winning_items
+        if moves is None:
+            self.moves = []
+        else:
+            self.moves = moves
+
     def show_navigator(self, game):
         if self.transport == "":
             category = ""
@@ -80,7 +95,7 @@ class PlayerCharacter:
         game.msg.append(str("Current location: {location}").format(location=self.destination.name.upper()))
         game.msg.append(str("Zone: {zone}").format(zone=self.zone.name.upper()))
         game.player.destination.voyage_list(game, "list")
-        
+
     def go(self, game, command):
         go_directions = {"north": 2, "south": 0, "west": 1, "east": 3}
         go_styles = ["swagger over to the", "jog over to the", "walk cautiously in the direction of the", "sprint towards the ", "do a ninja roll to get to the"]
@@ -91,11 +106,11 @@ class PlayerCharacter:
             game.msg.append(game.player.zone.scenario)
             if game.destinations[-1].zones[-1] == self.zone:
                 self.zone.non_player_characters.encounter(game)
-                
+
         elif command == game.player.zone.objects.name.lower():
             go_style = random.choice(go_styles)
             game.msg.append(str("You {go} {object}").format(go = go_style, object = game.player.zone.objects.name))
-            game.msg.append(game.player.zone.objects.msg['go'])         
+            game.msg.append(game.player.zone.objects.msg['go'])
 
         elif command == game.transport.name:
             if self.list_inventory(game, "fuel tank", "check") == True:
@@ -105,8 +120,7 @@ class PlayerCharacter:
                             game.player.inventory.remove(itm)
             game.msg.append(game.player.transport.msg.get('go'))
         else:
-            game.msg.append(stylize(commands['go']['error'], colored.fg(1)))
-
+            game.msg.append(commands['go']['error'])
 
     def look(self, game, command):
         if command == "closer" and "look" in game.player.moves:
@@ -114,34 +128,34 @@ class PlayerCharacter:
             if game.player.zone.items.collected == False:
                 if game.player.zone.items.collected == False:
                     game.msg.append("see that the item in front of you looks a lot like a " + game.player.zone.items.name)
-                    if hasattr(game.player.zone.items, 'description'): 
+                    if hasattr(game.player.zone.items, 'description'):
                         game.msg.append(game.player.zone.items.description)
             if game.player.zone.winning_items != "":
                 if game.player.zone.winning_items.collected == False:
                     game.msg.append("Wow!! You see what appears to be a " + game.player.zone.winning_items.name)
                     game.msg.append(game.player.zone.winning_items.description)
             else:
-                game.msg.append("...but there doesn't appear to be anything here to see...")  
+                game.msg.append("...but there doesn't appear to be anything here to see...")
         elif command == "around":
             if game.player.zone == game.destinations[0].zones[0] and game.player.weapon == "":
                 game.select_weapon()
             else:
                 game.msg.append("You have a good look around...")
                 tip = ""
-                tip = stylize('''\n(tip: go ''' + game.player.zone.objects.name + ''')''', colored.fg(1))
-            
+                tip = '''\n(tip: go ''' + game.player.zone.objects.name + ''')'''
+
                 if game.player.zone.items.collected == False:
                     game.msg.append(game.player.zone.items.msg['look'])
-            
+
                 if isinstance(game.player.zone.winning_items, WinningItem):
                     if game.player.zone.winning_items.collected == False:
-                        game.msg.append(game.player.zone.winning_items.msg['look'])   
+                        game.msg.append(game.player.zone.winning_items.msg['look'])
 
                 game.msg.append(game.player.zone.objects.msg['look'] + tip)
 
         else:
-            game.msg.append(stylize(commands['look']['error'], colored.fg(1)))
-    
+            game.msg.append(commands['look']['error'])
+
     def dance(self, game, command):
         pass
 
@@ -154,7 +168,7 @@ I think the smell has killed her!**!!
 ''',
             2: '''
 PARP PARP PARP - your but cheeks sing and
-then there's the smell - wow it's a tuneful killa. You chuckle 
+then there's the smell - wow it's a tuneful killa. You chuckle
 loudly - thoroughly impressed with your bottom skills''',
             3: '''
 A high pitch SCREEEECH is coming from somewhere
@@ -163,17 +177,17 @@ confirms it. ***Deadly***'''
         }
         fart_choice = random.randint(1,3)
         game.msg.clear()
-        game.msg.append(fart[fart_choice])    
+        game.msg.append(fart[fart_choice])
 
     def list_inventory(self, game, command, task):
         if task == "list":
-            game.msg.append(stylize("Your pack items:", colored.fg(84)))
+            game.msg.append("Your pack items:")
             if self.inventory:
                 for item in self.inventory:
-                    game.msg.append(str(item.name.title()) + " (" + str(item.category) + ")",)       
-                game.msg.append(stylize(str("Remember you can only hold {capacity} items in your pack").format(capacity=pack_max), colored.fg(1)))
+                    game.msg.append(str(item.name.title()) + " (" + str(item.category) + ")",)
+                game.msg.append(str("Remember you can only hold {capacity} items in your pack").format(capacity=pack_max))
             else:
-                game.msg.append(stylize("[ No items in your inventory. ]", colored.fg(1)))
+                game.msg.append("[ No items in your inventory. ]")
         elif task == "check":
             if self.inventory:
                 for item in self.inventory:
@@ -181,9 +195,9 @@ confirms it. ***Deadly***'''
                         return True
 
 
-class NonPlayerCharacter:
+class NonPlayerCharacter(Character):
     #Create NPC, friends and foe to populate the game and spice it up!
-    
+
     def __init__(self, name, species, appearance, weakness, status, strength, speed, health, msg):
         self.name = name
         self.species = species
@@ -193,54 +207,30 @@ class NonPlayerCharacter:
         self.strength = strength
         self.speed = speed
         self.health = health
-        self.msg = msg 
-    
-    def show_health(self):
-        health = self.health
-        h = 1
-        health_hearts = ""
-
-        while h <= health:
-            health_hearts += " \u2764 "
-            h += 1   
-        return health_hearts
-
-    def show_info(self, game):
-        #NPC name
-        game.msg.append(stylize("Name : " + self.name, colored.fg(84)))
-        #NPC species
-        print(stylize("Species : " + self.species, colored.fg(84)))
-        #NPC strength
-        print(stylize("Strength : " + str(self.strength), colored.fg(84)))
-        #NPC speed
-        print(stylize("Speed : " + str(self.speed), colored.fg(84)))
-        #NPC health
-        print(stylize("Health :" + str(self.show_health()), colored.fg(15) + colored.bg(1)))
-
+        self.msg = msg
 
     def encounter(self, game):
-    #encounter a npc    
-
+    #encounter a npc
         game.msg.append('''Before you can get it...''')
         game.msg.append(self.msg['encounter'])
         game.msg.append(str('''
 It's {name} from the species {species}''').format(name=self.name, species=self.species))
-        game.msg.append(self.appearance.title())    
+        game.msg.append(self.appearance.title())
         game.msg.append(str('''You know of these guys and you know them to be {status}''').format(status=self.status))
 
-    def fight(self, game):
+    def attack(self, game):
     #dice based fighting engine
 
         attack = 'n'
 
         #intro to fight
-        print(self.msg['fight'])   
-        print(stylize(str('''{name} are you ready to commence battle with {npc}?''').format(name=game.player.name, npc=self.name), colored.fg(1)))   
+        print(self.msg['fight'])
+        print(str('''{name} are you ready to commence battle with {npc}?''').format(name=game.player.name, npc=self.name))
 
         attack = input("Start fight (y/n) > ")
 
         if attack == 'y':
-            
+
             if game.player.weapon:
                 print(str('''You have your trusty {weapon} - this will add strength to your attack''').format(weapon=game.player.weapon.name))
                 player_strength = game.player.strength + 1
@@ -271,7 +261,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                     }
                 }
 
-        #defence        
+        #defence
         defence = {
                 1 : {
                         'name': 'block',
@@ -306,16 +296,16 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 game.player.health = game.player.health - 1
                 h = 1
                 health_hearts = ""
-                
+
                 while h <= game.player.health:
                     health_hearts += " \u2764 "
                     h += 1
-                
+
                 # print health
-                print(stylize("Health :" + str(health_hearts), colored.fg(15) + colored.bg(1)))
+                cprint("Health :" + str(health_hearts), 'white', 'on_red')
 
                 if game.player.health == 1:
-                    game.msg.append(stylize("Your health is on it's last legs - lose one more and you are dead...just saying!", colored.fg(1)))
+                    game.msg.append("Your health is on it's last legs - lose one more and you are dead...just saying!")
 
                 attack = 'n'
 
@@ -323,7 +313,7 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                     game.msg.append("Oh no you have just died at the hands of " + self.name)
                     game.msg.append(self.msg['win'])
                     game.over()
-                    attack = 'n'  
+                    attack = 'n'
                 elif game.player.health > 0:
                     attack = input("Attack again? y/n > ")
             else:
@@ -333,12 +323,12 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
                 print ("Their health has been damaged")
                 self.health = self.health - 1
                 if self.health == 0:
-                    game.msg.append("You have just killed " + self.name) 
+                    game.msg.append("You have just killed " + self.name)
                     game.msg.append(self.msg['lose'])
                     # set attack to no
                     attack = 'n'
 
-        else: 
+        else:
             if self.health > 0:
                 print("No worries - there is indeed great strength in not fighting.")
                 time.sleep(1)
@@ -357,10 +347,8 @@ It's {name} from the species {species}''').format(name=self.name, species=self.s
 
 class Boss(NonPlayerCharacter):
     #create the boss - this character will guard the final object - they must be defeated to win the game!
-    
-    def __init__(self, name, species, appearance, weakness, status, strength, speed, health, encounter):
-        super().__init__(name, species, appearance, weakness, status, strength, speed, health, encounter)
+    pass
 
-    
-   
+
+
 
