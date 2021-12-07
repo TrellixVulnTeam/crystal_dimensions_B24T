@@ -1,5 +1,5 @@
 #!/bin/python3
-# Game characters
+# Game model
 # Code by Nathaniel Ashford
 # Date: 22 September 2019
 # RPG game designed by Rudy Ashford
@@ -14,10 +14,10 @@ import pyfiglet
 from game.universe import Destination, Object, Item, WinningItem
 from game.character import NonPlayerCharacter
 from game.utils import clear
-from config import commands, intro, soundtrack, objects, items, conversation
+from config import commands, intro, soundtrack, objects, items
 
 class Game:
-    """Main game class object, complete with heler functions, help, quit, restart, move etc.."""
+    """Main game class object, complete with helper functions, help, quit, restart, move etc.."""
 
     def __init__(self, title, author, mission, player_characters, destinations, transport, player, commands, msg):
         self.title = title
@@ -59,7 +59,7 @@ class Game:
     def play_soundtrack(self):
     #plays soundtrack in background
         pygame.mixer.init()
-        pygame.mixer.music.load("music/" + soundtrack)
+        pygame.mixer.music.load("story/crystal_dimensions/music/" + soundtrack)
         pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(loops=-1)
 
@@ -92,7 +92,7 @@ Looks like your super power - {power}
 
         #show destination artwork
         if self.player.destination.artwork is not None:
-            a = open(self.player.destination.artwork, 'r')
+            a = open("story/crystal_dimensions/" + self.player.destination.artwork, 'r')
             artwork = a.read()
             a.read()
             cprint(artwork, 'white')

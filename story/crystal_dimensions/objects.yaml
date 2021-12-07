@@ -1,0 +1,46 @@
+---
+#objects
+  1:
+    description: Two meter high navy pillar box with a screen illuminated on one side.
+    move: !!set
+      read: null
+    msg:
+      go: "Standing in front of the screen you can read some info in a language \nyou\
+        \ don't understand..."
+      look: '
+
+        You see what looks like a telephone boothe...is it doctor who?'
+    name: computer console
+  2:
+    description: Large black metal container with no obvious markings
+    move: !!set
+      open: null
+    msg:
+      go: "The box is much bigger than it looked from a distance. \nIt has a door but\
+        \ it's firmly shut - locked by the looks of it..."
+      look: '
+
+        A square metal container is lying on the ground up ahead of you'
+    name: box
+  3:
+    description: "High up in the trees there is a platform with a hideawy camouflaged\
+      \ \nin the branches of the big oak tree"
+    move: !!set
+      climb: null
+    msg:
+      go: "You're standing below the treehouse - wondering how to get up to it and \n\
+        inside to have a look around - could be hiding something interesting"
+      look: Up high above you can make out a treetop hideaway
+    name: treehouse
+  4:
+    description: 'It has a tough outer shell - looks bomb proof. There''s
+
+      a door on one side, its slightly ajar.'
+    move: !!set
+      enter: null
+    msg:
+      go: 'The door is open and you can make out a desk
+
+        with some files on it...'
+      look: There in the distance what looks like a bunker...
+    name: bunker

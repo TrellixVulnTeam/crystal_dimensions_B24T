@@ -3,7 +3,6 @@
 # Date: 22 September 2019
 # RPG game design by Rudy Ashford
 
-
 # TODO chat with Dilly to get crystal (not fight)
 # TODO clear game after win
 # TODO remove crystals when placed
@@ -15,14 +14,26 @@ import sys
 import os
 import random
 import time
-from config import commands, title, author, soundtrack, mission, player_characters, destinations, zones, transport, shop, non_player_characters, objects, items
+import yaml
+# from config import commands, title, author, soundtrack, mission, player_characters, destinations, zones, transport, shop, non_player_characters, objects, items
+from game.story import Story
 from game.game import Game
 from game.character import Hero, NonPlayerCharacter, Boss
 from game.universe import Destination, Zone, Transport, Object, Shop, Item, Weapon, Food, Magic, Key, Credit, WinningItem, Clue
 from game.utils import chunks
 from termcolor import colored, cprint
 
-#setup empty new game variables
+#game config
+config_file = open('story/crystal_dimensions/story.yaml')
+config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+#commands
+commands_file = open('game/commands.yaml')
+commands = yaml.load(commands_file, Loader=yaml.FullLoader)
+
+new_story = Story()
+
+#setup empty new game lists
 msg = []
 inventory = []
 game_items = []
@@ -42,57 +53,57 @@ game_destinations = []
 #create the destinations, zones, non-player characters, transport, weapons, items and objects for a new game
 
 #create transport for game
-game_transport = Transport(transport[0]['name'], transport[0]['description'], transport[0]['category'], transport[0]['capacity'], transport[0]['fuel_tank'], transport[0]['fuel_usage'], transport[0]['weapon'], transport[0]['msg'])
+game_transport = Transport(new_story.transport[0]['name'], new_story.transport[0]['description'], new_story.transport[0]['category'], new_story.transport[0]['capacity'], new_story.transport[0]['fuel_tank'], new_story.transport[0]['fuel_usage'], new_story.transport[0]['weapon'], new_story.transport[0]['msg'])
 
 #items are a little more complex as they come in a variety of shapes and sizes
 
 #weapons
-for weapon in items['weapons'].items():
+for weapon in new_story.items['weapons'].items():
     game_weapons.append(Weapon(weapon[1]['name'], weapon[1]['description'], weapon[1]['msg'], weapon[1]['category'], weapon[1]['value'], False, 0, 0, weapon[1]['player']))
 
 #create non player characters for game
-for game_non_player_character in non_player_characters:
-    if non_player_characters[game_non_player_character]['status'] == "boss":
-        game_boss = Boss(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['speed'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg'])
+for game_non_player_character in new_story.non_player_characters:
+    if new_story.non_player_characters[game_non_player_character]['status'] == "boss":
+        game_boss = Boss(new_story.non_player_characters[game_non_player_character]['name'], new_story.non_player_characters[game_non_player_character]['species'], new_story.non_player_characters[game_non_player_character]['appearance'], new_story.non_player_characters[game_non_player_character]['weakness'], new_story.non_player_characters[game_non_player_character]['status'], new_story.non_player_characters[game_non_player_character]['strength'], new_story.non_player_characters[game_non_player_character]['speed'], new_story.non_player_characters[game_non_player_character]['health'], new_story.non_player_characters[game_non_player_character]['msg'])
     else:
-        game_non_player_characters.append(NonPlayerCharacter(non_player_characters[game_non_player_character]['name'], non_player_characters[game_non_player_character]['species'], non_player_characters[game_non_player_character]['appearance'], non_player_characters[game_non_player_character]['weakness'], non_player_characters[game_non_player_character]['status'], non_player_characters[game_non_player_character]['strength'], non_player_characters[game_non_player_character]['speed'], non_player_characters[game_non_player_character]['health'], non_player_characters[game_non_player_character]['msg']))
+        game_non_player_characters.append(NonPlayerCharacter(new_story.non_player_characters[game_non_player_character]['name'], new_story.non_player_characters[game_non_player_character]['species'], new_story.non_player_characters[game_non_player_character]['appearance'], new_story.non_player_characters[game_non_player_character]['weakness'], new_story.non_player_characters[game_non_player_character]['status'], new_story.non_player_characters[game_non_player_character]['strength'], new_story.non_player_characters[game_non_player_character]['speed'], new_story.non_player_characters[game_non_player_character]['health'], new_story.non_player_characters[game_non_player_character]['msg']))
 
 #create a shop for the game
-game_shop = Shop(shop[0]['name'], shop[0]['description'], 'buy/sell', '', shop[0]['msg'], shop[0]['products'])
+game_shop = Shop(new_story.shop[0]['name'], new_story.shop[0]['description'], 'buy/sell', '', new_story.shop[0]['msg'], new_story.shop[0]['products'])
 
 #winning items
-for winning_item in items['winning_items'].items():
+for winning_item in new_story.items['winning_items'].items():
     game_winning_items.append(WinningItem(winning_item[1]['name'], winning_item[1]['description'], winning_item[1]['msg'], winning_item[1]['category'], winning_item[1]['value'], False))
 
 #keys
-for key in items['keys'].items():
+for key in new_story.items['keys'].items():
     game_keys.append(Key(key[1]['name'], key[1]['description'], key[1]['msg'], key[1]['category'], key[1]['value'], False, ''))
 game_items.extend(game_keys)
 
 #credits
-for credit in items['credits'].items():
+for credit in new_story.items['credits'].items():
     game_credits.append(Credit(credit[1]['name'], credit[1]['description'], credit[1]['msg'], 'credits', credit[1]['value'], False))
 game_items.extend(game_credits)
 
 #magic
-for magic in items['magic'].items():
+for magic in new_story.items['magic'].items():
     game_magic.append(Magic(magic[1]['name'], magic[1]['description'], magic[1]['msg'], magic[1]['category'], magic[1]['value'], False, magic[1]['spell'], magic[1]['health'], magic[1]['strength']))
 game_items.extend(game_magic)
 
 #food and drink
-for food in items['food'].items():
+for food in new_story.items['food'].items():
     game_food.append(Food(food[1]['name'], food[1]['description'], food[1]['msg'], food[1]['category'], food[1]['value'], False, food[1]['health']))
 game_items.extend(game_food)
 
 #create physical objects for game
-for game_object in objects:
-    game_objects.append(Object(objects[game_object]['name'], objects[game_object]['description'], objects[game_object]['move'], '', objects[game_object]['msg']))
+for game_object in new_story.objects:
+    game_objects.append(Object(new_story.objects[game_object]['name'], new_story.objects[game_object]['description'], new_story.objects[game_object]['move'], '', new_story.objects[game_object]['msg']))
 
 #create zones for game
-for game_zone in zones:
+for game_zone in new_story.zones:
     zone_item = random.choice(game_items)
     zone_object = random.choice(game_objects)
-    game_zones.append(Zone(zones[game_zone]['name'], zone_object, zone_item, '', zones[game_zone]['scenario']))
+    game_zones.append(Zone(new_story.zones[game_zone]['name'], zone_object, zone_item, '', new_story.zones[game_zone]['scenario']))
 
 final_zone = game_zones.pop()
 final_zone.non_player_characters = game_boss
@@ -113,7 +124,7 @@ for clue in game_clues:
     game_objects[i].clue = clue
     i += 1
 
-n = len(zones) / (len(destinations))
+n = len(new_story.zones) / (len(new_story.destinations))
 random.shuffle(game_zones)
 game_zones.append(final_zone)
 game_zones_group = list(chunks(game_zones, int(n)))
@@ -123,14 +134,14 @@ for z in game_zones_group:
 
 #create destinations for game
 i = 0
-for game_destination in destinations:
-    game_destinations.append(Destination(destinations[game_destination]['name'], destinations[game_destination]['voyages'], destinations[game_destination]['scenario'], destinations[game_destination]['colour'], destinations[game_destination]['artwork'], game_zones_group[i]))
+for game_destination in new_story.destinations:
+    game_destinations.append(Destination(new_story.destinations[game_destination]['name'], new_story.destinations[game_destination]['voyages'], new_story.destinations[game_destination]['scenario'], new_story.destinations[game_destination]['colour'], new_story.destinations[game_destination]['artwork'], game_zones_group[i]))
     i += 1
 
-new_game = Game(title, author, mission, player_characters, game_destinations, game_transport, "", commands, msg)
+new_game = Game(config['title'], config['author'], config['mission'], new_story.player_characters, game_destinations, game_transport, "", commands, msg)
 
 #play soundtrack
-if soundtrack is not None:
+if config['soundtrack'] is not None:
     new_game.play_soundtrack()
 
 #display inital credits and game play instructions
@@ -181,7 +192,7 @@ while True:
         # ['fly','east']
         command = ''
 
-        while command == '' and new_game.player.health > 0 and len(new_game.player.winning_items) != len(items['winning_items']):
+        while command == '' and new_game.player.health > 0 and len(new_game.player.winning_items) != len(new_story.items['winning_items']):
             command = input('>')
 
         new_game.command(command)

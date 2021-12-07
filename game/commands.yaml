@@ -1,0 +1,97 @@
+---
+  buy:
+    error: You'll need to find a shop before buy anything
+    hidden: false
+    input: ''
+  check:
+    error: Nothing to check
+    hidden: true
+    input: misc
+  climb:
+    error: Nothing to climb
+    hidden: true
+    input: object
+  dance:
+    error: That's not a dance!!
+    hidden: true
+    input: name
+  drink:
+    error: Drink what!?! there's only engine fuel here...
+    hidden: true
+    input: item
+  drop:
+    error: Sorry that item doesn't exist...yet
+    hidden: true
+    input: item
+  eat:
+    error: Blueurgh! that's not edible
+    hidden: true
+    input: food
+  fart:
+    error: You can only fart smelly air dude!
+    hidden: true
+    input: ''
+  fight:
+    error: There's nothing to fight here...
+    hidden: false
+    input: ''
+  fly:
+    error: Steady on... you'll need wings to fly!
+    hidden: false
+    input: direction
+  get:
+    error: Sorry you can't get that item here :(
+    hidden: false
+    input: item
+  go:
+    error: There isn't one of those to go to...*!*
+    hidden: false
+    input: direction or object
+  help:
+    error: ''
+    hidden: false
+    input: ''
+  inspect:
+    error: Nothing to inspect
+    hidden: true
+    input: planet
+  items:
+    error: ''
+    hidden: false
+    input: ''
+  look:
+    error: What's that look for!?! (may have been your clumsy typing...)
+    hidden: false
+    input: around or closer
+  open:
+    error: Nothing to open
+    hidden: true
+    input: object
+  place:
+    error: 'BUT the Earth is stil not safe...
+
+      you haven''t placed all the crystals yet..do you have the others?
+
+      You need to be quick!'
+    hidden: false
+    input: crystal name
+  quit:
+    error: ''
+    hidden: false
+    input: ''
+  read:
+    error: Nothing to read
+    hidden: true
+    input: object
+  restart:
+    error: ''
+    hidden: true
+    input: ''
+  sell:
+    error: No one to sell to aroudn here...
+    hidden: true
+    input: ''
+  talk:
+    error: There's not a soul about to talk to...
+    hidden: false
+    input: ''

@@ -1,0 +1,21 @@
+---
+#shop
+  0:
+    description: "Basic looking counter with a local standing behind it \nwaiting to\
+      \ take your credits..."
+    msg:
+      buy: Great to do business with you
+      go: You go up to the counter and start a conversation with the shop keeper...
+      look: "You can see that there is a small shop - \nhave you got anything you need\
+        \ to buy...or maybe even sell"
+    name: Shop
+    products:
+      1:
+        credits: 12
+        name: fuel
+      2:
+        credits: 10
+        name: food
+      3:
+        credits: 2
+        name: water

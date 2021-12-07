@@ -1,0 +1,25 @@
+---
+#Game setup credits and mission
+  title:  Crystal Dimensions
+  directory: crystal_dimensions
+  author: Rudy Ashford
+  soundtrack: soundtrack.wav
+  mission:  |
+    Travel accross the Galagamatic Universe to find
+    the three crystals that hold the key to closing
+    the portal and saving planet Earth!
+
+    Your mission is to collect your weapons and use your
+    super powers to get to the cystals before your time
+    runs out and Earth is destoyed!*!*!
+  intro: |
+    You begin your journey in a secret bunker in Stiffkey
+    deep in the Norfolk arena - sector 9 on the planet Grampsian.
+
+    The sea is on the horizon and your spaceship
+    is parked just out of sight on the mud flats.
+  win: |
+    Amazingly you have placed the last crystal
+    just in time to save planet Earth. Your
+    mission is successful - Thank you!
+  pack_max: 6

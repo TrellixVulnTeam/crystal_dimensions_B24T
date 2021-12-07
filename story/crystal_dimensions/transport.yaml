@@ -1,0 +1,18 @@
+---
+#transport
+  0:
+    capacity: 3
+    category: spaceship
+    description: "It's a sporty looking, lightweight ship with no frills. \nIt can carry\
+      \ a couple of passangers and enough fuel \nto get you to the local shops and back..."
+    fuel_tank: 40
+    fuel_usage: 17
+    msg:
+      go: "You stroll up to your spaceship, with a push of a button \nyou open the hatch,\
+        \ then you climb aboard and fire up the engines - \nyou're ready to fly out\
+        \ into the Galagamatic Universe...\n\nMight be worth having a look at your navigator\
+        \ \nto see where to go next!"
+      look: "You can see it neatly parked just behind you, it's all fueled up \nand\
+        \ ready to go - whenever you are..."
+    name: spaceship
+    weapon: Lazers

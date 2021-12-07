@@ -1,0 +1,56 @@
+---
+#destinations
+  1:
+    artwork: artwork/sector9.txt
+    colour: 125
+    name: Sector 9
+    scenario: "You check your handy navigator, \nfrom here you can fly to the South,\
+      \ where you'll find planet Sapsa \nand it's not far or fly North to Yanus.\nIt\
+      \ occurs to you that both planets could have the crystals you\nso desperately\
+      \ need but that you also risk bumping into trouble..."
+    voyages:
+      north: 3
+      south: 4
+  2:
+    artwork: artwork/taiga.txt
+    colour: 51
+    name: Taiga planet
+    scenario: "You struggle to find somewhere to land, \nwith great skill you park in\
+      \ the middle of what \nappears to be the only dry land surrounded by swamp. \n\
+      You climb out into the damp air - ready to start investigating \nthe new planet\
+      \ you've landed on."
+    voyages:
+      north: 3
+      south: 4
+      west: 5
+  3:
+    artwork: artwork/yanus.txt
+    colour: 214
+    name: Yanus planet
+    scenario: "You land with a bump on an empty piece of land - there's a twilight glow\n\
+      to the sky and the air is dry. Stepping out of the spaceship, the ground \nis\
+      \ rocky, almost crunching under foot."
+    voyages:
+      east: 2
+      south: 4
+      west: 5
+  4:
+    artwork: artwork/sapsa.txt
+    colour: 226
+    name: Sapsa planet
+    scenario: "You pull off a super smooth landing in a clearing and \nrun towards what\
+      \ looks like vegetation - travelling around the solar system \nhas made you hungry."
+    voyages:
+      east: 2
+      north: 3
+      west: 5
+  5:
+    artwork: artwork/earth.txt
+    colour: 21
+    name: Earth
+    scenario: "You've arrived on Earth, memories flood back, the summer breeze, the\
+      \ trees, \nthe ocean but enough of this nostalgia where is the Portal?"
+    voyages:
+      east: 2
+      north: 3
+      south: 4
