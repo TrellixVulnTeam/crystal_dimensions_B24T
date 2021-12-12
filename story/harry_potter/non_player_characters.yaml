@@ -1,0 +1,114 @@
+---
+#non player characters
+  1:
+    appearance: "\nMiddle aged white woman with frizzy brown hair.\n        "
+    art: ' '
+    health: 6
+    msg:
+      encounter: "A tall shadow moves quickly across the floor and before you know it\
+        \ \n- you are face to face with a mean looking monster!"
+      fight: '
+
+        Are you ready for serious brawl, he screams "I will play with you, then smash
+        you into a pulp!*!*!"'
+      lose: "\nIt's hard to imagine something so strong falling like this - \nseeing\
+        \ is believing - all the life drains from him and his tail \nbecomes flappy\
+        \ and shrivelled like a salt soaked slug."
+      win: "He stands over your dead body - tail swiping from left to right, \nerasing\
+        \ any memory of your failed heroics"
+    name: Hermione Granger
+    species: muggle born
+    speed: 4
+    status: dangerous
+    strength: 7
+    weakness: 
+  2:
+    appearance: "\nsmall and fast with a cunning smile. They carry daggers in each hand.\
+      \ \nBe careful as these guys are super intelligent.\n        "
+    art: ''
+    health: 3
+    msg:
+      encounter: "Something darts about in the corner of your vision, then speeds past\
+        \ you, \ntoo fast to make out. Then whatever it is calls out - \"I'll fight\
+        \ you for \nthe crystal\""
+      fight: "Are you ready for serious brawl, he screams \"I will play with you, \n\
+        then smash you into a pulp!*!*!\""
+      lose: "\nAnd just as quickly as he appeared - pooofff - \nhis body evaporates\
+        \ in a puff of smoke"
+      win: "Grinning, he wipes his blades clean of your blood \n- not the easiest battle\
+        \ but a win none the less!"
+    name: Pancini
+    species: Scepti
+    speed: 5
+    status: dangerous
+    strength: 5
+    weakness: greed
+  3:
+    appearance: "\ntwo and half feet high with delicate features, pointy ears and pink\
+      \ hair. \nYou know them to be loyal and really chatty.\n        "
+    art: ''
+    health: 2
+    msg:
+      encounter: "There's a russle behind you, sounds like someone tripping over and\
+        \ then you \nget a tap on the shoulder - turning round you see it and smile."
+      fight: '"I''m friendly folk - I really don;t want to fight with you..."'
+      lose: "\nIt's hard to imagine something so strong falling like this - \nseeing\
+        \ is believing - all the life drains from him and his tail \nbecomes flappy\
+        \ and shrivelled like a salt soaked slug."
+      win: He stands over your dead body - tail swiping from left to right, erasing
+        any memory of your failed heroics
+    name: Dilly
+    species: Labadu
+    speed: 4
+    status: friendly
+    strength: 2
+    weakness: clumsy
+  4:
+    appearance: "\nheavy build with wings and a beak. It has armoured scales and they\
+      \ like to \ndestroy everything in their path.\n        "
+    art: ''
+    health: 2
+    msg:
+      encounter: "Loud swooshing and squarking screaches in your ears \nand you dive\
+        \ for shelter, it swoops over your head once more before landing \nfour feet\
+        \ away and you get a proper look."
+      fight: Are you ready for serious brawl, he screams "I will play with you, then
+        smash you into a pulp!*!*!"
+      lose: "\nHow you beat this guy is a bit of a mystery - but now it lies fallen\
+        \ in front of you - \nyou start to breath more normally, relieved and greatful\
+        \ it isn't you lying dead on the floor."
+      win: Flappy his wings he sores up into the sky - he's left your body for the night
+        demons...
+    name: Sapdeez
+    species: Calltee
+    speed: 2
+    status: dangerous
+    strength: 5
+    weakness: slow
+  5:
+    appearance: "\ndeathly pale, 8 feet tall human like creature. He carries a blunderbuss\
+      \ riffle on his back \nand shoots anything that gets in his way.\n        "
+    art: ''
+    health: 5
+    msg:
+      encounter: "As you feared the mission is not quite in the bag - \nstanding between\
+        \ you and the portal is the fiercest of the foes that you have faced so far..."
+      fight: "The earth shakes beneath your feet as \nhe thunder towards you...you know\
+        \ you don't have a choice but to stay and fight\n- lets hope you survive this\
+        \ one"
+      lose: "\nin a swirl of dust and debris, Lord D starts to disintegrate - \nhis\
+        \ flesh turning into black particals and spinning into \nthe vortex of pure\
+        \ darkness that's opended up in front of you. \nYou did it - the ultimate evil\
+        \ one has been vanquished"
+      win: 'You came so close but he has done his job and done away with
+
+        you like you were a piece of muck on his shoe. He kicks your dead body into
+        orbit
+
+        and walks away...planet Earth is now doomed'
+    name: Lord Devilhanger
+    species: Galati
+    speed: 6
+    status: boss
+    strength: 8
+    weakness: vanity

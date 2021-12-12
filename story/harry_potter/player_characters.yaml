@@ -1,0 +1,20 @@
+---
+#player characters
+  1:
+    health: 5
+    name: Katrijn Harden
+    power: sheldon cooper intelligence
+    speed: 3
+    strength: 7
+  2:
+    health: 6
+    name: Nevada Herczeg
+    power: bravery
+    speed: 5
+    strength: 4
+  3:
+    health: 5
+    name: Quỳnh Lopes
+    power: charmer  -  Good with people
+    speed: 4
+    strength: 6

@@ -1,0 +1,19 @@
+---
+#transport
+  0:
+    capacity: 3
+    category: magic
+    description: "It's a magical powder that will take you anywhere. But you will need to seek out a\n
+      \ a fireplace if you want to fly!\nGo sparing though as this stuff comes in handy\n
+      \ when you need a quick exit."
+    fuel_tank: 40
+    fuel_usage: 17
+    msg:
+      go: "You stroll up to the fireplace \nyou search for a match,\
+        \ once the fire is burning \nyou're ready to go\
+        \ You thrown in a handful of Floo Powder...\n\nMake sure to tuck in your elbows and close your eyes\
+        \ \nto ensure you shoot out of the fire unscathed!"
+      look: "You can see a fireplace across the room, perfect for transporting\n
+        \ yourself out of here - are you ready to go!?!"
+    name: Floo Powder
+    weapon: None
