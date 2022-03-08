@@ -1,0 +1,221 @@
+---
+#items
+  credits:
+    1:
+      description: Credits to spend if you can find a shop to spend them in...
+      msg:
+        get: Watch the Knuts and the Galleons will look after themselves!
+        look: Shiny crrrr's - need some of that
+        spend: Well its what it was intended for...
+      name: Knuts
+      value: 50
+    2:
+      description: Credits to spend if you can find a shop to spend them in...
+      msg:
+        get: This has got a reassuring weight about it - should buy some tings
+        look: what's on the floor, is that some free crrrrr's?
+        spend: hmmm I hope that was worth it...
+      name: Sickle
+      value: 97
+    3:
+      description: Credits to spend if you can find a shop to spend them in...
+      msg:
+        get: CHING CHING - I'm in the CRrrrr's
+        look: Bling! Looks like some credits kicking around in front of you
+        spend: Ouch that hurt
+      name: Galleon
+      value: 423
+  food:
+    1:
+      category: food
+      description: Jelly Beans - your favourite. They appear to be in every colour - which falvour should you choose...
+      health: -1
+      msg:
+        food: "You go for the nearest one and gobble it down - and then\n\
+          a taste unlike any sweet fills you tastebuds, it's as if you have vomitted in your own mouth\n
+          \ is this even a sweet? You dash the rest to the floor in disgust..."
+        get: Save these sweets in case you need a boost later!
+        look: "Your eyes must be decieving you - \nit looks like cake ****chocolate\
+          \ cake!?!****"
+      name: Bertie Botts Every Flavour Beans
+      value: 25
+    2:
+      category: drink
+      description: Blue. Cold. Wet. Delicious
+      health: 0
+      msg:
+        drink: "You take a couple of big gulps,\n
+          interesting - tasted kind of like a vegetable\n
+          - sweet and not terrible...you could learn to quite this\n
+          Your health increase :) \n"
+        get: Water seems precious around here - you might get thirsty!
+        look: A large glass bottle holding what looks like orange sludge
+      name: pumpkin juice
+      value: 200
+    3:
+      category: food
+      description: Does food normally move? What appears to be a hopping chocolate bar is tempting you to eat it.
+      health: 1
+      msg:
+        food: 'You feel lucky to have found your favourite snack out here - you savour
+
+          each mouthful - its a good one, chewy with plenty of cream cheese.'
+        get: Keep this bread in case you need an energy boost!
+        look: "A brown paper bag is lying on the floor in front of you keeping something\
+          \ \nsafe, looks like a food bag of some sort."
+      name: chocolate frog
+      value: 10
+    4:
+      category: food
+      description: Looks like a vegan fruity energy bar
+      health: 1
+      msg:
+        food: A zing in your mouth lets you know your body has scored some energy -
+          it's pretty tasty too
+        get: "You've heard of these - even Super Heroes need a boost from time to time.\n\
+          Could be useful in a fight - The advert says it boosts your health \nand your\
+          \ strength...double whammy!!!"
+        look: 'A bar of something has been discarded inches from your feet...
+
+          could be a tasty treat'
+      name: pumkin pasty
+      strength: 1
+      value: 250
+    5:
+      category: food
+      description: "They look like raspberries - you love fresh berries but what was\
+        \ it that your mum told you about picking \nwild fruit!?!?"
+      health: -1
+      msg:
+        food: "Not bad tasting but they do have really glooopy texture - \nit's made\
+          \ you feel a bit sick...And then you are sick, \nreally sick, you lose health\
+          \ and strength :("
+        get: Going to be hard not just to scoff these fruity gems
+        look: There are berries hanging off a plant just in front of you...
+      name: wild berries
+      strength: -1
+      value: 5
+  keys:
+    1:
+      category: key
+      description: "It's a Large iron key with a Ruby encrusted bit and a \nornate looking\
+        \ blade."
+      msg:
+        get: You pocket the skeleton key - this will unlock anything
+        look: "Is that a key you can see, looks like someone has tried to hide it \n\
+          - but failed as there it is bold as brass, right in front of you!"
+      name: key
+      value: 10
+  magic:
+    1:
+      category: drink
+      description: 'A small leather flask with clear liquid inside.
+
+        Smells like vanilla pods.'
+      health: 0
+      msg:
+        drink: 'With a gulp and a slurp you down the potion.
+
+          A few moments later the hallucinations kick in -
+
+          you might need to lie down for while...'
+        get: Supplies always come in handy - you wonder if the potion has a kick to
+          it?
+        look: There's a bottle - looks too special to be water...
+        magic: But miraculously this potion has hidden powers and your strength increases!!!
+      name: potion
+      spell: ''
+      strength: 2
+      value: 12
+  weapons:
+    1:
+      category: weapon
+      damage: 3
+      description: Nothing is sharper or cuts deaper than fossilized rhino horn.
+      msg:
+        get: "You're now armed with your trusty weapon - \nready to do battle with the\
+          \ bad guys..."
+        look: "Right by your feet is your weapon. \nWhere you're going - you're defintely\
+          \ going to need a weapon!"
+      name: Rhino horn daggers
+      player: 1
+      rounds: 18
+      value: 20
+    2:
+      category: weapon
+      damage: 4
+      description: "Ready for close and long range combat. \nThe swords are your favourite\
+        \ but you are happy to finish the job with a pistol if need be..."
+      msg:
+        get: "You're now armed with your trusty weapon - \nready to do battle with the\
+          \ bad guys..."
+        look: "Right by your feet is your weapon. \nWhere you're going - you're defintely\
+          \ going to need a weapon!"
+      name: Two swords and a pistol
+      player: 2
+      rounds: 14
+      value: 15
+    3:
+      category: weapon
+      damage: 5
+      description: 'You need to get up out of the way with this weapon,
+
+        its leathal but you need some cover to use it range effectively'
+      msg:
+        get: "You're now armed with your trusty weapon - \nready to do battle with the\
+          \ bad guys..."
+        look: "Right by your feet is your weapon. \nWhere you're going - you're defintely\
+          \ going to need a weapon!"
+      name: Rifle
+      player: 3
+      rounds: 10
+      value: 18
+  winning_items:
+    1:
+      category: crystal
+      description: "A very thin, sheet like crystal with shards of shiny black \nmaterial\
+        \ running through the middle."
+      msg:
+        get: "Nice work, another precious crystal and \nanother step closer to completing\
+          \ your mission"
+        look: "You spot what looks like a stone but something tells \nyou it is more\
+          \ than that"
+        place: "Placing the crystal into the slot carefully so as not to damage it -\
+          \ \nas it slots into position the black material at it's centre \nturns to\
+          \ gold!"
+      name: Collapse Crystal
+      value: 60
+    2:
+      category: crystal
+      description: "A dense perfect square. Purple and very shiny, \nwhen you look into\
+        \ this crystal you see your reflection\nbut wear your eyes would be, there are\
+        \ black holes."
+      msg:
+        get: "It's the build crystal, this one creeps you right out but \nyou're pleased\
+          \ it's safely in your possession"
+        look: "What's that shiny thing reflecting the light a little way off, \nyou\
+          \ can just about see the light bouncing off - deep purple \n- the build crystal\
+          \ is purple..."
+        place: "Holding it in both hands you drop it lightly into place -\nit changes\
+          \ colour as it lowers into the portal - \nnow a million shade so "
+      name: Build Crystal
+      value: 50
+    3:
+      category: crystal
+      description: "This is the most beautiful thing you have ever seen.\nRadiating\
+        \ warmth and energy, the Unite Crystal has an \niridescent glow that lights\
+        \ up it's surroundings."
+      msg:
+        get: 'Wow you barely manage to take your eyes off the crystal as you stow it
+          away safely.
+
+          The rumours were right this is the most powerful crystal and you''ve got it!!'
+        look: 'There''s glow coming up from somewhere in the undergrowth.
+
+          It could be some kind of energy source - its worth a closer look.'
+        place: "Oh precious, it's hard to let go of this one - it has a magnetic beauty,\n\
+          giving it away is like parting with the hobbit's ring. You close your eyes\
+          \ and thrust it into the portal\n- a flash of bright light shoots out and\
+          \ it's sucked out of your \nhands and out of sight forever..."
+      name: Unite Crystal
+      value: 75

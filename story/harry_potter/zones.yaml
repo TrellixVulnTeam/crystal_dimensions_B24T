@@ -1,0 +1,125 @@
+---
+#game zones
+  1:
+    name: Forest
+    scenario: "A copse of tall rigid trees zig zagged across the hill. \nTheir silky\
+      \ green leaves drift down from their spikey branches onto the \ndamp forest floor."
+  2:
+    name: Graveyard
+    scenario: "Uneven rows of massive tombs stretch into the distance.\nThere is a path\
+      \ weaving through the graves of a thousand dead bodies...\nBut it is overgrown\
+      \ and riddled with potholes. Night or day this \nplace has an atmosphere - dark,\
+      \ always dark."
+  3:
+    name: Town of nothing
+    scenario: "Destroyed and hollow, rows of abandoned homes \nlay quiet and eerie.\
+      \ Roads weave through the buildings and debris, \nin the distance you can make\
+      \ out hundreds if not thousand of candles \nflickering in the ancient ruins, maybe\
+      \ despite the deserted appearance \nthere is life..."
+  4:
+    name: Lost lake
+    scenario: "The cold clear water shimmers like molten glass \non the surface of the\
+      \ forgotten lake. The marshy banks surrounding the dark\nlake is covered in a\
+      \ glowing green moss - you've seen this vegetation before \nand recall it to be\
+      \ the home to poisonous balck and red beatles. Where they live\nnothing else does..."
+  5:
+    name: Rainbow falls
+    scenario: "A flowing torrent of candy colours descends from \nthe sky, crashing\
+      \ into the rock pools hundreds of feet below. A multi-coloured \nmist that's warm\
+      \ and tingly stops you fomr seeing much but despite this \nit's somehow magical"
+  6:
+    name: Alien Corp
+    scenario: "Three sky scrapers, all glass and carbon fibre \ntower climb high into\
+      \ the nights sky. Each with a matrix of illumination - \nthey look like alien\
+      \ spaceships just landed \n- a bright neon sign reads \"ALIEN CORP PLC\""
+  7:
+    name: Stone statue
+    scenario: "The sand is whipping up off the dessert floor, \npartly hiding the giant\
+      \ stone statue in front of you. It must be at least \n20 feet tall. It looks like\
+      \ a fierce warrior going into battle - it's \nwielding an emormous sharp scord\
+      \ above it's head. The statue looks like \ngranite but it has a fur coat of moss"
+  8:
+    name: Rocky mountain
+    scenario: "The kilometer high peak looks over many towns, \nthe spectacular views\
+      \ attracts thousands of visitors from all over the \nGalagamatic Universe. It\
+      \ takes a lot of effort to climb this high above \nthe clouds and there isn't\
+      \ much in the way of buildings when you reach \nthe summit, just rocks and the\
+      \ occasional lookout post."
+  9:
+    name: Crazy camp
+    scenario: "This is weirdest alien retreat camp you've seen. \nThe stripy tents are\
+      \ full of the Universe's most wildiest warriors, \ndrinking, eating messily and\
+      \ brawling. It's total chaos and very noisey \nso fairly easy to keep a low profile\
+      \ aorund here..."
+  10:
+    name: Market place
+    scenario: "A shop standing on its own in what appears to be \nthe middle of nowhere.\
+      \ Inside there are endless aisles of random things \n- pretty much everything\
+      \ from food to weapons to playing cards. You'll be \nable to buy pretty much anything\
+      \ here - for sure you"
+  11:
+    name: Cranky cave
+    scenario: "The mysterious dark openning leads to an orange \nchamber full of stalactites\
+      \ and stalagmites. There is a hole in the roof \nof the cave providing the only\
+      \ light - luminescent light like an underwater \nworld. You can see a giant rock\
+      \ blocking the exit from the cave."
+  12:
+    name: Square
+    scenario: "A bustling lively place - more activity than you've seen for a while.\n\
+      There are market stalls and people seeling street food - \nthe smell is making\
+      \ you hungry. It is easy to get lost in the crowd...\nand it would be easy to\
+      \ hide important things here!\n"
+  13:
+    name: Forbidden desert
+    scenario: "This is a vast arid area - stretching further than a thousand days of\
+      \ travelling,\nit's a hostile place with deep crators that remind you of a \n\
+      planet you once visited. The sand whips up in you face \nmaking it hard to see"
+  14:
+    name: Frosty plains
+    scenario: "Bright white everywhere and a fierce blinding light \nrelecting off the\
+      \ ice - it takes a proper explorer to make it through \nthe Frosty plains -  suriving\
+      \ any amount of time here is super tough \nso it better be worth your while!!"
+  15:
+    name: Control tower
+    scenario: "An architectural wonder - it travels up up up up into the sky, \na gloriously\
+      \ oval concrete column crowned with a spacehsip like control centre. \nThe better\
+      \ be a lift as there's not a hope in hell of climbing to the top. You can just\
+      \ \nabout make out small space shuttles coming and going from what must be a \n\
+      landing pad near the top."
+  16:
+    name: Dino jungle
+    scenario: "Is that a leg or a tree moving ahead of you, as your eys scan up you\
+      \ see \nit's the leg of an enormous dinosaur of the likes you don't recognise\
+      \ \nfrom the picture books. The jungle is dense and steamy and there are loud\
+      \ exotic sounds \ncoming from the tree tops. This is an exicing and dangerous\
+      \ place you find yourself, you will\nneed to keep a low profile..."
+  17:
+    name: Battle bridge
+    scenario: "Standing at the edge of the ravine - in front of you is a wire bridge\
+      \ \ncreating a fragile border territory between the two enemy districts. Looking\
+      \ far down the \nvertical rock face you can see there is no option but to cross\
+      \ the bridge, you might want to \nclose your eyes!!"
+  18:
+    name: Smelly swamp
+    scenario: "Nothing can prepare you for the stench - the smell of a thoudands \n\
+      eggy farts fills your nostrills. You navigator tells you this is a swamp but it\
+      \ looks \ndeceptively firm under foot so beware. The plants that are able to grow\
+      \ in this smelly\natmosphere ar elike none you have ever seen, vidid colours,\
+      \ ouzing slimey sap.\nIt could have magce healing properties, then again it could\
+      \ just as easily \nbe deadly poison..."
+  19:
+    name: The crossroads
+    scenario: 'A neat sign reads North, South, East and West - pointing off
+
+      down each of the four dusty roads. There are vehicle tracks crossing paths, this
+      crossroads
+
+      feels strangely familiar despite having never been here before - which way next...?*!?'
+  20:
+    name: Portal
+    scenario: 'You have reached the portal - the end of your mission is in sight.
+
+      The chamber of crystals is backlight with a throbing glow. You must place each
+      one
+
+      carefully and pray to the Galagamatic gods that you''re not too late...'

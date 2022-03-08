@@ -1,0 +1,20 @@
+---
+#shop
+  0:
+    description: "A giant alley filled with different shops to buy whatever you might need..."
+    msg:
+      buy: Great to do business with you
+      go: you step into one of the shops nearby...
+      look: "You pop out of the fire place into Diagon Alley \nhave you got anything you need\
+        \ to buy...or maybe even sell"
+    name: Diagon Alley
+    products:
+      1:
+        credits: 12
+        name: Floo Powder
+      2:
+        credits: 10
+        name: food
+      3:
+        credits: 2
+        name: Pumpkin juice
